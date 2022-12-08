@@ -62,6 +62,15 @@ public class TeleopController extends BaseManualController {
 
         updateIntake();
         updateTargetLock();
+        spinMotor();
+    }
+
+    private void spinMotor() {
+        if(db.driverinput.isSet(ELogitech310.A_BTN)) {
+            db.intake.set(ROLLER_PCT, 0.2);
+        } else {
+            db.intake.set(ROLLER_PCT, 0.0);
+        }
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
