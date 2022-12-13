@@ -4,7 +4,6 @@ import com.flybotix.hfr.codex.CodexOf;
 
 public enum EIntakeData implements CodexOf<Double> {
     ARM_STATE,
-
     ROLLER_VEL_ft_s,
     SET_ROLLER_VEL_ft_s,
     CURRENT_ROLLER_RPM,
