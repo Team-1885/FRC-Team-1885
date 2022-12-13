@@ -24,13 +24,12 @@ public class LEDModule extends Module {
         mLEDCan.setStatusFramePeriod(CANifierStatusFrame.Status_1_General, 20);
         mLEDCan.setStatusFramePeriod(CANifierStatusFrame.Status_2_General, 20);
     }
-
+    @Override
     public void modeInit( EMatchMode pMode ) {
         db.ledcontrol.set(ELEDControlData.LED_STATE, 0.0);
         this.mBlinkTimer.stop();
         this.mBlinkTimer.reset();
     }
-
     @Override
     protected void setOutputs() {
         //set the LED output to a color and state (blinking/solid)

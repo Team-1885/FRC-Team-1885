@@ -62,6 +62,7 @@ public class TeleopController extends BaseManualController {
 
         updateIntake();
         updateTargetLock();
+        updateIntakeMotor();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -370,6 +371,15 @@ public class TeleopController extends BaseManualController {
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
                 setIntakeArmEnabled(false);
             }
+        }
+    }
+
+    private void updateIntakeMotor() {
+        if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+            db.intake.set(ROLLER_PCT,0.2);
+        }
+        else {
+            db.intake.set(ROLLER_PCT,0.0);
         }
     }
 
