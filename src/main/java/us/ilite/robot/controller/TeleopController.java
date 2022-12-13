@@ -67,9 +67,9 @@ public class TeleopController extends BaseManualController {
 
     private void spinMotor() {
         if(db.driverinput.isSet(ELogitech310.A_BTN)) {
-            db.intake.set(ROLLER_PCT, 0.2);
+            db.intake.set(DESIRED_ROLLER_pct, 0.2);
         } else {
-            db.intake.set(ROLLER_PCT, 0.0);
+            db.intake.set(DESIRED_ROLLER_pct, 0.0);
         }
     }
     private void updateHangerMotors() {

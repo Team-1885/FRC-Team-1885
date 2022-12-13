@@ -10,7 +10,7 @@ import us.ilite.robot.hardware.SparkMaxFactory;
 public class PracticeSpinMotor extends Module{
     private TalonFX mMotor;
     public PracticeSpinMotor() {
-        mMotor = new TalonFX(0); //change id to actual id: maybe? Settings.HW.CAN.kINRoller
+        mMotor = new TalonFX(4); //change id to actual id: maybe? Settings.HW.CAN.kINRoller
     }
 
     @Override
@@ -29,8 +29,8 @@ public class PracticeSpinMotor extends Module{
         mMotor.set(TalonFXControlMode.PercentOutput, percentSpeed);
 
         //velocity example:
-        double velocity = db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s); //feet per second
-        mMotor.set(TalonFXControlMode.Velocity, velocity);
+//        double velocity = db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s); //feet per second
+//        mMotor.set(TalonFXControlMode.Velocity, velocity);
 
     }
 }

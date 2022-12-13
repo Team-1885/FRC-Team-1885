@@ -179,12 +179,13 @@ public class Robot extends TimedRobot {
         }
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
-        mRunningModules.addModule(mFeeder);
+//        mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
-        mRunningModules.addModule(mNeoDrive);
-        mRunningModules.addModule(mLimelight);
-        mRunningModules.addModule(mClimber);
-        mRunningModules.addModule(mLEDControl);
+//        mRunningModules.addModule(mNeoDrive);
+//        mRunningModules.addModule(mLimelight);
+//        mRunningModules.addModule(mClimber);
+//        mRunningModules.addModule(mLEDControl);
+
         mRunningModules.addModule(mSpinMotor);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
