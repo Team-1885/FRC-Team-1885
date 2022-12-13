@@ -4,6 +4,7 @@ import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /**
  * Creates CANTalon objects and configures all the parameters we care about to factory defaults. Closed-loop and sensor
@@ -66,7 +67,7 @@ public class TalonSRXFactory {
         return createVictor(id, kDefaultConfiguration);
     }
 
-    public static TalonSRX createPermanentSlaveTalon(int id, int master_id) {
+    public static TalonSRX createPermanentSlaveTalon(int id, WPI_TalonFX master_id) {
         final TalonSRX talon = createTalon(id, kSlaveConfiguration);
         talon.set(ControlMode.Follower, master_id);
         return talon;
