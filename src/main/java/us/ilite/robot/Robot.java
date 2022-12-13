@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
     private ThreeBallController mThreeBallController;
     private TexasSwitchController mReverseController;
     private TwoBallController mTwoBallController;
+    private TestMotor mIntakeMotor;
     private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
     private FourBallTrajectoryAuton mFourBallAuton;
     private ThreeBallTrajectoryController mThreeBallAuton;
@@ -79,6 +80,7 @@ public class Robot extends TimedRobot {
         CLOCK.update();
         Arrays.stream(EForwardableConnections.values()).forEach(EForwardableConnections::addPortForwarding);
         mAutonSelection = new AutonSelection();
+        mIntakeMotor = new TestMotor();
         mBaseAutonController = new BaseAutonController();
         mShootMoveController = new ShootMoveController();
         mThreeBallController = new ThreeBallController();

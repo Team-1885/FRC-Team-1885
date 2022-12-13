@@ -36,6 +36,13 @@ public class TeleopController extends BaseManualController {
         mClimbTimer.reset();
         mClimbTimer.start();
     }
+    public void updateMyMotor(){
+        if(db.driverinput.isSet(ELogitech310.X_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.5);
+        } else{
+            db.intake.set(DESIRED_ROLLER_pct, 0);
+        }
+    }
 
     @Override
     protected void updateImpl() {
@@ -45,7 +52,7 @@ public class TeleopController extends BaseManualController {
         super.updateDrivetrain();
         updateCargo();
         super.updateBallCount();
-
+        updateMyMotor();
         //Makes sure that we call the right methods for the climber mode
         if (Robot.CLIMB_MODE.equals("WCMP")) {
             if (db.operatorinput.isSet(ELogitech310.START)) {
