@@ -5,10 +5,13 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import us.ilite.common.config.Settings;
+import us.ilite.common.types.EIntakeData;
 import us.ilite.robot.Enums;
 
 import static us.ilite.common.types.EIntakeData.*;
@@ -29,6 +32,7 @@ public class IntakeModule extends Module {
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kIntakeRollerRatio;
     public static final double kFeetSpeedConversion = (kScaledUnitsToRPM * kWheelCircumference) / 60.0;
 
+    private NetworkTable mTable;
     public IntakeModule() {
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
@@ -43,6 +47,9 @@ public class IntakeModule extends Module {
         mCompressor.enableAnalog(100, 110);
         mArmSolenoid.set(DoubleSolenoid.Value.kForward);
         db.intake.set(PNEUMATIC_STATE, 1.0);
+
+        mTable = NetworkTableInstance.getDefault().getTable("intake");
+
     }
 
     @Override
@@ -59,6 +66,12 @@ public class IntakeModule extends Module {
     protected void setOutputs() {
        setPneumaticState();
        setRollerState();
+
+        mTable.getEntry("roller percent").setNumber(db.intake.get(EIntakeData.ROLLER_PCT));
+        mTable.getEntry("roller vel").setNumber(db.intake.get(EIntakeData.ROLLER_VEL_ft_s));
+        mTable.getEntry("roller rpm").setNumber(db.intake.get(EIntakeData.CURRENT_ROLLER_RPM));
+        mTable.getEntry("intake current").setNumber(db.intake.get(EIntakeData.INTAKE_SUPPLY_CURRENT));
+        mTable.getEntry("compressor psi").setNumber(db.intake.get(EIntakeData.COMPRESSOR_PSI));
     }
 
     public void setPneumaticState() {
