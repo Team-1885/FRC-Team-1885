@@ -370,6 +370,13 @@ public class TeleopController extends BaseManualController {
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
                 setIntakeArmEnabled(false);
             }
+
+            private void updateMyMotor() {
+            if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)){
+                db.intake.set(DESIRED_ROLLER_pct, 0d);
+            }
+
+            }
         }
     }
 
