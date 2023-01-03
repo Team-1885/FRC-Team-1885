@@ -53,8 +53,6 @@ public abstract class Module {
     }
 
 
-    public abstract void modeInit();
-
     /**
      * The module's update function. Runs every time [mode]Periodic() is called (Roughly ~50Hz), or in a loop running at a custom frequency.
      */
