@@ -376,10 +376,10 @@ public class TeleopController extends BaseManualController {
 
     private void updateIntakeMotor() {
         if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
-            db.intake.set(ROLLER_PCT,0.2);
+            db.intake.set(DESIRED_ROLLER_pct,0.2);
         }
         else {
-            db.intake.set(ROLLER_PCT,0.0);
+            db.intake.set(DESIRED_ROLLER_pct,0.0);
         }
     }
 
