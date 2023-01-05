@@ -7,7 +7,7 @@ import us.ilite.common.types.EIntakeData;
 public class TestMotor extends Module {
     private final TalonFX mIntakeMotor;
     public TestMotor(){
-        mIntakeMotor = new TalonFX(0);
+        mIntakeMotor = new TalonFX(9);
     }
     public void modeInIt(){
 
