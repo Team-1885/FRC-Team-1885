@@ -67,7 +67,7 @@ public class TalonSRXFactory {
         return createVictor(id, kDefaultConfiguration);
     }
 
-    public static TalonSRX createPermanentSlaveTalon(int id, WPI_TalonFX master_id) {
+    public static TalonSRX createPermanentSlaveTalon(int id, int master_id) {
         final TalonSRX talon = createTalon(id, kSlaveConfiguration);
         talon.set(ControlMode.Follower, master_id);
         return talon;
