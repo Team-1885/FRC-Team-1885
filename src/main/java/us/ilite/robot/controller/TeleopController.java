@@ -63,6 +63,7 @@ public class TeleopController extends BaseManualController {
         updateIntake();
         updateTargetLock();
         updateIntakeMotor();
+        updatePneumaticTest();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -380,6 +381,14 @@ public class TeleopController extends BaseManualController {
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
+        }
+    }
+    private void updatePneumaticTest() {
+        if(db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
+            db.climber.set(EClimberData.DESIRED_POS_deg,0.2);
+        }
+        else {
+            db.climber.set(EClimberData.DESIRED_POS_deg,0.0);
         }
     }
 
