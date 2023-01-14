@@ -11,7 +11,7 @@ import static us.ilite.common.types.EClimberData.*;
 public class Pnuematics extends Module {
     private final DoubleSolenoid mCLPNSingle;
     public Pnuematics() {
-        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 8, 10);
+        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 4, 5);
     }
     public void modeInit(EMatchMode mode) {
 

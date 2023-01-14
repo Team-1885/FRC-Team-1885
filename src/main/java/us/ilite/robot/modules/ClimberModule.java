@@ -60,7 +60,7 @@ public class ClimberModule extends Module{
         mCLMR11.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 0.01));
 
         mCLPNDouble = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 2, 3);
-        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 4, 5);
+        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 8, 9);
 
         mCL12.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 20);
         mCLMR11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0, 20);
