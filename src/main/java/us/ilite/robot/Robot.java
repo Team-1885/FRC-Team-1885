@@ -181,7 +181,7 @@ public class Robot extends TimedRobot {
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
         //mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
+        //mRunningModules.addModule(mIntake);
         //mRunningModules.addModule(mNeoDrive);
         //mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mClimber);
@@ -191,8 +191,8 @@ public class Robot extends TimedRobot {
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
-       // mRunningModules.addModule(mSpinIntakeMotor);
-        // mRunningModules.addModule(mPneumaticTest);
+        //mRunningModules.addModule(mSpinIntakeMotor);
+        mRunningModules.addModule(mPneumaticTest);
     }
 
     @Override
