@@ -10,7 +10,6 @@ public class PneumaticTest extends Module {
     private DoubleSolenoid mCLPNSingle;
     public PneumaticTest() {
         mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 4, 5);
-
     }
     @Override
     public void modeInit(EMatchMode mode) {

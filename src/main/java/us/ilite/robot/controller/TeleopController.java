@@ -385,10 +385,10 @@ public class TeleopController extends BaseManualController {
     }
     private void updatePneumaticTest() {
         if(db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
-            db.climber.set(EClimberData.DESIRED_POS_deg,0.2);
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED,true);
         }
         else {
-            db.climber.set(EClimberData.DESIRED_POS_deg,0.0);
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED,false);
         }
     }
 
