@@ -70,6 +70,8 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+    private falconMotor mFalconMotor;
+    private Pnuematics mPnuematics;
 
     @Override
     public void robotInit() {
@@ -96,6 +98,8 @@ public class Robot extends TimedRobot {
         mClimber = new ClimberModule();
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
+        mFalconMotor = new falconMotor();
+        mPnuematics = new Pnuematics();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -176,13 +180,15 @@ public class Robot extends TimedRobot {
         }
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
-        mRunningModules.addModule(mFeeder);
+       // mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
-        mRunningModules.addModule(mNeoDrive);
-        mRunningModules.addModule(mLimelight);
-        mRunningModules.addModule(mClimber);
-        mRunningModules.addModule(mLEDControl);
+        //mRunningModules.addModule(mNeoDrive);
+       // mRunningModules.addModule(mLimelight);
+        //mRunningModules.addModule(mClimber);
+        //mRunningModules.addModule(mLEDControl);
+        mRunningModules.addModule(mFalconMotor);
       //  mRunningModules.addModule(mPixy);
+        mRunningModules.addModule(mPnuematics);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);

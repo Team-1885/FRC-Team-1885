@@ -7,6 +7,7 @@ import us.ilite.common.Field2022;
 import us.ilite.common.config.InputMap;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
+import us.ilite.common.types.input.EInputScale;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
@@ -62,6 +63,9 @@ public class TeleopController extends BaseManualController {
 
         updateIntake();
         updateTargetLock();
+        updateMotor();
+        updatePnuematics();
+
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -367,9 +371,26 @@ public class TeleopController extends BaseManualController {
         if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
                 setIntakeArmEnabled(true);
-            } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
+            }
+            else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
                 setIntakeArmEnabled(false);
             }
+        }
+    }
+    private void updateMotor() {
+        if (db.operatorinput.isSet(ELogitech310.A_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.4);
+        }
+        else {
+            db.intake.set(DESIRED_ROLLER_pct, 0);
+        }
+    }
+    private void updatePnuematics() {
+        if (db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, true);
+        }
+        else {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, false);
         }
     }
 
