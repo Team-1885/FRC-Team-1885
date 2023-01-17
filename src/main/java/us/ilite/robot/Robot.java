@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
     private ClimbModeSelection mClimberSelector;
   //  private BallTracking mPixy;
 
+
     private OperatorInput mOI;
     private MatchMetadata mMatchMeta = null;
 
@@ -70,6 +71,9 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+
+    // KYLES AUTON
+    private KyleAuton mKyleAuton; //--------------------------------------------------------------------------------------------------------
 
     @Override
     public void robotInit() {
@@ -87,6 +91,10 @@ public class Robot extends TimedRobot {
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
+
+
+
+
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
@@ -96,6 +104,10 @@ public class Robot extends TimedRobot {
         mClimber = new ClimberModule();
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
+
+        // INITIALIZE KYLE AUTON                                                                                                                    
+        mKyleAuton = new KyleAuton(mNeoDrive);        // ------------------------------------------------------------------------------------       
+
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -146,6 +158,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         MODE = AUTONOMOUS;
+        //mRunningModules.addModule(mKyleAuton);
+
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
         mRunningModules.addModule(mFeeder);
@@ -160,6 +174,8 @@ public class Robot extends TimedRobot {
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
         mActiveController.setEnabled(true);
+
+
     }
 
     @Override
