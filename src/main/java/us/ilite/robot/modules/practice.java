@@ -36,10 +36,14 @@ db.intake.set(EIntakeData.ROLLER_PCT, mMotor.getMotorOutputPercent());
 public void setOutputs(){
     speed = db.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s);
     mMotor.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
-    setNetworkTableValue("intake", EIntakeData.DESIRED_ROLLER_pct);
+    setIntakeTableValue("intake", EIntakeData.DESIRED_ROLLER_pct);
 }
 
-    private void setNetworkTableValue(String pEntry, EIntakeData pEnum) {
+    private void setIntakeTableValue(String pEntry, EIntakeData pEnum) {
+        mTable.getEntry(pEntry).setNumber(db.intake.get(pEnum));
+    }
+
+    private void setButtonTableValue(String pEntry, EIntakeData pEnum) {
         mTable.getEntry(pEntry).setNumber(db.intake.get(pEnum));
     }
 
