@@ -387,18 +387,13 @@ public class TeleopController extends BaseManualController {
     }
     private void updatePnuematics() {
         if (db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, true);
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
         }
         else {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, false);
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.BLUE);
+
         }
-
-
-        if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, false);
-        }
-
-
     }
-
 }

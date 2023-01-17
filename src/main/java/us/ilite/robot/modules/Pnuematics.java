@@ -27,10 +27,9 @@ public class Pnuematics extends Module {
         Enums.EClampMode singleMode = db.climber.get(IS_SINGLE_CLAMPED, Enums.EClampMode.class);
         if (singleMode == Enums.EClampMode.CLAMPED) {
             System.out.println("MY Button got pushed#######################################");
-
-
             mCLPNSingle.set(DoubleSolenoid.Value.kForward);
-        } else if (singleMode == Enums.EClampMode.RELEASED) {
+        }
+        else if (singleMode == Enums.EClampMode.RELEASED) {
             mCLPNSingle.set(DoubleSolenoid.Value.kReverse);
         }
     }
