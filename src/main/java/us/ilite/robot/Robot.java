@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
     private ClimbModeSelection mClimberSelector;
     private SpinIntakeMotor mSpinIntakeMotor;
     private PneumaticTest mPneumaticTest;
+    private LEDTestModule mLEDTestModule;
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -100,6 +101,7 @@ public class Robot extends TimedRobot {
         mLimelight = new Limelight();
         mSpinIntakeMotor = new SpinIntakeMotor();
         mPneumaticTest = new PneumaticTest();
+        mLEDTestModule = new LEDTestModule();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -193,6 +195,7 @@ public class Robot extends TimedRobot {
         mRunningModules.modeInit(TELEOPERATED);
         //mRunningModules.addModule(mSpinIntakeMotor);
         mRunningModules.addModule(mPneumaticTest);
+        mRunningModules.addModule(mLEDTestModule);
     }
 
     @Override
