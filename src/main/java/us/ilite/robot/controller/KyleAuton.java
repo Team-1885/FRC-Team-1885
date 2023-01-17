@@ -23,6 +23,7 @@ import us.ilite.robot.Robot;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 // NOT SURE IF THIS CODE ACTUALLY GETS THE KINEMATIC CONSTANT OF THE ROBOT
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
@@ -88,7 +89,7 @@ public class KyleAuton {
                                 Settings.kA // VoltSecondsSquaredPerMeter
                         ),
                         mDriveKinematics,
-                        m_robotDrive.getVelocity(), // getWheelSpeeds
+                        m_robotDrive::getWheelSpeeds,
                         //m_robotDrive::
 //                                mDriveKinematics.toWheelSpeeds(
 //                                        new ChassisSpeeds(
@@ -98,6 +99,7 @@ public class KyleAuton {
                         new PIDController(0.1, 0, 0), // left controller
                         new PIDController(0.1, 0, 0), // right controller
                         // RamseteCommand passes volts to the callback
+                        BiConsumer<Double, Double> = new BiConsumer<Double, Double>();
                         m_robotDrive::tankDriveVolts,
                         m_robotDrive
                 );

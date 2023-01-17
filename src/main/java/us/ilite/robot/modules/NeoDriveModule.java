@@ -5,6 +5,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
@@ -23,9 +27,11 @@ import us.ilite.robot.hardware.HardwareUtils;
 import us.ilite.robot.hardware.Pigeon;
 import us.ilite.robot.hardware.SparkMaxFactory;
 
+import java.util.function.BiConsumer;
+
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module {
+public class NeoDriveModule extends Module implements BiConsumer<Double, Double> {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -279,6 +285,36 @@ public class NeoDriveModule extends Module {
                 mRightCtrl.setReference((vright / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
         }
+    }
+
+    private final MotorControllerGroup m_leftMotors =
+            new MotorControllerGroup(
+                    mLeftMaster,
+                    mLeftFollower);
+
+    // The motors on the right side of the drive.
+    private final MotorControllerGroup m_rightMotors =
+            new MotorControllerGroup(
+                    mRightMaster,
+                    mRightFollower);
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        double leftMetersPerSecond = Units.feet_to_meters((db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
+        double rightMetersPerSecond = Units.feet_to_meters((db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
+        return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
+    }
+
+    private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+    public BiConsumer tankDriveVolts(double leftVolts, double rightVolts) {
+        m_leftMotors.setVoltage(leftVolts);
+        m_rightMotors.setVoltage(rightVolts);
+        m_drive.feed();
+    }
+
+    @Override
+    public void accept(Double o, Double o2) {
+
     }
 
     public void reset() {
