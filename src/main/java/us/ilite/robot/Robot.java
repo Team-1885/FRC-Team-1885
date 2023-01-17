@@ -145,26 +145,27 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        MODE = AUTONOMOUS;
-        //Robot.DATA.registerAllWithShuffleboard();
-        mRunningModules.clearModules();
-        mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
-        mRunningModules.addModule(mNeoDrive);
-        mRunningModules.addModule(mLimelight);
-        mRunningModules.addModule(mLEDControl);
-        mRunningModules.modeInit(AUTONOMOUS);
-        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-        mActiveController = mAutoController;
-        mAutoController.initialize();
-        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
-        mNeoDrive.readInputs();
-        mActiveController.setEnabled(true);
+
+//        MODE = AUTONOMOUS;
+//        //Robot.DATA.registerAllWithShuffleboard();
+//        mRunningModules.clearModules();
+//        mRunningModules.addModule(mFeeder);
+//        mRunningModules.addModule(mIntake);
+//        mRunningModules.addModule(mNeoDrive);
+//        mRunningModules.addModule(mLimelight);
+//        mRunningModules.addModule(mLEDControl);
+//        mRunningModules.modeInit(AUTONOMOUS);
+//        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+//        mActiveController = mAutoController;
+//        mAutoController.initialize();
+//        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
+//        mNeoDrive.readInputs();
+//        mActiveController.setEnabled(true);
     }
 
     @Override
     public void autonomousPeriodic() {
-        commonPeriodic();
+//        commonPeriodic();
     }
 
     @Override
