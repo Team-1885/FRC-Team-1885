@@ -183,7 +183,7 @@ public class Robot extends TimedRobot {
         //mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
         //mRunningModules.addModule(mNeoDrive);
-        //mRunningModules.addModule(mLimelight);
+        mRunningModules.addModule(mLimelight);
         //mRunningModules.addModule(mClimber);
        // mRunningModules.addModule(mLEDControl);
         mRunningModules.addModule(mPracticeModule);

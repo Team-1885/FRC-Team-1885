@@ -5,20 +5,22 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.types.EIntakeData;
 import us.ilite.common.types.EMatchMode;
-import us.ilite.robot.hardware.TalonSRXFactory;
-import us.ilite.robot.modules.FalconDriveModule;
+import us.ilite.common.types.input.ELogitech310;
+
 
 public class PracticeModule extends Module {
 
-    private final NetworkTable mTable;
+    private final NetworkTable mIntakeTable;
+    private final NetworkTable mButtonTable;
     private TalonFX mMotor;
-    private double speed;
-    private String pEtntry;
+
+
 
 
     public PracticeModule() {
-        TalonFX mMotor = new TalonFX(9);
-        mTable = NetworkTableInstance.getDefault().getTable("intake");
+        mMotor = new TalonFX(9);
+        mIntakeTable = NetworkTableInstance.getDefault().getTable("intake");
+        mButtonTable = NetworkTableInstance.getDefault().getTable("button being pressed");
     }
 
     @Override
@@ -38,14 +40,23 @@ public class PracticeModule extends Module {
     public void setOutputs() {
         mMotor.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
         
-        setNetworkTableValue("desiredpct", EIntakeData.DESIRED_ROLLER_pct);
-        setNetworkTableValue("rollerpct", EIntakeData.ROLLER_PCT);
+        setIntakeTableValue("desiredpct", EIntakeData.DESIRED_ROLLER_pct);
+        setIntakeTableValue("rollerpct", EIntakeData.ROLLER_PCT);
+
+        setButtonTableValue("a_btn", ELogitech310.A_BTN);
 
     }
 
-    private void setNetworkTableValue(String pEntry, EIntakeData pEnum)
+    private void setIntakeTableValue(String pEntry, EIntakeData pEnum)
     {
-        mTable.getEntry(pEtntry).setNumber(db.intake.get(pEnum));
+        mIntakeTable.getEntry(pEntry).setNumber(db.intake.get(pEnum));
     }
+
+    private void setButtonTableValue(String pEntry, ELogitech310 pEnum)
+    {
+        mButtonTable.getEntry(pEntry).setNumber();
+    }
+
+
 
 }

@@ -67,7 +67,16 @@ public class TeleopController extends BaseManualController {
 
     private void updatePracticeIntake() {
         if (db.driverinput.isSet(ELogitech310.A_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.4);
+        }
+        else if (db.driverinput.isSet(ELogitech310.B_BTN)) {
             db.intake.set(DESIRED_ROLLER_pct, 0.3);
+        }
+        else if (db.driverinput.isSet(ELogitech310.X_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.2);
+        }
+        else if (db.driverinput.isSet(ELogitech310.Y_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.1);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct, 0.0);
