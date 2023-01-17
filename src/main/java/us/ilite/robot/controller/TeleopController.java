@@ -390,9 +390,6 @@ public class TeleopController extends BaseManualController {
         else {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);
         }
-        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
-        }
     }
 
 }
