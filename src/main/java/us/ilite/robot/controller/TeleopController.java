@@ -386,7 +386,7 @@ public class TeleopController extends BaseManualController {
     private void updatePneumaticTest() {
         if(db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR,db.ledcontrol.get(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.class));
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
         }
         else {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);

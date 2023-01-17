@@ -46,7 +46,7 @@ public class LEDTestModule extends Module{
                         mBlinkTimer.reset();
                     }
                 } else {
-                    setLEDColor(255, 0, 0);
+                    setLEDColor(0, 0, 0);
                 }
                 break;
             case SOLID:
