@@ -55,7 +55,9 @@ public class PnuematicsLEDs extends Module {
                 }
                 break;
             case SOLID:
-                setLEDColor(color.getRed(), color.getGreen(), color.getBlue());
+
+                    setLEDColor(color.getRed(), color.getGreen(), color.getBlue());
+
                 break;
         }
     }
