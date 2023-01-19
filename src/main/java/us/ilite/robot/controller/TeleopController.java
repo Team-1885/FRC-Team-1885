@@ -381,11 +381,13 @@ public class TeleopController extends BaseManualController {
             db.intake.set(DESIRED_ROLLER_pct,0.2);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
             db.intake.set(ARM_STATE, 1.0);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
             db.intake.set(SET_ROLLER_VEL_ft_s,0.0);
             db.intake.set(ARM_STATE,0.0);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
         }
     }
     private void updatePneumaticTest() {
