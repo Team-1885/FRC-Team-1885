@@ -304,7 +304,7 @@ public class NeoDriveModule extends Module implements BiConsumer<Double, Double>
         return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
     }
 
-    private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
+    private DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         m_leftMotors.setVoltage(leftVolts);
