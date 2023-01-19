@@ -1,5 +1,6 @@
 package us.ilite.robot.controller;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -378,9 +379,13 @@ public class TeleopController extends BaseManualController {
     private void updateIntakeMotor() {
         if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
             db.intake.set(DESIRED_ROLLER_pct,0.2);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
+            db.intake.set(ARM_STATE, 1.0);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
+            db.intake.set(SET_ROLLER_VEL_ft_s,0.0);
+            db.intake.set(ARM_STATE,0.0);
         }
     }
     private void updatePneumaticTest() {
