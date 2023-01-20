@@ -44,6 +44,8 @@ public class Robot extends TimedRobot {
     private CSVLogger mCSVLogger;
 
     public practice mpractice;
+
+    public pneumaticspractice mpneumaticspractice;
     private ClimberModule mHanger;
     private Timer initTimer = new Timer();
 
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
         mpractice = new practice();
+        mpneumaticspractice = new pneumaticspractice();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
