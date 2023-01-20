@@ -7,8 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.types.EIntakeData;
 import us.ilite.common.types.EMatchMode;
 
-import static us.ilite.common.types.EIntakeData.ARM_STATE;
-import static us.ilite.common.types.EIntakeData.ROLLER_VEL_ft_s;
+import static us.ilite.common.types.EIntakeData.*;
 
 public class SpinIntakeMotor extends Module {
     private TalonFX mTalonFX;
@@ -26,15 +25,17 @@ public class SpinIntakeMotor extends Module {
     public void readInputs() {
 
         db.intake.set(EIntakeData.ROLLER_PCT, mTalonFX.getMotorOutputPercent());
-        db.intake.set(ROLLER_VEL_ft_s, mTalonFX.getSelectedSensorVelocity());
+        db.intake.set(ROLLER_VEL_ft_s, mTalonFX.getSelectedSensorVelocity() * IntakeModule.kFeetSpeedConversion);
         db.intake.set(EIntakeData.ARM_STATE, mTalonFX.getSelectedSensorPosition());
     }
     @Override
     public void setOutputs() {
-        mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
-        mTalonFX.set(TalonFXControlMode.Position, db.intake.get(ARM_STATE));
-        mTalonFX.set(TalonFXControlMode.Velocity,db.intake.get(EIntakeData.ROLLER_VEL_ft_s));
+        //mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
+        //mTalonFX.set(TalonFXControlMode.Position, db.intake.get(DESIRED_ARM_STATE));
+        //mTalonFX.set(TalonFXControlMode.Velocity,db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
         mTable.getEntry("Roller_Pct").setNumber(db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
+        mTable.getEntry("Velocity").setNumber(db.intake.get(ROLLER_VEL_ft_s));
+        mTable.getEntry("Position").setNumber(db.intake.get(DESIRED_ARM_STATE));
     }
 
 }

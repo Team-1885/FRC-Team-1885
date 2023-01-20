@@ -377,21 +377,31 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateIntakeMotor() {
-        if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) {
             db.intake.set(DESIRED_ROLLER_pct,0.2);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+        }
+
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
-            db.intake.set(ARM_STATE, 1.0);
+            db.intake.set(DESIRED_ROLLER_pct,0.0);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+        }
+
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
+            db.intake.set(DESIRED_ARM_STATE, 1.0);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
-            db.intake.set(SET_ROLLER_VEL_ft_s,0.0);
-            db.intake.set(ARM_STATE,0.0);
+            db.intake.set(DESIRED_ARM_STATE, 0.0);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
         }
     }
     private void updatePneumaticTest() {
-        if(db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
+        if(db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
         }
