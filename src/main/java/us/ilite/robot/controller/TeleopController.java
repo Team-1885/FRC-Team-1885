@@ -71,6 +71,11 @@ public class TeleopController extends BaseManualController {
         updateIntake();
         updateTargetLock();
         updateMyMotor2();
+        updatepneumaticspractice();
+    }
+
+    private void updatepneumaticspractice() {
+        if (db.climber.isSet(EClimberData.A_BTN));
     }
 
     private void updateHangerMotors() {
@@ -390,7 +395,6 @@ public class TeleopController extends BaseManualController {
             db.intake.set(DESIRED_ROLLER_pct, 0.8);
         } else {
             db.intake.set(DESIRED_ROLLER_pct, 0.0);
-
         }
 
     }
