@@ -379,15 +379,25 @@ public class TeleopController extends BaseManualController {
     }
     private void updateMotor() {
         if (db.operatorinput.isSet(ELogitech310.A_BTN)) {
-            db.intake.set(DESIRED_ROLLER_pct, 0.4);
-            db.intake.set(ROLLER_VEL_ft_s, .7);
-            db.intake.set(ARM_STATE, 1);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+            db.intake.set(DESIRED_ARM_STATE, 1.0);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
+
+        }
+        else if (db.operatorinput.isSet(ELogitech310.B_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0);
+            db.intake.set(SET_ROLLER_VEL_ft_s, .3);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
+        }
+        else if (db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0);
+            db.intake.set(DESIRED_ROLLER_pct, .5);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct, 0);
-            db.intake.set(ROLLER_VEL_ft_s, 0);
-            db.intake.set(ARM_STATE, 0);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0);
+            db.intake.set(DESIRED_ARM_STATE, 2.0);
+
         }
     }
     private void updatePnuematics() {
