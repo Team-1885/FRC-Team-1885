@@ -306,9 +306,10 @@ public class NeoDriveModule extends Module {
 
     private DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-    @Override
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        super.tankDriveVolts(leftVolts, rightVolts);
+    public void tankDriveVolts(Double leftVolts, Double rightVolts) {
+        db.drivetrain.set(LEFT_VOLTAGE, leftVolts);
+        db.drivetrain.set(RIGHT_VOLTAGE, rightVolts);
+
     }
 
     public void reset() {
