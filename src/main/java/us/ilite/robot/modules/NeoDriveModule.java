@@ -31,7 +31,7 @@ import java.util.function.BiConsumer;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module implements BiConsumer<Double, Double> {
+public class NeoDriveModule extends Module {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -306,15 +306,9 @@ public class NeoDriveModule extends Module implements BiConsumer<Double, Double>
 
     private DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        m_leftMotors.setVoltage(leftVolts);
-        m_rightMotors.setVoltage(rightVolts);
-        m_drive.feed();
-    }
-
     @Override
-    public void accept(Double o, Double o2) {
-
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        super.tankDriveVolts(leftVolts, rightVolts);
     }
 
     public void reset() {

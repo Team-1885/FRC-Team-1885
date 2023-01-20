@@ -52,6 +52,10 @@ public abstract class Module {
         }
     }
 
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+
+    }
+
 
     /**
      * The module's update function. Runs every time [mode]Periodic() is called (Roughly ~50Hz), or in a loop running at a custom frequency.
