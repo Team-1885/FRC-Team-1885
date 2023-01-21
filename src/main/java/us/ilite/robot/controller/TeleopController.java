@@ -74,10 +74,6 @@ public class TeleopController extends BaseManualController {
         updatepneumaticspractice();
     }
 
-    private void updatepneumaticspractice() {
-        if (db.climber.isSet(EClimberData.A_BTN));
-    }
-
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
 
@@ -397,5 +393,13 @@ public class TeleopController extends BaseManualController {
             db.intake.set(DESIRED_ROLLER_pct, 0.0);
         }
 
+    }
+    private void updatepneumaticspractice() {
+        if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)){
+            db.climber.set(EClimberData.DESIRED_VEL_pct, 0.8);
+        }
+        else {
+            db.climber.set(EClimberData.DESIRED_VEL_pct, 0.0);
+        }
     }
 }
