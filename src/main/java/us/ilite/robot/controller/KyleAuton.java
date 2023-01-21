@@ -20,6 +20,7 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Robot;
+import us.ilite.robot.modules.DriveSubsystem;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.List;
@@ -28,9 +29,10 @@ import java.util.function.BiConsumer;
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
 public class KyleAuton {
-    protected NeoDriveModule m_robotDrive;
-    public KyleAuton(NeoDriveModule mNeoDrive) {
-        m_robotDrive = mNeoDrive;
+    private DriveSubsystem mRobotDrive;
+
+    public KyleAuton(DriveSubsystem pDriveSubsystem) {
+        mRobotDrive = pDriveSubsystem;
     }
     protected final Data db = Robot.DATA;
     DifferentialDriveKinematics mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)); // kDriveKinematics
@@ -89,8 +91,8 @@ public class KyleAuton {
                                 Settings.kA // VoltSecondsSquaredPerMeter
                         ),
                         mDriveKinematics,
-                        m_robotDrive::getWheelSpeeds,
-                        //m_robotDrive::
+                        mRobotDrive::getWheelSpeeds,
+                        mRobotDrive::
 //                                mDriveKinematics.toWheelSpeeds(
 //                                        new ChassisSpeeds(
 //                                                initialState.velocityMetersPerSecond,

@@ -105,8 +105,8 @@ public class Robot extends TimedRobot {
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
 
-        // INITIALIZE KYLE AUTON                                                                                                                    
-        mKyleAuton = new KyleAuton(mNeoDrive);        // ------------------------------------------------------------------------------------       
+//        // INITIALIZE KYLE AUTON
+//        mKyleAuton = new KyleAuton(mNeoDrive);        // ------------------------------------------------------------------------------------
 
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {

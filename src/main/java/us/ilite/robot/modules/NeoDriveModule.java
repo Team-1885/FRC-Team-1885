@@ -22,6 +22,7 @@ import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.TrajectoryCommandUtils;
+import us.ilite.robot.controller.KyleAuton;
 import us.ilite.robot.hardware.ECommonNeutralMode;
 import us.ilite.robot.hardware.HardwareUtils;
 import us.ilite.robot.hardware.Pigeon;
@@ -45,6 +46,11 @@ public class NeoDriveModule extends Module {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    private DriveSubsystem mDriveSubsystem;
+    private MotorControllerGroup mLeftMotors;
+    private MotorControllerGroup mRightMotors;
+    private KyleAuton mKyleAuton;
+
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -96,6 +102,13 @@ public class NeoDriveModule extends Module {
     private DifferentialDriveOdometry mOdometry;
 
     public NeoDriveModule() {
+        //creating a drive susbsystem module for auton
+        mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
+        mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
+        mDriveSubsystem = new DriveSubsystem(mLeftMotors, mRightMotors);
+        mKyleAuton = new KyleAuton(mDriveSubsystem);
+
+
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
@@ -175,6 +188,7 @@ public class NeoDriveModule extends Module {
         mGyro.resetAngle(pose.getRotation());
         mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
+
     @Override
     public void readInputs() {
         mGyro.update();
@@ -287,35 +301,20 @@ public class NeoDriveModule extends Module {
         }
     }
 
-    private final MotorControllerGroup m_leftMotors =
-            new MotorControllerGroup(
-                    mLeftMaster,
-                    mLeftFollower);
-
-    // The motors on the right side of the drive.
-    private final MotorControllerGroup m_rightMotors =
-            new MotorControllerGroup(
-                    mRightMaster,
-                    mRightFollower);
-
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftMetersPerSecond = Units.feet_to_meters((db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
-        double rightMetersPerSecond = Units.feet_to_meters((db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
-        return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
-    }
-
-    private DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
-
-    @Override
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        super.tankDriveVolts(leftVolts, rightVolts);
-    }
 
     public void reset() {
         mLeftEncoder.setPosition(0.0);
         mRightEncoder.setPosition(0.0);
         mLeftMaster.set(0.0);
         mRightMaster.set(0.0);
+    }
+
+    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
+    //auton methods:
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        mLeftMotors.setVoltage(leftVolts);
+        mRightMotors.setVoltage(rightVolts);
+        m_drive.feed();
     }
 
 
