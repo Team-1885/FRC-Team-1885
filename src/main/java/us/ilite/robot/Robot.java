@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
         mNeoDrive.readInputs();
         mActiveController.setEnabled(true);
         // INITIALIZE KYLE AUTON
-        mKyleAuton = new KyleAuton();
+        mKyleAuton = new KyleAuton(mNeoDrive);
 
     }
 

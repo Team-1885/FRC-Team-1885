@@ -14,20 +14,16 @@ import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Robot;
 
-
+@Deprecated
 public class DriveSubsystem extends SubsystemBase  {
     //private db = Robot.DATA;
     private DifferentialDrive mDifferentialDrive;
-    public DriveSubsystem() {
-        mDifferentialDrive = new DifferentialDrive()
-    }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
         Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
-        mDifferentialDrive.feed();
-
+        Robot.DATA.drivetrain.set(EDriveData.FEED, 1);
     }
 //    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
 //    //auton methods:

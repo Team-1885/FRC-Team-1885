@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
@@ -32,7 +33,7 @@ import java.util.function.BiConsumer;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module {
+public class NeoDriveModule extends Module implements Subsystem {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -47,6 +48,8 @@ public class NeoDriveModule extends Module {
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
     private DifferentialDrive mDrive;
+    private MotorControllerGroup mLeftMotors;
+    private MotorControllerGroup mRightMotors;
 
 
     // ========================================
@@ -102,6 +105,7 @@ public class NeoDriveModule extends Module {
         //creating a drive susbsystem module for auton
         mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
         mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
+        mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
 //        mDriveSubsystem = new DriveSubsystem();
        // mKyleAuton = new KyleAuton(mDriveSubsystem);
 
@@ -288,6 +292,9 @@ public class NeoDriveModule extends Module {
                 //Divide by 6.56 since that is the max velocity in ft/s
                 double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
                 double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
+                if (db.drivetrain.get(FEED) == 1) {
+                    mDrive.feed();
+                }
 //                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
 //                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
 //                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
@@ -306,10 +313,18 @@ public class NeoDriveModule extends Module {
         mRightMaster.set(0.0);
     }
 
-    //auton methods:
-    public void feed() {
-        m_drive.feed();
+    //auton:
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
+        Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
+        Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
+        mDrive.feed();
     }
 
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        double leftMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s)));
+        double rightMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.R_ACTUAL_VEL_FT_s)));
+        return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
+    }
 
 }

@@ -30,10 +30,10 @@ import java.util.function.Supplier;
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
 public class KyleAuton {
-    private DriveSubsystem mRobotDrive;
+    private NeoDriveModule mRobotDrive;
 
-    public KyleAuton() {
-        mRobotDrive = new DriveSubsystem();
+    public KyleAuton(NeoDriveModule pNeoDrive) {
+        mRobotDrive = pNeoDrive;
     }
     protected final Data db = Robot.DATA;
     DifferentialDriveKinematics mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)); // kDriveKinematics
