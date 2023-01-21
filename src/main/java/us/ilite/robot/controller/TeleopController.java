@@ -386,6 +386,7 @@ public class TeleopController extends BaseManualController {
         else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
             db.intake.set(DESIRED_ROLLER_pct,0.0);
+            //db.intake.set(Enums.ERollerState , Enums.ERollerState.VELOCITY);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
         }
 
@@ -395,7 +396,7 @@ public class TeleopController extends BaseManualController {
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
-            db.intake.set(DESIRED_ARM_STATE, 0.0);
+            db.intake.set(DESIRED_ARM_STATE, 2.0);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
         }
