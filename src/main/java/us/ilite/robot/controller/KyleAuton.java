@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import us.ilite.common.Data;
 import us.ilite.common.config.Settings;
@@ -44,7 +45,7 @@ public class KyleAuton {
      * @return the command to run in autonomous
      */
 
-    public void runAuton() {
+    public Command runAuton() {
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
