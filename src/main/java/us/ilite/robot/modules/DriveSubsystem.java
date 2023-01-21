@@ -16,17 +16,26 @@ import us.ilite.robot.Robot;
 
 
 public class DriveSubsystem extends SubsystemBase  {
-    private MotorControllerGroup mLeftMotors;
-    private MotorControllerGroup mRightMotors;
-
-    public DriveSubsystem(MotorControllerGroup p_leftMotors, MotorControllerGroup p_rightMotors) {
-        mLeftMotors = p_leftMotors;
-        mRightMotors = p_rightMotors;
+    //private db = Robot.DATA;
+    private DifferentialDrive mDifferentialDrive;
+    public DriveSubsystem() {
+        mDifferentialDrive = new DifferentialDrive()
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
-        NeoDriveModule.(leftVolts, rightVolts);
+        //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
+        Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
+        Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
+        mDifferentialDrive.feed();
+
     }
+//    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
+//    //auton methods:
+//    public void tankDriveVolts(double leftVolts, double rightVolts) {
+//        mLeftMotors.setVoltage(leftVolts);
+//        mRightMotors.setVoltage(rightVolts);
+//        m_drive.feed();
+//    }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         double leftMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s)));

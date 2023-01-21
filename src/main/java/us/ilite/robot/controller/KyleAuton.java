@@ -25,14 +25,15 @@ import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 // NOT SURE IF THIS CODE ACTUALLY GETS THE KINEMATIC CONSTANT OF THE ROBOT
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
 public class KyleAuton {
     private DriveSubsystem mRobotDrive;
 
-    public KyleAuton(DriveSubsystem pDriveSubsystem) {
-        mRobotDrive = pDriveSubsystem;
+    public KyleAuton() {
+        mRobotDrive = new DriveSubsystem();
     }
     protected final Data db = Robot.DATA;
     DifferentialDriveKinematics mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)); // kDriveKinematics
@@ -80,7 +81,7 @@ public class KyleAuton {
         RamseteCommand ramseteCommand =
                 new RamseteCommand(
                         exampleTrajectory,
-                        getRobotPose(), //m_robotDrive::getPose,
+                        (Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
                         new RamseteController(
                                 Settings.kRamseteB, // kRamseteB
                                 Settings.kRamseteZeta // kRamseteZeta
@@ -92,7 +93,6 @@ public class KyleAuton {
                         ),
                         mDriveKinematics,
                         mRobotDrive::getWheelSpeeds,
-                        mRobotDrive::
 //                                mDriveKinematics.toWheelSpeeds(
 //                                        new ChassisSpeeds(
 //                                                initialState.velocityMetersPerSecond,
@@ -101,15 +101,15 @@ public class KyleAuton {
                         new PIDController(0.1, 0, 0), // left controller
                         new PIDController(0.1, 0, 0), // right controller
                         // RamseteCommand passes volts to the callback
-                        m_robotDrive::tankDriveVolts, //BiConsumer<Double, Double> outputVolts = new BiConsumer<Double, Double> = m_robotDrive::tankDriveVolts, //(leftVolts, rightVolts) -> m_robotDrive.tankDriveVolts(leftVolts, rightVolts),
-                        m_robotDrive
+                        mRobotDrive::tankDriveVolts, //BiConsumer<Double, Double> outputVolts = new BiConsumer<Double, Double> = m_robotDrive::tankDriveVolts, //(leftVolts, rightVolts) -> m_robotDrive.tankDriveVolts(leftVolts, rightVolts),
+                        mRobotDrive
                 );
 
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
+        return ramseteCommand.andThen(() -> mRobotDrive.tankDriveVolts(0, 0));
     }
     public Pose2d getRobotPose () {
         double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);

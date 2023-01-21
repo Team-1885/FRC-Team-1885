@@ -46,10 +46,7 @@ public class NeoDriveModule extends Module {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
-    private DriveSubsystem mDriveSubsystem;
-    private MotorControllerGroup mLeftMotors;
-    private MotorControllerGroup mRightMotors;
-    private KyleAuton mKyleAuton;
+    private DifferentialDrive mDrive;
 
 
     // ========================================
@@ -105,8 +102,8 @@ public class NeoDriveModule extends Module {
         //creating a drive susbsystem module for auton
         mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
         mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
-        mDriveSubsystem = new DriveSubsystem(mLeftMotors, mRightMotors);
-        mKyleAuton = new KyleAuton(mDriveSubsystem);
+//        mDriveSubsystem = new DriveSubsystem();
+       // mKyleAuton = new KyleAuton(mDriveSubsystem);
 
 
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
@@ -309,11 +306,8 @@ public class NeoDriveModule extends Module {
         mRightMaster.set(0.0);
     }
 
-    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
     //auton methods:
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        mLeftMotors.setVoltage(leftVolts);
-        mRightMotors.setVoltage(rightVolts);
+    public void feed() {
         m_drive.feed();
     }
 
