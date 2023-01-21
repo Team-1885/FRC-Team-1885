@@ -44,7 +44,9 @@ public class PracticeModule extends Module {
         setIntakeTableValue("rollerpct", EIntakeData.ROLLER_PCT);
 
         setButtonTableValue("a_btn", ELogitech310.A_BTN);
-
+        setButtonTableValue("b_btn", ELogitech310.B_BTN);
+        setButtonTableValue("y_btn", ELogitech310.Y_BTN);
+        setButtonTableValue("x_btn", ELogitech310.X_BTN);
     }
 
     private void setIntakeTableValue(String pEntry, EIntakeData pEnum)
@@ -54,7 +56,7 @@ public class PracticeModule extends Module {
 
     private void setButtonTableValue(String pEntry, ELogitech310 pEnum)
     {
-        mButtonTable.getEntry(pEntry).setNumber();
+        mButtonTable.getEntry(pEntry).setNumber(db.driverinput.get(pEnum));
     }
 
 
