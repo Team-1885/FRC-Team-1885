@@ -101,8 +101,8 @@ public class KyleAuton {
                         new PIDController(0.1, 0, 0), // left controller
                         new PIDController(0.1, 0, 0), // right controller
                         // RamseteCommand passes volts to the callback
-                        (leftVolts, rightVolts) -> m_robotDrive.tankDriveVolts(leftVolts, rightVolts),
-                        m_robotDrive;
+                        m_robotDrive::tankDriveVolts, //BiConsumer<Double, Double> outputVolts = new BiConsumer<Double, Double> = m_robotDrive::tankDriveVolts, //(leftVolts, rightVolts) -> m_robotDrive.tankDriveVolts(leftVolts, rightVolts),
+                        m_robotDrive
                 );
 
         // Reset odometry to the starting pose of the trajectory.
