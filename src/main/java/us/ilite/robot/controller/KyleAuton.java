@@ -1,6 +1,7 @@
 package us.ilite.robot.controller;
 
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,12 +31,13 @@ import java.util.function.Supplier;
 // NOT SURE IF THIS CODE ACTUALLY GETS THE KINEMATIC CONSTANT OF THE ROBOT
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
-public class KyleAuton {
+public class KyleAuton extends BaseAutonController {
     private NeoDriveModule mRobotDrive;
 
     public KyleAuton(NeoDriveModule pNeoDrive) {
         mRobotDrive = pNeoDrive;
     }
+
     protected final Data db = Robot.DATA;
     DifferentialDriveKinematics mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)); // kDriveKinematics
 
@@ -45,7 +47,12 @@ public class KyleAuton {
      * @return the command to run in autonomous
      */
 
-    public Command runAuton() {
+    public void updateImpl() {
+        //create follow trajectory setup
+        getTrajectoryInstructions().execute(); // this follows the actual traj
+        getTrajectoryInstructions().cancel();
+    }
+    public Command getTrajectoryInstructions() {
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(

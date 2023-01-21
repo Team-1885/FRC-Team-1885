@@ -23,7 +23,6 @@ public class DriveSubsystem extends SubsystemBase  {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
         Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
-        Robot.DATA.drivetrain.set(EDriveData.FEED, 1);
     }
 //    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
 //    //auton methods:

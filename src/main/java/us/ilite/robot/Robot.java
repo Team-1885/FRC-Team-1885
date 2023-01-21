@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
 
-
+        mKyleAuton = new KyleAuton(mNeoDrive);
 
 
         MODE = INITIALIZING;
@@ -173,9 +173,6 @@ public class Robot extends TimedRobot {
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
         mActiveController.setEnabled(true);
-        // INITIALIZE KYLE AUTON
-        mKyleAuton = new KyleAuton(mNeoDrive);
-
     }
 
     @Override

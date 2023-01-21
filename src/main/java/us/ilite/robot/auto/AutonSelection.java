@@ -20,6 +20,7 @@ public class AutonSelection {
             TwoBallController.class,
             ThreeBallController.class,
             TexasSwitchController.class,
+            KyleAuton.class,
 //            FiveBallController.class,
 //            FourBallController.class,
 //            TwoBallTrajectoryController.class,

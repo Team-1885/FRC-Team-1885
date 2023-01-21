@@ -14,7 +14,6 @@ public enum EDriveData implements CodexOf<Double> {
     IS_CURRENT_LIMITING,
     DESIRED_TURN_ANGLE_deg,
     DESIRED_TURN_PCT, DESIRED_THROTTLE_PCT,
-    FEED,
 
     //Ramsete odometry enums
     GET_X_OFFSET, GET_Y_OFFSET,

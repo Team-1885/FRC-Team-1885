@@ -292,9 +292,6 @@ public class NeoDriveModule extends Module implements Subsystem {
                 //Divide by 6.56 since that is the max velocity in ft/s
                 double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
                 double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
-                if (db.drivetrain.get(FEED) == 1) {
-                    mDrive.feed();
-                }
 //                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
 //                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
 //                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
