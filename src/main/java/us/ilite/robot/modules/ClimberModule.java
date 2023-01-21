@@ -60,7 +60,7 @@ public class ClimberModule extends Module{
         mCLMR11.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 0.01));
 
         mCLPNDouble = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 2, 3);
-        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 4, 5);
+        mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 7, 8);
 
         mCL12.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 20);
         mCLMR11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0, 20);
@@ -148,12 +148,14 @@ public class ClimberModule extends Module{
             mCLPNDouble.set(DoubleSolenoid.Value.kReverse);
         }
 
-        if (singleMode == Enums.EClampMode.CLAMPED) {
+
+      if (singleMode == Enums.EClampMode.CLAMPED) {
             mCLPNSingle.set(DoubleSolenoid.Value.kForward);
         } else if (singleMode == Enums.EClampMode.RELEASED) {
             mCLPNSingle.set(DoubleSolenoid.Value.kReverse);
         }
     }
+
 
     private double ticksToClimberDegrees(double pTicks) {
         return pTicks / 2048 * kClimberRatio * 360;
