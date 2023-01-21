@@ -62,9 +62,12 @@
       "Field": {
         "open": false
       }
+    },
+    "button is pressed": {
+      "open": true
+    },
+    "intake": {
+      "open": true
     }
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }
