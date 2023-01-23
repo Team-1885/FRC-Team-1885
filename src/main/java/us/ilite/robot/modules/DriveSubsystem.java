@@ -24,6 +24,11 @@ public class DriveSubsystem extends SubsystemBase  {
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
         Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
     }
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        m_odometry.resetPosition(
+                m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance(), pose);
+    }
 //    private DifferentialDrive m_drive = new DifferentialDrive(mLeftMotors, mRightMotors);
 //    //auton methods:
 //    public void tankDriveVolts(double leftVolts, double rightVolts) {
