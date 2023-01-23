@@ -22,7 +22,7 @@ public class InputMap {
         TURN_AXIS = ELogitech310.RIGHT_X_AXIS,
         THROTTLE_AXIS = ELogitech310.LEFT_Y_AXIS,
         SNAIL_MODE = ELogitech310.RIGHT_TRIGGER_AXIS, // TODO Experiment with increased or decreased acceleration rates for snail
-        ACTIVATE_CLIMB = ELogitech310.START,
+        ACTIVATE_CLIMB = ELogitech310.Y_BTN,
         MID_RUNG = ELogitech310.L_BTN,
         TARGET_LOCK = ELogitech310.LEFT_TRIGGER_AXIS
         ;

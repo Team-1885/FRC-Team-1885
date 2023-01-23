@@ -395,7 +395,7 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updatepneumaticspractice() {
-        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
+        if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
             }
