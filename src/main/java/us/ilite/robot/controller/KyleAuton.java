@@ -29,9 +29,17 @@ import java.util.function.Supplier;
 
 public class KyleAuton extends BaseAutonController {
     private NeoDriveModule mRobotDrive;
+    private Command mAuton;
 
-    public KyleAuton(NeoDriveModule pNeoDrive) {
+    public KyleAuton() //
+    public KyleAuton(NeoDriveModule pNeoDrive) { // given proper Drive Data in Robot.java
         mRobotDrive = pNeoDrive;
+    }
+
+    @Override
+    public void initialize() { // called once
+        mAuton = getTrajectoryInstructions(); //
+        mAuton.schedule();
     }
 
     protected final Data db = Robot.DATA;
@@ -43,14 +51,13 @@ public class KyleAuton extends BaseAutonController {
      * @return the command to run in autonomous
      */
 
-    public void updateImpl() {
+    public void updateImpl() { // called periodically
         //create follow trajectory setup
-        Command urmother = getTrajectoryInstructions();
+
         if (urmother != null) //
         {
-            urmother.schedule();
-            urmother.execute(); // this follows the actual traj
-            urmother.cancel();
+            mAuton.execute(); // this follows the actual traj
+            mAuton.cancel();
             //urmother.end();
         }
 
@@ -122,6 +129,9 @@ public class KyleAuton extends BaseAutonController {
         // Run path following command, then stop at the end.
         return ramseteCommand.andThen(() -> mRobotDrive.tankDriveVolts(0, 0));
     }
+    // take a set of points and create a trajectory between them
+    // create command method that sets up trajectories with ramsete
+
     public Pose2d getRobotPose () {
         double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
         double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);
