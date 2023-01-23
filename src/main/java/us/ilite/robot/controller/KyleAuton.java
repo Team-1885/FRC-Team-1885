@@ -1,14 +1,12 @@
 package us.ilite.robot.controller;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -22,11 +20,9 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Robot;
-import us.ilite.robot.modules.DriveSubsystem;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 // NOT SURE IF THIS CODE ACTUALLY GETS THE KINEMATIC CONSTANT OF THE ROBOT
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
@@ -49,8 +45,15 @@ public class KyleAuton extends BaseAutonController {
 
     public void updateImpl() {
         //create follow trajectory setup
-        getTrajectoryInstructions().execute(); // this follows the actual traj
-        getTrajectoryInstructions().cancel();
+        Command urmother = getTrajectoryInstructions();
+        if (urmother != null) //
+        {
+            urmother.schedule();
+            urmother.execute(); // this follows the actual traj
+            urmother.cancel();
+            //urmother.end();
+        }
+
     }
     public Command getTrajectoryInstructions() {
         // Create a voltage constraint to ensure we don't accelerate too fast

@@ -50,10 +50,6 @@ public class NeoDriveModule extends Module implements Subsystem {
     private DifferentialDrive mDrive;
     private MotorControllerGroup mLeftMotors;
     private MotorControllerGroup mRightMotors;
-
-    // for trajectory kyleauton
-    private MotorControllerGroup mLeftMotors;
-    private MotorControllerGroup mRightMotors;
     private DifferentialDrive mDifferentialDrive;
 
 
