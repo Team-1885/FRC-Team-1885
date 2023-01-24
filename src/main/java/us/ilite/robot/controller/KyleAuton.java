@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import us.ilite.common.Data;
@@ -32,13 +33,20 @@ public class KyleAuton extends BaseAutonController {
     private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
     private NeoDriveModule mRobotDrive; // get singleton instance
     private Command mAuton; // save command instance for reuse
-
+    private Timer mTimer;
     @Override
     public void initialize() { // called once
+        // first set up timer
+        mTimer = new Timer();
+        mTimer.reset();
+        mTimer.start();
+
+        // set up other vars
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
         mRobotDrive = NeoDriveModule.getInstance();
         mAuton = getTrajectoryInstructions();
         mAuton.schedule();
+        mAuton.execute();
     }
 
     /**
@@ -49,11 +57,21 @@ public class KyleAuton extends BaseAutonController {
 
     @Override
     public void updateImpl() { // called periodically
-        if (mAuton != null) // make sure command exists
+        // set up timer in initialize (15 seconds bc auton lasts 15 seconds)
+        // keep checking timer in updateImpl
+        // cancel command when timer expires
+
+        if (mTimer > 15.0) // 15 seconds not working idk
         {
-            mAuton.execute(); // this follows the actual trajectory
             mAuton.cancel();
+            // mAuton.end();
         }
+
+//        if (mAuton != null) // make sure command exists
+//        {
+//            mAuton.execute(); // this follows the actual trajectory
+//            mAuton.cancel();
+//        }
     }
     public Command getTrajectoryInstructions() {
         // Create a voltage constraint to ensure we don't accelerate too fast
