@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
+    private FollowRamseteTrajectory mFollowRamseteTrajectory;
   //  private BallTracking mPixy;
 
 
@@ -91,7 +92,8 @@ public class Robot extends TimedRobot {
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
-        mKyleAuton = new KyleAuton(); // Trajectory
+        mFollowRamseteTrajectory = new FollowRamseteTrajectory();
+        //mKyleAuton = new KyleAuton(); // Trajectory
 
 
         MODE = INITIALIZING;

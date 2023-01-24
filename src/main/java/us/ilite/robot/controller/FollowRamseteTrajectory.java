@@ -1,6 +1,7 @@
 package us.ilite.robot.controller;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import us.ilite.robot.commands.FollowRamseteCommand;
 
 public class FollowRamseteTrajectory extends BaseAutonController{
@@ -18,7 +19,7 @@ public class FollowRamseteTrajectory extends BaseAutonController{
         mRamseteCommand.init(mTimer.get());
     }
     public void updateImpl() {
-
+//        SmartDashboard.putNumber("Test", 4);
     }
 
 }

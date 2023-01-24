@@ -44,9 +44,9 @@ public class KyleAuton extends BaseAutonController {
         // set up other vars
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
         mRobotDrive = NeoDriveModule.getInstance();
-        mAuton = getTrajectoryInstructions();
-        mAuton.schedule();
-        mAuton.execute();
+//        mAuton = getTrajectoryInstructions();
+//        mAuton.schedule();
+//        mAuton.execute();
     }
 
     /**
@@ -61,7 +61,7 @@ public class KyleAuton extends BaseAutonController {
         // keep checking timer in updateImpl
         // cancel command when timer expires
 
-        if (mTimer > 15.0) // 15 seconds not working idk
+        if (mTimer.get() > 15.0) // 15 seconds not working idk
         {
             mAuton.cancel();
             // mAuton.end();
@@ -108,7 +108,6 @@ public class KyleAuton extends BaseAutonController {
                         config);
 
         RamseteCommand ramseteCommand =
-
                 new RamseteCommand(
                         exampleTrajectory,
                         mRobotDrive::getRobotPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
