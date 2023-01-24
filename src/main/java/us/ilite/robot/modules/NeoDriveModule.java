@@ -384,18 +384,21 @@ public class NeoDriveModule extends Module implements Subsystem {
     public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
         return instance;
     }
-
+    public Pose2d getRobotPose () {
+        double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
+        double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);
+        double heading = Robot.DATA.drivetrain.get(EDriveData.ACTUAL_HEADING_RADIANS);
+        return new Pose2d(new Translation2d(x, y), new Rotation2d(heading));
+    }
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        double leftMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s)));
+        double rightMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.R_ACTUAL_VEL_FT_s)));
+        return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
+    }
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
         Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
         mDrive.feed();
     }
-
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s)));
-        double rightMetersPerSecond = Units.feet_to_meters((Robot.DATA.drivetrain.get(EDriveData.R_ACTUAL_VEL_FT_s)));
-        return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
-    }
-
 }

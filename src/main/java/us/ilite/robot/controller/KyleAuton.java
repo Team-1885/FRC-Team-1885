@@ -28,22 +28,18 @@ import java.util.function.Supplier;
 // new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)
 
 public class KyleAuton extends BaseAutonController {
-    private NeoDriveModule mRobotDrive;
-    private Command mAuton;
-
-    //public KyleAuton() //
-//    public KyleAuton(NeoDriveModule pNeoDrive) { // given proper Drive Data in Robot.java
-//        mRobotDrive = pNeoDrive;
-//    }
-
+    protected final Data db = Robot.DATA;
+    private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
+    private NeoDriveModule mRobotDrive; // get singleton instance
+    private Command mAuton; // save command instance for reuse
     @Override
     public void initialize() { // called once
-        mAuton = getTrajectoryInstructions(); //
+        mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
+        mRobotDrive = NeoDriveModule.getInstance();
+        mAuton = getTrajectoryInstructions();
         mAuton.schedule();
     }
 
-    protected final Data db = Robot.DATA;
-    DifferentialDriveKinematics mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet)); // kDriveKinematics
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -52,15 +48,11 @@ public class KyleAuton extends BaseAutonController {
      */
 
     public void updateImpl() { // called periodically
-        //create follow trajectory setup
-
-        if (mAuton != null) //
+        if (mAuton != null) // make sure command exists
         {
-            mAuton.execute(); // this follows the actual traj
+            mAuton.execute(); // this follows the actual trajectory
             mAuton.cancel();
-            //urmother.end();
         }
-
     }
     public Command getTrajectoryInstructions() {
         // Create a voltage constraint to ensure we don't accelerate too fast
@@ -99,7 +91,7 @@ public class KyleAuton extends BaseAutonController {
         RamseteCommand ramseteCommand =
                 new RamseteCommand(
                         exampleTrajectory,
-                        (Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
+                        mRobotDrive::getRobotPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
                         new RamseteController(
                                 Settings.kRamseteB, // kRamseteB
                                 Settings.kRamseteZeta // kRamseteZeta
@@ -129,14 +121,8 @@ public class KyleAuton extends BaseAutonController {
         // Run path following command, then stop at the end.
         return ramseteCommand.andThen(() -> mRobotDrive.tankDriveVolts(0, 0));
     }
+    // TODO --------------------------
     // take a set of points and create a trajectory between them
     // create command method that sets up trajectories with ramsete
-
-    public Pose2d getRobotPose () {
-        double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
-        double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);
-        double heading = Robot.DATA.drivetrain.get(EDriveData.ACTUAL_HEADING_RADIANS);
-        return new Pose2d(new Translation2d(x, y), new Rotation2d(heading));
-    }
 }
 
