@@ -32,6 +32,7 @@ public class KyleAuton extends BaseAutonController {
     private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
     private NeoDriveModule mRobotDrive; // get singleton instance
     private Command mAuton; // save command instance for reuse
+
     @Override
     public void initialize() { // called once
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
@@ -40,13 +41,13 @@ public class KyleAuton extends BaseAutonController {
         mAuton.schedule();
     }
 
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
 
+    @Override
     public void updateImpl() { // called periodically
         if (mAuton != null) // make sure command exists
         {
@@ -80,15 +81,16 @@ public class KyleAuton extends BaseAutonController {
         Trajectory exampleTrajectory =
                 TrajectoryGenerator.generateTrajectory(
                         // Start at the origin facing the +X direction
-                        new Pose2d(0, 0, new Rotation2d(0)),
+                        //new Pose2d(0, 0, new Rotation2d(0)),
                         // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                        List.of(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(2, 0, new Rotation2d(0))),
                         // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(3, 0, new Rotation2d(0)),
+                        //new Pose2d(3, 0, new Rotation2d(0)),
                         // Pass config
                         config);
 
         RamseteCommand ramseteCommand =
+
                 new RamseteCommand(
                         exampleTrajectory,
                         mRobotDrive::getRobotPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,

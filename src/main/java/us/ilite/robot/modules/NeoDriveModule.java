@@ -204,6 +204,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         db.drivetrain.set(L_ACTUAL_VEL_FT_s, mLeftEncoder.getVelocity() * kDriveNEOVelocityFactor);
         db.drivetrain.set(R_ACTUAL_VEL_RPM, mRightEncoder.getVelocity() * kGearboxRatio);
         db.drivetrain.set(L_ACTUAL_VEL_RPM, mLeftEncoder.getVelocity() * kGearboxRatio);
+        db.drivetrain.set(L_ACTUAL_VEL_M_s, Units.feet_to_meters((mLeftEncoder.getVelocity() * kDriveNEOVelocityFactor)));
+        db.drivetrain.set(R_ACTUAL_VEL_M_s, Units.feet_to_meters((mRightEncoder.getVelocity() * kDriveNEOVelocityFactor)));
         db.drivetrain.set(R_ACTUAL_POS_FT, mRightEncoder.getPosition() * kDriveNEOPositionFactor);
         db.drivetrain.set(R_ACTUAL_VEL_FT_s, mRightEncoder.getVelocity() * kDriveNEOVelocityFactor);
         db.imu.set(EGyro.ACCEL_X, mGyro.getAccelX());
@@ -399,6 +401,12 @@ public class NeoDriveModule extends Module implements Subsystem {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
         Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
+        mDrive.feed();
+    }
+
+    public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
+        Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, leftSpeed);
+        Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightSpeed);
         mDrive.feed();
     }
 }
