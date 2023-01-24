@@ -102,67 +102,67 @@ public class NeoDriveModule extends Module implements Subsystem {
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
 
-    public NeoDriveModule() {
-        //creating a drive susbsystem module for auton
-        mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
-        mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
-        mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
-//        mDriveSubsystem = new DriveSubsystem();
-       // mKyleAuton = new KyleAuton(mDriveSubsystem);
-
-
-        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
-        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
-
-        mLeftFollower.follow(mLeftMaster);
-        mRightFollower.follow(mRightMaster);
-        mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
-
-        mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        mRightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        mRightMaster.setInverted(true);
-
-        mRightMaster.setSmartCurrentLimit(65);
-        mRightFollower.setSmartCurrentLimit(65);
-        mLeftMaster.setSmartCurrentLimit(65);
-        mLeftFollower.setSmartCurrentLimit(65);
-        
-        mRightEncoder = mRightMaster.getEncoder();
-        mLeftEncoder = mLeftMaster.getEncoder();
-
-        mRightCtrl = mRightMaster.getPIDController();
-        mLeftCtrl = mLeftMaster.getPIDController();
-        mRightCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
-        mLeftCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
-
-        mTurnToDegreePID = new PIDController(kTurnToProfileGains, -180, 180, Settings.kControlLoopPeriod);
-        mTurnToDegreePID.setContinuous(true);
-        mTurnToDegreePID.setOutputRange(-1, 1);
-
-        mRightPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
-        mRightPositionPID.setOutputRange(-1 , 1);
-        mLeftPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
-        mLeftPositionPID.setOutputRange(-1 , 1);
-
-        mTargetLockPID = new PIDController(kTargetAngleLockGains, -180, 180, Settings.kControlLoopPeriod);
-        mTargetLockPID.setOutputRange(Settings.kTargetAngleLockMinPower, Settings.kTargetAngleLockMaxPower);
-
-        HardwareUtils.setGains(mLeftCtrl, kVelocityGains);
-        HardwareUtils.setGains(mRightCtrl, kVelocityGains);
-        HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
-        HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
-
-        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
-
-        mLeftMaster.burnFlash();
-        mLeftFollower.burnFlash();
-        mRightMaster.burnFlash();
-        mRightFollower.burnFlash();
-    }
+//    public NeoDriveModule() {
+//        //creating a drive susbsystem module for auton
+//        mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
+//        mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
+//        mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
+////        mDriveSubsystem = new DriveSubsystem();
+//       // mKyleAuton = new KyleAuton(mDriveSubsystem);
+//
+//
+//        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
+//        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+//        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
+//        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+//
+//        mLeftFollower.follow(mLeftMaster);
+//        mRightFollower.follow(mRightMaster);
+//        mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
+//
+//        mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+//        mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+//        mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+//        mRightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+//        mRightMaster.setInverted(true);
+//
+//        mRightMaster.setSmartCurrentLimit(65);
+//        mRightFollower.setSmartCurrentLimit(65);
+//        mLeftMaster.setSmartCurrentLimit(65);
+//        mLeftFollower.setSmartCurrentLimit(65);
+//
+//        mRightEncoder = mRightMaster.getEncoder();
+//        mLeftEncoder = mLeftMaster.getEncoder();
+//
+//        mRightCtrl = mRightMaster.getPIDController();
+//        mLeftCtrl = mLeftMaster.getPIDController();
+//        mRightCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
+//        mLeftCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
+//
+//        mTurnToDegreePID = new PIDController(kTurnToProfileGains, -180, 180, Settings.kControlLoopPeriod);
+//        mTurnToDegreePID.setContinuous(true);
+//        mTurnToDegreePID.setOutputRange(-1, 1);
+//
+//        mRightPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
+//        mRightPositionPID.setOutputRange(-1 , 1);
+//        mLeftPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
+//        mLeftPositionPID.setOutputRange(-1 , 1);
+//
+//        mTargetLockPID = new PIDController(kTargetAngleLockGains, -180, 180, Settings.kControlLoopPeriod);
+//        mTargetLockPID.setOutputRange(Settings.kTargetAngleLockMinPower, Settings.kTargetAngleLockMaxPower);
+//
+//        HardwareUtils.setGains(mLeftCtrl, kVelocityGains);
+//        HardwareUtils.setGains(mRightCtrl, kVelocityGains);
+//        HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
+//        HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
+//
+//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+//
+//        mLeftMaster.burnFlash();
+//        mLeftFollower.burnFlash();
+//        mRightMaster.burnFlash();
+//        mRightFollower.burnFlash();
+//    }
     @Override
     public void modeInit(EMatchMode pMode) {
         mGyro.zeroAll();
@@ -311,7 +311,80 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightMaster.set(0.0);
     }
 
-    //auton:
+
+    // KYLE AUTON METHODS AND CONSTRUCTOR (For trajectory)
+
+    // Only one NeoDriveModule will ever exist.
+    // Allows KyleAuton to have an instance of our NeoDrive Module
+    // without creating a constructor, code expects no constructor
+    // so it can use a default constructor
+    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
+    private NeoDriveModule() // private constructor to avoid client applications using the constructor; can only be called inside class
+    {
+        //creating a drive susbsystem module for auton
+        mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
+        mRightMotors = new MotorControllerGroup(mRightMaster, mRightFollower);
+        mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
+        // mDriveSubsystem = new DriveSubsystem();
+        // mKyleAuton = new KyleAuton(mDriveSubsystem);
+
+
+        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
+        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+
+        mLeftFollower.follow(mLeftMaster);
+        mRightFollower.follow(mRightMaster);
+        mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
+
+        mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        mRightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        mRightMaster.setInverted(true);
+
+        mRightMaster.setSmartCurrentLimit(65);
+        mRightFollower.setSmartCurrentLimit(65);
+        mLeftMaster.setSmartCurrentLimit(65);
+        mLeftFollower.setSmartCurrentLimit(65);
+
+        mRightEncoder = mRightMaster.getEncoder();
+        mLeftEncoder = mLeftMaster.getEncoder();
+
+        mRightCtrl = mRightMaster.getPIDController();
+        mLeftCtrl = mLeftMaster.getPIDController();
+        mRightCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
+        mLeftCtrl.setOutputRange(-kMaxVelocityRPM, kMaxVelocityRPM);
+
+        mTurnToDegreePID = new PIDController(kTurnToProfileGains, -180, 180, Settings.kControlLoopPeriod);
+        mTurnToDegreePID.setContinuous(true);
+        mTurnToDegreePID.setOutputRange(-1, 1);
+
+        mRightPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
+        mRightPositionPID.setOutputRange(-1 , 1);
+        mLeftPositionPID = new PIDController(kPositionGains,0, 10, Settings.kControlLoopPeriod);
+        mLeftPositionPID.setOutputRange(-1 , 1);
+
+        mTargetLockPID = new PIDController(kTargetAngleLockGains, -180, 180, Settings.kControlLoopPeriod);
+        mTargetLockPID.setOutputRange(Settings.kTargetAngleLockMinPower, Settings.kTargetAngleLockMaxPower);
+
+        HardwareUtils.setGains(mLeftCtrl, kVelocityGains);
+        HardwareUtils.setGains(mRightCtrl, kVelocityGains);
+        HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
+        HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
+
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+
+        mLeftMaster.burnFlash();
+        mLeftFollower.burnFlash();
+        mRightMaster.burnFlash();
+        mRightFollower.burnFlash();
+    }
+    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+        return instance;
+    }
+
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
         Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);

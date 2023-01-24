@@ -31,10 +31,10 @@ public class KyleAuton extends BaseAutonController {
     private NeoDriveModule mRobotDrive;
     private Command mAuton;
 
-    public KyleAuton() //
-    public KyleAuton(NeoDriveModule pNeoDrive) { // given proper Drive Data in Robot.java
-        mRobotDrive = pNeoDrive;
-    }
+    //public KyleAuton() //
+//    public KyleAuton(NeoDriveModule pNeoDrive) { // given proper Drive Data in Robot.java
+//        mRobotDrive = pNeoDrive;
+//    }
 
     @Override
     public void initialize() { // called once
@@ -54,7 +54,7 @@ public class KyleAuton extends BaseAutonController {
     public void updateImpl() { // called periodically
         //create follow trajectory setup
 
-        if (urmother != null) //
+        if (mAuton != null) //
         {
             mAuton.execute(); // this follows the actual traj
             mAuton.cancel();

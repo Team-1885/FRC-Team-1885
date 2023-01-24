@@ -91,8 +91,7 @@ public class Robot extends TimedRobot {
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
-
-        mKyleAuton = new KyleAuton(mNeoDrive);
+        mKyleAuton = new KyleAuton(); // Trajectory
 
 
         MODE = INITIALIZING;
@@ -102,7 +101,7 @@ public class Robot extends TimedRobot {
         mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = new NeoDriveModule.getInstance();
         mLimelight = new Limelight();
 
 //         // ------------------------------------------------------------------------------------
