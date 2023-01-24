@@ -72,6 +72,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateMyMotor2();
         updatepneumaticspractice();
+        updateled();
     }
 
     private void updateHangerMotors() {
@@ -395,13 +396,28 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updatepneumaticspractice() {
-        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
+        if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
             }
             if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
             }
+        }
+    }
+
+    private void updateled(){
+        if (db.operatorinput.isSet(ELogitech310.A_BTN)){
+            setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
+        }
+        else if (db.operatorinput.isSet(ELogitech310.Y_BTN)){
+            setLED(Enums.LEDColorMode.PURPLE, Enums.LEDState.SOLID);
+        }
+        else if (db.operatorinput.isSet(ELogitech310.X_BTN)){
+            setLED(Enums.LEDColorMode.WHITE, Enums.LEDState.SOLID);
+        }
+        else {
+            setLED(Enums.LEDColorMode.DEFAULT, Enums.LEDState.BLINKING);
         }
     }
 }
