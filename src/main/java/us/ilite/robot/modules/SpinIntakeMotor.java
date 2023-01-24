@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import us.ilite.common.config.Settings;
@@ -22,6 +23,7 @@ public class SpinIntakeMotor extends Module {
         mTalonFX = new TalonFX(9);
         mThingy = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
         mThingy.set(DoubleSolenoid.Value.kForward);
+        db.intake.set(PNEUMATIC_STATE, 1.0);
         mTable = NetworkTableInstance.getDefault().getTable("intake");
     }
     @Override
@@ -49,15 +51,19 @@ public class SpinIntakeMotor extends Module {
         }
         switch(state) {
             case PERCENT_OUTPUT:
+                db.intake.set(ROLLER_STATE, DESIRED_ROLLER_pct);
+                db.intake.set(ROLLER_STATE,0.2);
                 mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
                 break;
             case VELOCITY:
+                db.intake.set(ROLLER_STATE,SET_ROLLER_VEL_ft_s);
+                db.intake.set(ROLLER_STATE,0.2);
                 mTalonFX.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
                 break;
         }
     }
     public void idk() {
-        Enums.EArmState mode = db.intake.get(ARM_STATE, Enums.EArmState.class);
+        Enums.EArmState mode = db.intake.get(PNEUMATIC_STATE, Enums.EArmState.class);
         if (mode == null) {
             return;
         }

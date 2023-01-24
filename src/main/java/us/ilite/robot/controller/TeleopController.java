@@ -346,9 +346,9 @@ public class TeleopController extends BaseManualController {
             }
             if (db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
                 fireCargo();
-            } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
-                db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-                intakeCargo();
+            // } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+            //    db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
+            //    intakeCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
                 placeCargo();
@@ -382,15 +382,13 @@ public class TeleopController extends BaseManualController {
 
         //A_BTN
         if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(DESIRED_ROLLER_pct,Enums.ERollerState.PERCENT_OUTPUT);
-            db.intake.set(DESIRED_ROLLER_pct,0.2);
+            db.intake.set(ROLLER_STATE,Enums.ERollerState.PERCENT_OUTPUT);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
             setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
         }
         //X_BTN
         else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(SET_ROLLER_VEL_ft_s,Enums.ERollerState.VELOCITY);
-            db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
+            db.intake.set(ROLLER_STATE,Enums.ERollerState.VELOCITY);
             db.intake.set(DESIRED_ROLLER_pct,0.0);
             setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
         }
