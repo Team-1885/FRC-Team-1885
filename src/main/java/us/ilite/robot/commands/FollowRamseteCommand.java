@@ -23,16 +23,21 @@ public class FollowRamseteCommand implements ICommand{
     private RamseteCommand mRamseteCommand;
     private NeoDriveModule mRobotDrive; // get singleton instance
     private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
+    private PIDController mLeftDrivePID;
+    private PIDController mRightDrivePID;
 
     public FollowRamseteCommand() {
         mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
-
+        mLeftDrivePID = new PIDController(0.1, 0, 0);
+        mRightDrivePID = new PIDController(0.1, 0, 0);
     }
     @Override
     public void init(double pNow) {
         generateRamseteCommand();
-        mRamseteCommand.schedule();
+        if (mRamseteCommand != null) {
+            mRamseteCommand.schedule();
+        }
     }
 
     @Override
@@ -45,7 +50,7 @@ public class FollowRamseteCommand implements ICommand{
         mRamseteCommand.end(true);
     }
 
-    public void generateRamseteCommand() {
+    public void generateRamseteCommand() { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
@@ -94,18 +99,12 @@ public class FollowRamseteCommand implements ICommand{
                         ),
                         mDriveKinematics,
                         mRobotDrive::getWheelSpeeds,
-//                                mDriveKinematics.toWheelSpeeds(
-//                                        new ChassisSpeeds(
-//                                                initialState.velocityMetersPerSecond,
-//                                                0,
-//                                                initialState.curvatureRadPerMeter * initialState.velocityMetersPerSecond)),  //::getWheelSpeeds,
-                        new PIDController(0.1, 0, 0), // left controller
-                        new PIDController(0.1, 0, 0), // right controller
+                        mLeftDrivePID, // left controller
+                        mRightDrivePID, // right controller
                         // RamseteCommand passes volts to the callback
-                        mRobotDrive::tankDriveVolts, //BiConsumer<Double, Double> outputVolts = new BiConsumer<Double, Double> = m_robotDrive::tankDriveVolts, //(leftVolts, rightVolts) -> m_robotDrive.tankDriveVolts(leftVolts, rightVolts),
+                        mRobotDrive::tankDriveVolts,
                         mRobotDrive
                 );
-
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
     }
