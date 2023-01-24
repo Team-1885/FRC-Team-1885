@@ -1,6 +1,7 @@
 package us.ilite.robot.controller;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -11,6 +12,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.modules.SpinIntakeMotor;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -377,28 +379,35 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateIntakeMotor() {
-        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) {
+
+        //A_BTN
+        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(DESIRED_ROLLER_pct,Enums.ERollerState.PERCENT_OUTPUT);
             db.intake.set(DESIRED_ROLLER_pct,0.2);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+            setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
         }
-
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+        //X_BTN
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(SET_ROLLER_VEL_ft_s,Enums.ERollerState.VELOCITY);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
             db.intake.set(DESIRED_ROLLER_pct,0.0);
-            //db.intake.set(Enums.ERollerState , Enums.ERollerState.VELOCITY);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+            setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
         }
-
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
-            db.intake.set(DESIRED_ARM_STATE, 1.0);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+        //Y_BTN
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.EXTEND);
+            setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
+        }
+        //B_BTN
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.RETRACT);
+            setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
         }
         else {
             db.intake.set(DESIRED_ROLLER_pct,0.0);
-            db.intake.set(DESIRED_ARM_STATE, 2.0);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
+            setLED(Enums.LEDColorMode.DEFAULT, Enums.LEDState.SOLID);
         }
     }
     private void updatePneumaticTest() {
