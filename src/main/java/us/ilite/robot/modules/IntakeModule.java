@@ -38,7 +38,7 @@ public class IntakeModule extends Module {
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 255);
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 255);
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 255);
-        mArmSolenoid = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
+        mArmSolenoid = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 2, 3);
         mCompressor = new Compressor(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH);
         mCompressor.enableAnalog(100, 110);
         mArmSolenoid.set(DoubleSolenoid.Value.kForward);

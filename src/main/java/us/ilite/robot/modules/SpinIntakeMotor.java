@@ -21,6 +21,7 @@ public class SpinIntakeMotor extends Module {
     public SpinIntakeMotor() {
         mTalonFX = new TalonFX(9);
         mThingy = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
+        mThingy.set(DoubleSolenoid.Value.kForward);
         mTable = NetworkTableInstance.getDefault().getTable("intake");
     }
     @Override
