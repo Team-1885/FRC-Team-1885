@@ -24,14 +24,14 @@ public class falconMotor extends Module {
     public void readInputs() {
         db.intake.set(EIntakeData.ROLLER_PCT, mMotor.getMotorOutputPercent());
         db.intake.set(ROLLER_VEL_ft_s, mMotor.getSelectedSensorVelocity() * IntakeModule.kFeetSpeedConversion);
-        db.intake.set(EIntakeData.ARM_STATE, mMotor.getSelectedSensorPosition());
+
     }
     public void setOutputs() {
         setRollerState();
         mMotor.set(TalonFXControlMode.Position, db.intake.get(EIntakeData.DESIRED_ARM_STATE));
-        mTable.getEntry(" DESIRED_ROLLER_pct" ).setNumber(db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
-        mTable.getEntry("ARM_STATE").setNumber(db.intake.get(EIntakeData.ARM_STATE));
-        mTable.getEntry("ROLLER_VEL_ft_s").setNumber(db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
+        mTable.getEntry(" Roller_Pct" ).setNumber(db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
+        mTable.getEntry("Velocity").setNumber(db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
+        mTable.getEntry("Position").setNumber(db.intake.get(EIntakeData.ARM_STATE));
     }
     public void setRollerState() {
         Enums.ERollerState mode = db.intake.get(ROLLER_STATE, Enums.ERollerState.class);
@@ -46,5 +46,8 @@ public class falconMotor extends Module {
                 mMotor.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
                 break;
         }
+    }
+    public  void idk() {
+        Enums.ear
     }
 }
