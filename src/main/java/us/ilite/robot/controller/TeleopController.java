@@ -399,7 +399,7 @@ public class TeleopController extends BaseManualController {
             db.intake.set(PNEUMATIC_STATE,Enums.EArmState.EXTEND);
             setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
         }
-        //B_BTN
+        //DPAD_DOWN
         else if(db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
             db.intake.set(PNEUMATIC_STATE,Enums.EArmState.RETRACT);
             setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);

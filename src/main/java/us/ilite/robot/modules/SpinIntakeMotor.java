@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import us.ilite.common.config.Settings;
 import us.ilite.common.types.EIntakeData;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.robot.Enums;
@@ -18,6 +20,7 @@ public class SpinIntakeMotor extends Module {
     private final NetworkTable mTable;
     public SpinIntakeMotor() {
         mTalonFX = new TalonFX(9);
+        mThingy = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
         mTable = NetworkTableInstance.getDefault().getTable("intake");
     }
     @Override
