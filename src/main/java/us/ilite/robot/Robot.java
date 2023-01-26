@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -21,6 +22,7 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
+import us.ilite.robot.commands.FollowRamseteCommand;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
-    private FollowRamseteTrajectory mFollowRamseteTrajectory;
+    private FollowRamseteCommand mFollowRamseteCommand;
   //  private BallTracking mPixy;
 
 
@@ -92,8 +94,7 @@ public class Robot extends TimedRobot {
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
-        mFollowRamseteTrajectory = new FollowRamseteTrajectory();
-        //mKyleAuton = new KyleAuton(); // Trajectory
+        mFollowRamseteCommand = new FollowRamseteCommand();
 
 
         MODE = INITIALIZING;
@@ -160,7 +161,6 @@ public class Robot extends TimedRobot {
         MODE = AUTONOMOUS;
         //mRunningModules.addModule(mKyleAuton);
 
-        //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
         mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
@@ -170,19 +170,22 @@ public class Robot extends TimedRobot {
         mRunningModules.modeInit(AUTONOMOUS);
         BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
         mActiveController = mAutoController;
-        mAutoController.initialize();
+        //mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
-        mActiveController.setEnabled(true);
+        //mActiveController.setEnabled(true);
+        mFollowRamseteCommand.generateRamseteCommand().schedule();
     }
 
     @Override
     public void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
         commonPeriodic();
     }
 
     @Override
     public void teleopInit() {
+        Robot.DATA.registerAllWithShuffleboard();
         CLIMB_MODE = mClimberSelector.getSelectedMode();
         SmartDashboard.putString("Climb Mode", CLIMB_MODE);
         if ( Settings.kIsLogging ){

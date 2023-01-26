@@ -51,7 +51,7 @@ public class FollowRamseteCommand implements ICommand{
         mRamseteCommand.end(true);
     }
 
-    public void generateRamseteCommand() { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
+    public Command generateRamseteCommand() { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
@@ -79,7 +79,7 @@ public class FollowRamseteCommand implements ICommand{
                         // Start at the origin facing the +X direction
                         //new Pose2d(0, 0, new Rotation2d(0)),
                         // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(2, 0, new Rotation2d(0))),
+                        List.of(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(1, 0, new Rotation2d(0))),
                         // End 3 meters straight ahead of where we started, facing forward
                         //new Pose2d(3, 0, new Rotation2d(0)),
                         // Pass config
@@ -108,5 +108,6 @@ public class FollowRamseteCommand implements ICommand{
                 );
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        return mRamseteCommand;
     }
 }

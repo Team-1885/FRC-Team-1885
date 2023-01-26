@@ -4,8 +4,11 @@ import com.revrobotics.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
@@ -50,7 +53,10 @@ public class NeoDriveModule extends Module implements Subsystem {
     private DifferentialDrive mDrive;
     private MotorControllerGroup mLeftMotors;
     private MotorControllerGroup mRightMotors;
-    private DifferentialDrive mDifferentialDrive;
+    private DifferentialDriveOdometry mDifferentialDriveOdometry;
+    private Pose2d pose;
+    private final NetworkTable mTable;
+
 
 
     // ========================================
@@ -100,7 +106,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     // DO NOT MODIFY THESE OTHER CONSTANTS
     // ========================================
     public static double kTurnSensitivity = 0.85;
-    private DifferentialDriveOdometry mOdometry;
+//    private DifferentialDriveOdometry mOdometry;
 
 //    public NeoDriveModule() {
 //        //creating a drive susbsystem module for auton
@@ -188,7 +194,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mDifferentialDriveOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
 
     @Override
@@ -214,12 +220,17 @@ public class NeoDriveModule extends Module implements Subsystem {
         db.imu.set(EGyro.ROLL_DEGREES, mGyro.getRoll().getDegrees());
         db.imu.set(EGyro.YAW_DEGREES, -mGyro.getYaw().getDegrees());
         db.imu.set(EGyro.YAW_OMEGA_DEGREES, -mGyro.getYawRate().getDegrees());
-        db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
-        db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
-        mOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)),
+        db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mDifferentialDriveOdometry.getPoseMeters().getX());
+        db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mDifferentialDriveOdometry.getPoseMeters().getY());
+        pose = mDifferentialDriveOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)), // was in radians
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
-        Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
+//        Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
+
+        mTable.getEntry("left vel").setNumber(db.drivetrain.get(L_ACTUAL_VEL_M_s));
+        mTable.getEntry("right vel").setNumber(db.drivetrain.get(R_ACTUAL_VEL_M_s));
+        mTable.getEntry("heading").setNumber(db.drivetrain.get(ACTUAL_HEADING_RADIANS));
+
     }
 
     @Override
@@ -329,6 +340,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
         // mDriveSubsystem = new DriveSubsystem();
         // mKyleAuton = new KyleAuton(mDriveSubsystem);
+        mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
 
 
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
@@ -339,6 +351,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
         mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
+        mDifferentialDriveOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+
 
         mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
         mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -376,7 +390,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        //mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -399,9 +413,14 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         //TO-DO: make sure the motors are being set to these voltage values (in path following ramsete case)
-        Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
-        Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
-        mDrive.feed();
+//        Robot.DATA.drivetrain.set(EDriveData.LEFT_VOLTAGE, leftVolts);
+//        Robot.DATA.drivetrain.set(EDriveData.RIGHT_VOLTAGE, rightVolts);
+
+//        mLeftMaster.set(leftVolts / 12);
+//        mRightMaster.set(rightVolts / 12);
+
+        mTable.getEntry("left volts").setNumber((leftVolts / 12));
+        mTable.getEntry("right volts").setNumber((rightVolts / 12));
     }
 
     public void setWheelSpeeds(double leftSpeed, double rightSpeed) {
