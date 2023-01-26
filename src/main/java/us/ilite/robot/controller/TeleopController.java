@@ -345,10 +345,11 @@ public class TeleopController extends BaseManualController {
             }
             if (db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
                 fireCargo();
-            } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
-                db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-                intakeCargo();
-            } else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)) {
+            }//  else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+                // db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
+                // intakeCargo();
+            // }
+            else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
                 placeCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
@@ -378,26 +379,32 @@ public class TeleopController extends BaseManualController {
         }
     }
     private void updateMotor() {
-        if (db.operatorinput.isSet(ELogitech310.A_BTN)) {
-            db.intake.set(DESIRED_ARM_STATE, 1.0);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
-
+        //A_BTN
+        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
+            setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
         }
-        else if (db.operatorinput.isSet(ELogitech310.B_BTN)) {
-            db.intake.set(DESIRED_ROLLER_pct, 0);
-            db.intake.set(SET_ROLLER_VEL_ft_s, .3);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
+        //X_BTN
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(ROLLER_STATE, Enums.ERollerState.VELOCITY);
+            db.intake.set(DESIRED_ROLLER_pct, 0.2);
+            setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
         }
-        else if (db.operatorinput.isSet(ELogitech310.Y_BTN)) {
-            db.intake.set(SET_ROLLER_VEL_ft_s, 0);
-            db.intake.set(DESIRED_ROLLER_pct, .5);
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.YELLOW);
+        //Y_BTN
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.EXTEND);
+            setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
+        }
+        //dpad_down
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.RETRACT);
+            setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
         }
         else {
-            db.intake.set(DESIRED_ROLLER_pct, 0);
-            db.intake.set(SET_ROLLER_VEL_ft_s, 0);
-            db.intake.set(DESIRED_ARM_STATE, 2.0);
-
+            db.intake.set(DESIRED_ROLLER_pct,0.0);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
+            setLED(Enums.LEDColorMode.DEFAULT, Enums.LEDState.SOLID);
         }
     }
     private void updatePnuematics() {
