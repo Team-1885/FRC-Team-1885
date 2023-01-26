@@ -104,7 +104,8 @@ public class Robot extends TimedRobot {
         mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
-        mNeoDrive = NeoDriveModule.getInstance(); // don't create new, use singleton instance
+//        mNeoDrive = NeoDriveModule.getInstance(); // don't create new, use singleton instance
+        mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
 
 //         // ------------------------------------------------------------------------------------

@@ -227,10 +227,6 @@ public class NeoDriveModule extends Module implements Subsystem {
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
 //        Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
 
-        mTable.getEntry("left vel").setNumber(db.drivetrain.get(L_ACTUAL_VEL_M_s));
-        mTable.getEntry("right vel").setNumber(db.drivetrain.get(R_ACTUAL_VEL_M_s));
-        mTable.getEntry("heading").setNumber(db.drivetrain.get(ACTUAL_HEADING_RADIANS));
-
     }
 
     @Override
@@ -240,6 +236,11 @@ public class NeoDriveModule extends Module implements Subsystem {
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
         double left = throttle + turn;
         double right = throttle - turn;
+
+        mTable.getEntry("left").setNumber(left);
+        mTable.getEntry("right").setNumber(right);
+        mTable.getEntry("heading").setNumber(db.drivetrain.get(ACTUAL_HEADING_RADIANS));
+
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
         if (state == null) return;
         switch (state) {
@@ -331,8 +332,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     // Allows KyleAuton to have an instance of our NeoDrive Module
     // without creating a constructor, code expects no constructor
     // so it can use a default constructor
-    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
-    private NeoDriveModule() // private constructor to avoid client applications using the constructor; can only be called inside class
+//    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
+    public NeoDriveModule() // private constructor to avoid client applications using the constructor; can only be called inside class
     {
         //creating a drive susbsystem module for auton
         mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
@@ -397,9 +398,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightMaster.burnFlash();
         mRightFollower.burnFlash();
     }
-    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
-        return instance;
-    }
+//    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+//        return instance;
+//    }
     public Pose2d getRobotPose () {
         double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
         double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);

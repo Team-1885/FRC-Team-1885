@@ -28,7 +28,7 @@ public class FollowRamseteCommand implements ICommand{
     private PIDController mRightDrivePID;
 
     public FollowRamseteCommand() {
-        mRobotDrive = NeoDriveModule.getInstance();
+        //mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
         mLeftDrivePID = new PIDController(0.1, 0, 0);
         mRightDrivePID = new PIDController(0.1, 0, 0);

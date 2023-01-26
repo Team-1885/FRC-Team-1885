@@ -43,7 +43,7 @@ public class KyleAuton extends BaseAutonController {
 
         // set up other vars
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
-        mRobotDrive = NeoDriveModule.getInstance();
+//        mRobotDrive = NeoDriveModule.getInstance();
 //        mAuton = getTrajectoryInstructions();
 //        mAuton.schedule();
 //        mAuton.execute();
