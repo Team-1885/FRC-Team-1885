@@ -47,18 +47,17 @@ public class SpinIntakeMotor extends Module {
     public void setRollerState() {
         Enums.ERollerState state = db.intake.get(ROLLER_STATE,Enums.ERollerState.class);
         if (state == null) {
-            state = Enums.ERollerState.PERCENT_OUTPUT;
+            //state = Enums.ERollerState.PERCENT_OUTPUT;
+            return;
         }
         switch(state) {
             case PERCENT_OUTPUT:
-                db.intake.set(ROLLER_STATE, DESIRED_ROLLER_pct);
-                db.intake.set(ROLLER_STATE,0.2);
                 mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
+                db.intake.set(ROLLER_STATE,0.2);
                 break;
             case VELOCITY:
-                db.intake.set(ROLLER_STATE,SET_ROLLER_VEL_ft_s);
-                db.intake.set(ROLLER_STATE,0.2);
                 mTalonFX.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
+                db.intake.set(ROLLER_STATE,0.2);
                 break;
         }
     }
