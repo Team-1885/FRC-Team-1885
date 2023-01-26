@@ -1,5 +1,5 @@
 package us.ilite.robot.modules;
-
+import us.ilite.robot.modules.LEDModule;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.input.ELogitech310;
 

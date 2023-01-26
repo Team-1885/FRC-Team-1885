@@ -408,16 +408,13 @@ public class TeleopController extends BaseManualController {
 
     private void updateled(){
         if (db.operatorinput.isSet(ELogitech310.A_BTN)){
-            setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
-        }
-        else if (db.operatorinput.isSet(ELogitech310.Y_BTN)){
-            setLED(Enums.LEDColorMode.PURPLE, Enums.LEDState.SOLID);
-        }
-        else if (db.operatorinput.isSet(ELogitech310.X_BTN)){
-            setLED(Enums.LEDColorMode.WHITE, Enums.LEDState.SOLID);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+            
         }
         else {
-            setLED(Enums.LEDColorMode.DEFAULT, Enums.LEDState.BLINKING);
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
         }
     }
 }
