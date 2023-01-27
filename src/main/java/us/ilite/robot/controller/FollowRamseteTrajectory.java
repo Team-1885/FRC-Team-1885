@@ -16,7 +16,7 @@ public class FollowRamseteTrajectory extends BaseAutonController{
         mTimer.reset();
         mTimer.start();
 
-        mRamseteCommand.init(mTimer.get());
+//        mRamseteCommand.init(mTimer.get());
     }
     public void updateImpl() {
 //        SmartDashboard.putNumber("Test", 4);

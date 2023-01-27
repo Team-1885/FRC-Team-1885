@@ -20,7 +20,7 @@ import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.List;
 
-public class FollowRamseteCommand implements ICommand{
+public class FollowRamseteCommand{
     private RamseteCommand mRamseteCommand;
     private NeoDriveModule mRobotDrive; // get singleton instance
     private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
@@ -28,28 +28,28 @@ public class FollowRamseteCommand implements ICommand{
     private PIDController mRightDrivePID;
 
     public FollowRamseteCommand() {
-        //mRobotDrive = NeoDriveModule.getInstance();
+        mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
         mLeftDrivePID = new PIDController(0.1, 0, 0);
         mRightDrivePID = new PIDController(0.1, 0, 0);
     }
-    @Override
-    public void init(double pNow) {
-        generateRamseteCommand();
-        if (mRamseteCommand != null) {
-            mRamseteCommand.schedule();
-        }
-    }
+//    @Override
+//    public void init(double pNow) {
+//        generateRamseteCommand();
+//        if (mRamseteCommand != null) {
+//            mRamseteCommand.schedule();
+//        }
+//    }
 
-    @Override
-    public boolean update(double pNow) {
-        return false;
-    }
-
-    @Override
-    public void shutdown(double pNow) {
-        mRamseteCommand.end(true);
-    }
+//    @Override
+//    public boolean update(double pNow) {
+//        return false;
+//    }
+//
+//    @Override
+//    public void shutdown(double pNow) {
+//        mRamseteCommand.end(true);
+//    }
 
     public Command generateRamseteCommand() { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
@@ -108,6 +108,7 @@ public class FollowRamseteCommand implements ICommand{
                 );
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        System.out.println("********************************************************");
         return mRamseteCommand;
     }
 }

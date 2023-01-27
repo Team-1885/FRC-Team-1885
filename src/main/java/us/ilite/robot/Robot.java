@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     private TestController mTestController;
 
     // KYLES AUTON
-    private KyleAuton mKyleAuton; //--------------------------------------------------------------------------------------------------------
+//    private KyleAuton mKyleAuton; //--------------------------------------------------------------------------------------------------------
 
     @Override
     public void robotInit() {
@@ -104,8 +104,7 @@ public class Robot extends TimedRobot {
         mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
-//        mNeoDrive = NeoDriveModule.getInstance(); // don't create new, use singleton instance
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = NeoDriveModule.getInstance(); // don't create new, use singleton instance
         mLimelight = new Limelight();
 
 //         // ------------------------------------------------------------------------------------
@@ -161,6 +160,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         MODE = AUTONOMOUS;
         //mRunningModules.addModule(mKyleAuton);
+        mFollowRamseteCommand.generateRamseteCommand().schedule();
 
         mRunningModules.clearModules();
         mRunningModules.addModule(mFeeder);
@@ -175,7 +175,6 @@ public class Robot extends TimedRobot {
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
         //mActiveController.setEnabled(true);
-        mFollowRamseteCommand.generateRamseteCommand().schedule();
     }
 
     @Override

@@ -26,7 +26,6 @@ import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.TrajectoryCommandUtils;
-import us.ilite.robot.controller.KyleAuton;
 import us.ilite.robot.hardware.ECommonNeutralMode;
 import us.ilite.robot.hardware.HardwareUtils;
 import us.ilite.robot.hardware.Pigeon;
@@ -332,8 +331,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     // Allows KyleAuton to have an instance of our NeoDrive Module
     // without creating a constructor, code expects no constructor
     // so it can use a default constructor
-//    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
-    public NeoDriveModule() // private constructor to avoid client applications using the constructor; can only be called inside class
+    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
+    private NeoDriveModule() // private constructor to avoid client applications using the constructor; can only be called inside class
     {
         //creating a drive susbsystem module for auton
         mLeftMotors = new MotorControllerGroup(mLeftMaster, mLeftFollower);
@@ -398,9 +397,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightMaster.burnFlash();
         mRightFollower.burnFlash();
     }
-//    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
-//        return instance;
-//    }
+    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+        return instance;
+    }
     public Pose2d getRobotPose () {
         double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
         double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);
