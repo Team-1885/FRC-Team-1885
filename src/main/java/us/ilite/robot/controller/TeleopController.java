@@ -399,22 +399,15 @@ public class TeleopController extends BaseManualController {
         if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
+                db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
+                db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
             }
             if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
+                db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
+                db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
             }
         }
     }
 
-    private void updateled(){
-        if (db.operatorinput.isSet(ELogitech310.A_BTN)){
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
-            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
-            
-        }
-        else {
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
-            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
-        }
-    }
 }
