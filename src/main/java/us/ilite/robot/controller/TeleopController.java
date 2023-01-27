@@ -72,7 +72,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateMyMotor2();
         updatepneumaticspractice();
-        updateled();
+
     }
 
     private void updateHangerMotors() {
