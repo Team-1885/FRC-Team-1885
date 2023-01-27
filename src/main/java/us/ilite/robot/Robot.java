@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -21,6 +22,7 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
+import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -70,6 +72,7 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+    private GenerateRamseteCommand mGenerateRamseteCommand;
 
     @Override
     public void robotInit() {
@@ -94,8 +97,9 @@ public class Robot extends TimedRobot {
         mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
+        mGenerateRamseteCommand = new GenerateRamseteCommand();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -156,14 +160,16 @@ public class Robot extends TimedRobot {
         mRunningModules.modeInit(AUTONOMOUS);
         BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
         mActiveController = mAutoController;
-        mAutoController.initialize();
+        //mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
-        mActiveController.setEnabled(true);
+        //mActiveController.setEnabled(true);
+        mGenerateRamseteCommand.generateCommand().schedule(); // Autonomous Trajectory Command
     }
 
     @Override
     public void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
         commonPeriodic();
     }
 

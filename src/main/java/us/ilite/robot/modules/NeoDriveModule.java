@@ -4,8 +4,13 @@ import com.revrobotics.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
@@ -25,7 +30,7 @@ import us.ilite.robot.hardware.SparkMaxFactory;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module {
+public class NeoDriveModule extends Module implements Subsystem {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -39,6 +44,9 @@ public class NeoDriveModule extends Module {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    private DifferentialDriveKinematics mKinematics;
+    private Pose2d mPose2d;
+    private final NetworkTable mTable;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -88,8 +96,15 @@ public class NeoDriveModule extends Module {
     // ========================================
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
+    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
 
-    public NeoDriveModule() {
+    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+        return instance;
+    }
+
+    private NeoDriveModule() {
+        mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
+
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
@@ -192,7 +207,7 @@ public class NeoDriveModule extends Module {
         db.imu.set(EGyro.YAW_OMEGA_DEGREES, -mGyro.getYawRate().getDegrees());
         db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
-        mOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)),
+        mPose2d = mOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)),
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
@@ -205,6 +220,10 @@ public class NeoDriveModule extends Module {
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
         double left = throttle + turn;
         double right = throttle - turn;
+
+        mTable.getEntry("left").setNumber(left);
+        mTable.getEntry("right").setNumber(right);
+
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
         if (state == null) return;
         switch (state) {
@@ -281,6 +300,24 @@ public class NeoDriveModule extends Module {
         }
     }
 
+    public Pose2d getPose() {
+        return mPose2d;
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s))
+        );
+    }
+
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        mLeftMaster.set(leftVolts / 12);
+        mRightMaster.set(rightVolts / 12);
+
+        mTable.getEntry("left volts").setNumber((leftVolts / 12));
+        mTable.getEntry("right volts").setNumber((rightVolts / 12));
+    }
     public void reset() {
         mLeftEncoder.setPosition(0.0);
         mRightEncoder.setPosition(0.0);
