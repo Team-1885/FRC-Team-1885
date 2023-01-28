@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private led mLEDPractice;
+    private SamBeamBreak mSamBeamBreak;
 
     @Override
     public void robotInit() {
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot {
         mpractice = new practice();
         mpneumaticspractice = new pneumaticspractice();
         mLEDPractice = new led();
+        mSamBeamBreak = new SamBeamBreak();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();

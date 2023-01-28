@@ -426,20 +426,9 @@ public class TeleopController extends BaseManualController {
             db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
         }
     }
-private DigitalBeamSensor mSingleBreak;
+
     private void updateBeamBreakpractice(){
-        mSingleBreak = new DigitalBeamSensor(3);
-        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)){
-            db.climber.set(EClimberData.SINGLE_BEAM_BROKEN, mSingleBreak.isBroken());
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
-            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-        } else if (db.driverinput.isSet(InputMap.DRIVER.TURN_AXIS)){
-            db.climber.set(EClimberData.SINGLE_BEAM_BROKEN, !mSingleBreak.isBroken());
-            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
-            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
-        }
+
     }
 
 }
