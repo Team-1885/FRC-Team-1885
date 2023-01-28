@@ -81,11 +81,18 @@
       }
     },
     "SmartDashboard": {
-      "Field": {
-        "open": false
-      }
+      "open": true
     },
     "intake": {
+      "open": true
+    },
+    "limelight": {
+      "open": true
+    },
+    "pneumatic": {
+      "open": true
+    },
+    "why": {
       "open": true
     }
   }

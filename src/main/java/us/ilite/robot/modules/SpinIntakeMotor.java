@@ -52,12 +52,10 @@ public class SpinIntakeMotor extends Module {
         }
         switch(state) {
             case PERCENT_OUTPUT:
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
                 //db.intake.set(ROLLER_STATE,0.2);
                 break;
             case VELOCITY:
-                System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
                 mTalonFX.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
                 //db.intake.set(ROLLER_STATE,0.2);
                 break;
