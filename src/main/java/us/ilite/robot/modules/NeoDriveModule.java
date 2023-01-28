@@ -182,7 +182,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
     }
     @Override
     public void readInputs() {
@@ -312,11 +312,12 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public void setVolts(double leftVolts, double rightVolts) {
-        mLeftMaster.set(leftVolts / 12);
-        mRightMaster.set(rightVolts / 12);
+//        mLeftMaster.set(leftVolts / 12);
+//        mRightMaster.set(-(rightVolts / 12));
 
-        mTable.getEntry("left volts").setNumber((leftVolts / 12));
-        mTable.getEntry("right volts").setNumber((rightVolts / 12));
+
+        mTable.getEntry("left volts").setNumber((leftVolts));
+        mTable.getEntry("right volts").setNumber(-(rightVolts));
     }
     public void reset() {
         mLeftEncoder.setPosition(0.0);

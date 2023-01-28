@@ -107,13 +107,13 @@ public class VioletDriveModule extends Module {
         .maxAccel(kDriveMaxAccel_simulated.feet() / kDriveNEOVelocityFactor / 1.2 * 0.8)
         .slot(VELOCITY_PID_SLOT)
         .velocityConversion(1d);
-    public static ProfileGains kPracticeGains = new ProfileGains()
-            .p(Settings.kP)
-            .maxVelocity(Settings.Input.kMaxAllowedVelocityMultiplier)
-            .slot(VELOCITY_PID_SLOT)
-            .kS(Settings.kS)
-            .kA(Settings.kA)
-            .kV(Settings.kV);
+//    public static ProfileGains kPracticeGains = new ProfileGains()
+//            .p(Settings.kP)
+//            .maxVelocity(Settings.Input.kMaxAllowedVelocityMultiplier)
+//            .slot(VELOCITY_PID_SLOT)
+//            .kS(Settings.kS)
+//            .kA(Settings.kA)
+//            .kV(Settings.kV);
 
     public static ProfileGains vGains = new ProfileGains()
         .p(0.0001)
