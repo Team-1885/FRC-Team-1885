@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
     private FourBallTrajectoryAuton mFourBallAuton;
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
-    private TestController mTestController;
+    private led mLEDPractice;
 
     @Override
     public void robotInit() {
@@ -103,6 +103,7 @@ public class Robot extends TimedRobot {
         mLimelight = new Limelight();
         mpractice = new practice();
         mpneumaticspractice = new pneumaticspractice();
+        mLEDPractice = new led();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -193,6 +194,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLEDControl);
         mRunningModules.addModule(mpractice);
         mRunningModules.addModule(mpneumaticspractice);
+        mRunningModules.addModule(mLEDPractice);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;
