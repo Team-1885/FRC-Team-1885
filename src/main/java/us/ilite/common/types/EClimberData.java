@@ -54,4 +54,5 @@ public enum EClimberData {
     CURRENT_RUNG,
     STAGE,
     RUNG_STATE,
+
     }

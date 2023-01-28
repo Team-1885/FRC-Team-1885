@@ -47,7 +47,7 @@ public class ClimberModule extends Module{
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kClimberRatio;
 
     public ClimberModule() {
-        mSingleBreak = new DigitalBeamSensor(3);
+        mSingleBreak = new DigitalBeamSensor(5);
         mCLMR11 = new TalonFX(Settings.HW.CAN.kCLM1);
         mCL12 = new TalonFX(Settings.HW.CAN.kCL2);
         mCLMR11.setNeutralMode(NeutralMode.Brake);

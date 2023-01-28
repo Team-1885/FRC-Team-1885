@@ -12,6 +12,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.modules.BeamBreakTest;
 import us.ilite.robot.modules.SpinIntakeMotor;
 
 import static us.ilite.common.types.EIntakeData.*;
@@ -67,6 +68,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateIntakeMotor();
         updatePneumaticTest();
+        updateBeamBreakTest();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -418,6 +420,14 @@ public class TeleopController extends BaseManualController {
         else {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
+        }
+    }
+    private void updateBeamBreakTest() {
+        if(db.intake.get(BEAM_BROKEN) == 1.0) {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
+        }
+        else {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);
         }
     }
 

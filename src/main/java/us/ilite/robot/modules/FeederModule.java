@@ -39,7 +39,7 @@ public class FeederModule extends Module {
 
     public FeederModule () {
         mIntakeFeeder = new TalonFX(Settings.HW.CAN.kINFeeder);
-        mEntryBeamBreaker = new DigitalBeamSensor(Settings.HW.DIO.kINEntryBeam, kDebounceTime);
+        mEntryBeamBreaker = new DigitalBeamSensor(9, kDebounceTime);
      //   mExitBeamBreaker = new DigitalBeamSensor(Settings.HW.DIO.kINExitBeam, kDebounceTime);
         mIntakeFeeder.configPeakOutputForward(1.0, 20);
         mIntakeFeeder.configPeakOutputReverse(-1.0, 20);
