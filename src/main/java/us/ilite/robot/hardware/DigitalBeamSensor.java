@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 public class DigitalBeamSensor  {
 
-	private final DigitalInput mBeamInput;
-	private FilteredAverage mFilter = null;
+	private static DigitalInput mBeamInput;
+	private static FilteredAverage mFilter = null;
 	
 	public DigitalBeamSensor(int pInputChannel) {
 
@@ -25,7 +25,7 @@ public class DigitalBeamSensor  {
 		mBeamInput = new DigitalInput(pInputChannel);
 	}
 
-	public boolean isBroken() {
+	public static boolean isBroken() {
 	  // NOTE - if the beam is noisy, we can do some filtered average based upon the leading
 	  // edge of the detection rather than just a 'get'.  This effectively debounces the signal.
 	  //	  mBeamInput.readRisingTimestamp()

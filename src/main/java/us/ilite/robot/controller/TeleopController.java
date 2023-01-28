@@ -11,6 +11,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.hardware.DigitalBeamSensor;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -401,13 +402,10 @@ public class TeleopController extends BaseManualController {
         if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-                db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
-                db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+
             }
             if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
-                db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
-                db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
             }
         }
     }
