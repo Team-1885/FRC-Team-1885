@@ -10,6 +10,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.hardware.DigitalBeamSensor;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -409,7 +410,11 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateLEDPractice() {
-        if(db.driverinput.isSet(ELogitech310.A_BTN)) {
+        if(DigitalBeamSensor.isBroken()){
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+        }
+        /*if(db.driverinput.isSet(ELogitech310.A_BTN)) {
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
             db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
         }
@@ -428,7 +433,7 @@ public class TeleopController extends BaseManualController {
         else{
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
             db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
-        }
+        }*/
     }
 
 }
