@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import us.ilite.common.Field2022;
 import us.ilite.common.config.InputMap;
+import us.ilite.common.config.Settings;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
@@ -72,6 +73,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateMyMotor2();
         updatepneumaticspractice();
+        updateLEDpractice();
 
     }
 
@@ -407,6 +409,22 @@ public class TeleopController extends BaseManualController {
                 db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.DEFAULT);
                 db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
             }
+        }
+    }
+
+    private void updateLEDpractice(){
+        if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)){
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.PURPLE);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+        } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)){
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+        } else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)){
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.GREEN);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
+        } else if (db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
+            db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.BLUE);
+            db.ledcontrol.set(ELEDControlData.LED_STATE, Enums.LEDState.SOLID);
         }
     }
 
