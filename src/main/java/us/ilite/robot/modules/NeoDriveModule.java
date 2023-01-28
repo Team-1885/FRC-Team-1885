@@ -311,7 +311,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         );
     }
 
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
+    public void setVolts(double leftVolts, double rightVolts) {
         mLeftMaster.set(leftVolts / 12);
         mRightMaster.set(rightVolts / 12);
 
