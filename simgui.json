@@ -89,6 +89,9 @@
     "limelight": {
       "open": true
     },
+    "pidposition": {
+      "open": true
+    },
     "pneumatic": {
       "open": true
     },

@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
     private PneumaticTest mPneumaticTest;
     private LEDTestModule mLEDTestModule;
     private BeamBreakTest mBeamBreakTest;
+    private PositionControl mPositionControl;
     private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -105,6 +106,7 @@ public class Robot extends TimedRobot {
         mLEDTestModule = new LEDTestModule();
         mBeamBreakTest = new BeamBreakTest(4);
         mBeamBreakTest = new BeamBreakTest(3,0.2);
+        mPositionControl = new PositionControl();
         mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -200,6 +202,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mPneumaticTest);
         mRunningModules.addModule(mLEDTestModule);
         mRunningModules.addModule(mBeamBreakTest);
+        mRunningModules.addModule(mPositionControl);
     }
 
     @Override
