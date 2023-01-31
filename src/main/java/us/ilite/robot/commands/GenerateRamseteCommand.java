@@ -89,7 +89,7 @@ public class GenerateRamseteCommand {
                 );
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-        return mRamseteCommand;
+        return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
 
 }

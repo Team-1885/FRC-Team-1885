@@ -313,11 +313,11 @@ public class NeoDriveModule extends Module implements Subsystem {
 
     public void setVolts(double leftVolts, double rightVolts) {
 //        mLeftMaster.set(leftVolts / 12);
-//        mRightMaster.set(-(rightVolts / 12));
+//        mRightMaster.set((rightVolts / 12));
 
 
         mTable.getEntry("left volts").setNumber((leftVolts));
-        mTable.getEntry("right volts").setNumber(-(rightVolts));
+        mTable.getEntry("right volts").setNumber((rightVolts));
     }
     public void reset() {
         mLeftEncoder.setPosition(0.0);

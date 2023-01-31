@@ -119,7 +119,7 @@ public class Settings {
     // RamseteCommand constants
     // =============================================================================
 
-    public static final double kS =  0.14188 ;
+    public static final double kS =  0.14188;
     public static final double kV = 2.8112;
     public static final double kA =  0.61942;
 
@@ -128,11 +128,11 @@ public class Settings {
 //    public static final double kV = 0.00046589;
 //    public static final double kA =  3.2696 * Math.pow(10.0, -5.0);
 
-    public static final double kP = 3.9049;//  0.1139
+    public static final double kP = 0;//  0.1139
 
     public static final double kTrackWidthMeters = 0.6858;
-    public static final double kMaxSpeedMetersPerSecond = 15;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 15;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
