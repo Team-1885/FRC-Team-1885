@@ -30,8 +30,13 @@ public class GenerateRamseteCommand {
     private PIDController mLeftDrivePID;
     private PIDController mRightDrivePID;
     private SimpleMotorFeedforward mFeedForward;
+    private RamseteController mRamseteController;
 
     public GenerateRamseteCommand() {
+        mRamseteController= new  RamseteController(
+                Settings.kRamseteB, // kRamseteB
+                Settings.kRamseteZeta // kRamseteZeta
+        );
         mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
         mLeftDrivePID = new PIDController(Settings.kP, 0, 0);
@@ -74,10 +79,7 @@ public class GenerateRamseteCommand {
                 new RamseteCommand(
                         exampleTrajectory,
                         mRobotDrive::getPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
-                        new RamseteController(
-                                Settings.kRamseteB, // kRamseteB
-                                Settings.kRamseteZeta // kRamseteZeta
-                        ),
+                        mRamseteController,
                         mFeedForward,
                         mDriveKinematics,
                         mRobotDrive::getWheelSpeeds,

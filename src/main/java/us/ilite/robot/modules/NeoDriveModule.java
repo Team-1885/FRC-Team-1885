@@ -163,10 +163,14 @@ public class NeoDriveModule extends Module implements Subsystem {
         reset();
         if(pMode == EMatchMode.AUTONOMOUS) {
             resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         } else {
             mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
             mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -221,8 +225,11 @@ public class NeoDriveModule extends Module implements Subsystem {
         double left = throttle + turn;
         double right = throttle - turn;
 
-        mTable.getEntry("left").setNumber(left);
-        mTable.getEntry("right").setNumber(right);
+//        mTable.getEntry("left").setNumber(left);
+//        mTable.getEntry("right").setNumber(right);
+//
+//        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
+//        mTable.getEntry("right m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
 
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
         if (state == null) return;
@@ -305,19 +312,27 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
+        mTable.getEntry("right m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
         return new DifferentialDriveWheelSpeeds(
-                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)),
                 Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s))
         );
     }
 
     public void setVolts(double leftVolts, double rightVolts) {
-//        mLeftMaster.set(leftVolts / 12);
-//        mRightMaster.set((rightVolts / 12));
+        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) { //safety check
+//            mRightMaster.setVoltage(-rightVolts);
+//            mLeftMaster.setVoltage(-leftVolts);
 
-
-        mTable.getEntry("left volts").setNumber((leftVolts));
-        mTable.getEntry("right volts").setNumber((rightVolts));
+            mRightMaster.set(rightVolts / 12);
+            mLeftMaster.set(leftVolts / 12);
+            mTable.getEntry("left volts").setNumber((leftVolts) / 12);
+            mTable.getEntry("right volts").setNumber((rightVolts) / 12);
+            mTable.getEntry("heading").setNumber(db.drivetrain.get(ACTUAL_HEADING_DEGREES));
+        }
+        mTable.getEntry("left vel").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
+        mTable.getEntry("right vel").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
     }
     public void reset() {
         mLeftEncoder.setPosition(0.0);
