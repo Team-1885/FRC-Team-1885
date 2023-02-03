@@ -73,7 +73,7 @@ public class TeleopController extends BaseManualController {
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-
+        //fix??
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {
                 db.climber.set(EClimberData.DESIRED_VEL_pct, 0.45);
