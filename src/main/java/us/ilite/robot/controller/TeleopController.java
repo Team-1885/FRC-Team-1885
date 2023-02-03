@@ -435,26 +435,20 @@ public class TeleopController extends BaseManualController {
     private void updatePositionControl() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
 
-        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
-            if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {
-                db.climber.set(EClimberData.DESIRED_VEL_pct, 0.45);
-            } else if (db.operatorinput.isSet(InputMap.HANGER.SPIN_DOUBLE)) {
-                db.climber.set(EClimberData.DESIRED_VEL_pct, -0.45);
-            } else if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)) {
+            if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, -90);
             }
-            else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG)) {
+            else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 90);
             }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
+            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
             }
             else {
-                db.climber.set(EClimberData.DESIRED_VEL_pct, 0);
+                db.climber.set(EClimberData.DESIRED_POS_deg, 0.0);
             }
-        }
     }
 }

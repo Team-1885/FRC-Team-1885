@@ -48,8 +48,8 @@ public class ClimberModule extends Module{
 
     public ClimberModule() {
         mSingleBreak = new DigitalBeamSensor(5);
-        mCLMR11 = new TalonFX(9);
-        mCL12 = new TalonFX(10);
+        mCLMR11 = new TalonFX(13);
+        mCL12 = new TalonFX(14);
         mCLMR11.setNeutralMode(NeutralMode.Brake);
         mCL12.setNeutralMode(NeutralMode.Brake);
         mCL12.configClosedloopRamp(0.5);
