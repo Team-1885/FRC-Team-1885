@@ -18,6 +18,10 @@ import us.ilite.robot.Robot;
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
 
+// for debug
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 
 public class TeleopController extends BaseManualController {
 
@@ -26,6 +30,9 @@ public class TeleopController extends BaseManualController {
 
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
+
+    // for debug
+    private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("angleTest"); // glass
 
 
 
@@ -380,9 +387,16 @@ public class TeleopController extends BaseManualController {
 
     private void updateTurn() {
         if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
+            // for debug
+            mTable.getEntry("test").setNumber(db.imu.get(EGyro.YAW_DEGREES));
+            //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
             if (db.imu.get(EGyro.YAW_DEGREES) < 90) {
                 db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
                 db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.5);
+            }
+            else {
+                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0);
+                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0);
             }
         }
     }

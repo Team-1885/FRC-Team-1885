@@ -1,12 +1,13 @@
 package us.ilite.robot.modules;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.Data;
 import us.ilite.common.config.InputMap;
 import us.ilite.robot.Robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+
 
 import static us.ilite.common.types.drive.EDriveData.L_DESIRED_VEL_FT_s;
 import static us.ilite.common.types.drive.EDriveData.R_DESIRED_VEL_FT_s;
