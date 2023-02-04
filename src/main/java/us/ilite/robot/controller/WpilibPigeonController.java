@@ -1,2 +1,6 @@
-package us.ilite.robot.controller;public class WpilibPigeonController {
+package us.ilite.robot.controller;
+
+public class WpilibPigeonController
+{
+    
 }
