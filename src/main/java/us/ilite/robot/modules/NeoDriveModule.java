@@ -96,8 +96,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     // ========================================
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
-    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
 
+    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
     public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
         return instance;
     }
