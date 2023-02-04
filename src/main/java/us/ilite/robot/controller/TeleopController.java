@@ -32,7 +32,7 @@ public class TeleopController extends BaseManualController {
     private Timer moveToTraversalTimer = new Timer();
 
     // for debug
-    private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("angleTest"); // glass
+    private NetworkTable mTable;
 
 
 
@@ -47,6 +47,8 @@ public class TeleopController extends BaseManualController {
         mClimbTimer = new Timer();
         mClimbTimer.reset();
         mClimbTimer.start();
+
+        mTable = NetworkTableInstance.getDefault().getTable("GryoValues"); // glass
     }
 
     @Override
