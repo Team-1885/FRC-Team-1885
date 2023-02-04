@@ -11,20 +11,12 @@ import us.ilite.common.lib.util.NetworkTablesConstantsBase;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
-// TEST
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
-
-// test for network tables for glass
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
-import static us.ilite.common.types.drive.EDriveData.L_DESIRED_VEL_FT_s;
-import static us.ilite.common.types.drive.EDriveData.R_DESIRED_VEL_FT_s;
 
 
 public class TeleopController extends BaseManualController {
@@ -35,8 +27,6 @@ public class TeleopController extends BaseManualController {
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
 
-    // test for gyro
-    private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("angle");
 
 
     public static TeleopController getInstance() {
@@ -388,24 +378,11 @@ public class TeleopController extends BaseManualController {
         }
     }
 
-
-    private WPI_PigeonIMU gyro = new WPI_PigeonIMU(30);
-    private void updateTurn()
-    {
-        // while B and Y are pressed
+    private void updateTurn() {
         if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
-            mTable.getEntry("test").setNumber(gyro.getAngle());
-            // spin while the angle turned is less than 90 degress
-            if (gyro.getAngle() >= 90)
-            {
-
-                Robot.DATA.drivetrain.set(R_DESIRED_VEL_FT_s, 0);
-                Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, 0);
-            }
-            else
-            {
-                Robot.DATA.drivetrain.set(R_DESIRED_VEL_FT_s, 0.5);
-                Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, 0.5);
+            if (db.imu.get(EGyro.YAW_DEGREES) > 90) {
+                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
+                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.5);
             }
         }
     }
