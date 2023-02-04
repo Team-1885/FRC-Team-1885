@@ -386,9 +386,17 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateTurn() {
+        // for debug
+        mTable.getEntry("YAW_DEGREES").setNumber(db.imu.get(EGyro.YAW_DEGREES));
+        mTable.getEntry("PITCH_DEGREES").setNumber(db.imu.get(EGyro.PITCH_DEGREES));
+        mTable.getEntry("ROLL_DEGREES").setNumber(db.imu.get(EGyro.ROLL_DEGREES));
+        mTable.getEntry("HEADING_DEGREES").setNumber(db.imu.get(EGyro.HEADING_DEGREES));
+        mTable.getEntry("ACCEL_X").setNumber(db.imu.get(EGyro.ACCEL_X));
+        mTable.getEntry("ACCEL_Y").setNumber(db.imu.get(EGyro.ACCEL_Y));
+        mTable.getEntry("ACCEL_Z").setNumber(db.imu.get(EGyro.ACCEL_Z));
+        mTable.getEntry("YAW_OMEGA_DEGREES").setNumber(db.imu.get(EGyro.YAW_OMEGA_DEGREES));
+
         if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
-            // for debug
-            mTable.getEntry("test").setNumber(db.imu.get(EGyro.YAW_DEGREES));
             //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
             if (db.imu.get(EGyro.YAW_DEGREES) < 90) {
                 db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
