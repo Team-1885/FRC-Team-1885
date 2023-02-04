@@ -23,6 +23,7 @@ import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
 import us.ilite.robot.commands.GenerateRamseteCommand;
+import us.ilite.robot.commands.PigeonTest;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;

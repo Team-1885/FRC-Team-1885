@@ -10,9 +10,13 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+// TEST
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
+import static us.ilite.common.types.drive.EDriveData.L_DESIRED_VEL_FT_s;
+import static us.ilite.common.types.drive.EDriveData.R_DESIRED_VEL_FT_s;
 
 
 public class TeleopController extends BaseManualController {
@@ -61,6 +65,7 @@ public class TeleopController extends BaseManualController {
 
         updateIntake();
         updateTargetLock();
+        updateTurn();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -371,4 +376,25 @@ public class TeleopController extends BaseManualController {
             }
         }
     }
+
+
+    private WPI_PigeonIMU gyro = new WPI_PigeonIMU(30);
+    private void updateTurn()
+    {
+        // while B and Y are pressed
+        if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
+            // spin while the angle turned is less than 90 degress
+            if (gyro.getAngle() >= 90)
+            {
+                Robot.DATA.drivetrain.set(R_DESIRED_VEL_FT_s, 0);
+                Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, 0);
+            }
+            else
+            {
+                Robot.DATA.drivetrain.set(R_DESIRED_VEL_FT_s, 0.5);
+                Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, 0.5);
+            }
+        }
+    }
 }
+
