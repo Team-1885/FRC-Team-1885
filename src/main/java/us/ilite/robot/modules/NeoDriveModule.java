@@ -48,6 +48,9 @@ public class NeoDriveModule extends Module implements Subsystem {
     private Pose2d mPose2d;
     private final NetworkTable mTable;
 
+    // debug test
+    //private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("GryoValues"); // glass;
+
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
@@ -215,6 +218,12 @@ public class NeoDriveModule extends Module implements Subsystem {
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
+
+
+        // debug test
+        mTable.getEntry("GetYaw").setString("" + mGyro.getYaw());
+        mTable.getEntry("GetRoll").setString("" + mGyro.getRoll());
+        mTable.getEntry("GetPitch").setString("" + mGyro.getPitch());
     }
 
     @Override

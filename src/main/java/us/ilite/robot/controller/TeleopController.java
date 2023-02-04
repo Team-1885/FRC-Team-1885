@@ -1,5 +1,6 @@
 package us.ilite.robot.controller;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -387,6 +388,9 @@ public class TeleopController extends BaseManualController {
         }
     }
 
+    PigeonIMU _pigeon = new PigeonIMU(30);
+    int loopCount = 0;
+
     private void updateTurn() {
         // for debug
         mTable.getEntry("YAW_DEGREES").setNumber(db.imu.get(EGyro.YAW_DEGREES));
@@ -397,6 +401,17 @@ public class TeleopController extends BaseManualController {
         mTable.getEntry("ACCEL_Y").setNumber(db.imu.get(EGyro.ACCEL_Y));
         mTable.getEntry("ACCEL_Z").setNumber(db.imu.get(EGyro.ACCEL_Z));
         mTable.getEntry("YAW_OMEGA_DEGREES").setNumber(db.imu.get(EGyro.YAW_OMEGA_DEGREES));
+        //mTable.getEntry("YAW_OMEGA_DEGREES").set
+
+//        if (loopCount++ > 10)
+//        {
+//            loopCount = 0;
+//            double[] ypr = new double[3];
+//            _pigeon.getYawPitchRoll(ypr);
+//            System.out.println("Pigeon Yaw is: " + ypr[0]);
+//            mTable.getEntry("Pigeon Yaw is:").setNumber(ypr[0]);
+//        }
+
 
         if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
             //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
