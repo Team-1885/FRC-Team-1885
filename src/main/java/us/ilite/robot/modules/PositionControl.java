@@ -24,7 +24,8 @@ import static us.ilite.common.types.EClimberData.*;
 import static us.ilite.common.types.EClimberData.IS_SINGLE_CLAMPED;
 
 public class PositionControl extends Module {
-    private TalonFX mPositionMotor;
+    private TalonFX mMotorID12;
+    private TalonFX mMotorID11;
     private PIDController mPositionPID;
     private PIDController mVelocityPID;
     private NetworkTable mTable;
@@ -45,22 +46,59 @@ public class PositionControl extends Module {
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kClimberRatio;
 
     public PositionControl() {
-        mPositionMotor = new TalonFX(12);
-        mPositionPID = new PIDController(kPositionGains, -kMaxClimberSpeed, kMaxClimberSpeed, Settings.kControlLoopPeriod);
-        mVelocityPID = new PIDController(kVelocityGains,-kMaxClimberSpeed,kMaxClimberSpeed,Settings.kControlLoopPeriod);
+        mMotorID11 = new TalonFX(11);
+        mMotorID12 = new TalonFX(12);
+        mMotorID11.setNeutralMode(NeutralMode.Brake);
+        mMotorID12.setNeutralMode(NeutralMode.Brake);
+        mMotorID12.configClosedloopRamp(0.5);
+        mMotorID11.configClosedloopRamp(0.5);
+
+        //Add 10 ms for current limit
+        mMotorID12.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 0.01));
+        mMotorID11.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 0.01));
+
+        mMotorID12.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 20);
+        mMotorID11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0, 20);
+
+        mMotorID11.configAllowableClosedloopError(1, climberDegreesToTicks(2));
+        mMotorID12.configAllowableClosedloopError(1, climberDegreesToTicks(2));
+
+        mVelocityPID = new PIDController(kVelocityGains, -kMaxClimberSpeed, kMaxClimberSpeed, Settings.kControlLoopPeriod);
+
+        mMotorID12.configNominalOutputForward(0, 20);
+        mMotorID11.configNominalOutputForward(0, 20);
+
+        mMotorID12.configNominalOutputReverse(0, 20);
+        mMotorID11.configNominalOutputReverse(0, 20);
+
+        mMotorID12.configPeakOutputForward(1, 20);
+        mMotorID11.configPeakOutputForward(1, 20);
+
+        mMotorID12.configPeakOutputReverse(-1, 20);
+        mMotorID11.configPeakOutputReverse(-1, 20);
+
+        mMotorID12.configMotionAcceleration(10 / kScaledUnitsToRPM, 20);
+        mMotorID11.configMotionAcceleration(10 / kScaledUnitsToRPM, 20);
+
+        HardwareUtils.setGains(mMotorID12, kPositionGains);
+        HardwareUtils.setGains(mMotorID11, kPositionGains);
         mTable = NetworkTableInstance.getDefault().getTable("pidposition");
     }
 
     @Override
     public void modeInit(EMatchMode mode) {
         if (mode == EMatchMode.TELEOPERATED) {
-            db.climber.set(ACTUAL_POSITION_deg, ticksToClimberDegrees(mPositionMotor.getSelectedSensorPosition()));
+            db.climber.set(ACTUAL_POSITION_deg, ticksToClimberDegrees(mMotorID12.getSelectedSensorPosition()));
         }
     }
     @Override
     public void readInputs() {
-        db.climber.set(ACTUAL_POSITION_deg,ticksToClimberDegrees(mPositionMotor.getSelectedSensorPosition()));
-        db.climber.set(ACTUAL_CLIMBER_PCT, (mPositionMotor.getSelectedSensorVelocity() * kScaledUnitsToRPM) / (6380 * kClimberRatio));
+        db.climber.set(ACTUAL_VEL_rpm, mMotorID12.getSelectedSensorVelocity() * kScaledUnitsToRPM);
+        db.climber.set(ACTUAL_POSITION_deg,ticksToClimberDegrees(mMotorID12.getSelectedSensorPosition()));
+        db.climber.set(ACTUAL_CLIMBER_PCT, (mMotorID12.getSelectedSensorVelocity() * kScaledUnitsToRPM) / (6380 * kClimberRatio));
+
+        db.climber.set(ACTUAL_POSITION_deg,ticksToClimberDegrees(mMotorID11.getSelectedSensorPosition()));
+        db.climber.set(ACTUAL_CLIMBER_PCT, (mMotorID11.getSelectedSensorVelocity() * kScaledUnitsToRPM) / (6380 * kClimberRatio));
 
     }
 
@@ -70,22 +108,27 @@ public class PositionControl extends Module {
         if (mode == null) return;
 
         if (db.climber.isSet(EClimberData.SET_COAST)) {
-            mPositionMotor.setNeutralMode(NeutralMode.Coast);
+            mMotorID12.setNeutralMode(NeutralMode.Coast);
+            mMotorID11.setNeutralMode(NeutralMode.Coast);
         } else {
-            mPositionMotor.setNeutralMode(NeutralMode.Brake);
+            mMotorID12.setNeutralMode(NeutralMode.Brake);
+            mMotorID11.setNeutralMode(NeutralMode.Brake);
         }
 
         switch(mode) {
             case PERCENT_OUTPUT:
-                mPositionMotor.set(ControlMode.PercentOutput, db.climber.get(EClimberData.DESIRED_VEL_pct));
+                mMotorID12.set(ControlMode.PercentOutput, db.climber.get(EClimberData.DESIRED_VEL_pct));
+                mMotorID11.set(ControlMode.PercentOutput, db.climber.get(EClimberData.DESIRED_VEL_pct));
                 break;
             case VELOCITY:
                 double desiredVel = mVelocityPID.calculate(db.climber.get(EClimberData.ACTUAL_VEL_rpm), clock.getCurrentTimeInMillis());
-                mPositionMotor.set(ControlMode.Velocity, desiredVel);
+                mMotorID12.set(ControlMode.Velocity, desiredVel);
+                mMotorID11.set(ControlMode.Velocity, desiredVel);
                 break;
             case POSITION:
-                double desiredPos = mPositionPID.calculate(db.climber.get(DESIRED_POS_deg), clock.getCurrentTimeInMillis());
-                mPositionMotor.set(ControlMode.Position, desiredPos);
+                double desiredPos = mPositionPID.calculate(db.climber.get(ACTUAL_POSITION_deg), clock.getCurrentTimeInMillis());
+                mMotorID12.set(ControlMode.Position, desiredPos);
+                mMotorID11.set(ControlMode.Position, desiredPos);
                 break;
         }
         mTable.getEntry("PositionPIDHelpMePlease").setNumber(db.climber.get(DESIRED_POS_deg));

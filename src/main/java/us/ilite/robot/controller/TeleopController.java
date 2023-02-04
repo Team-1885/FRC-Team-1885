@@ -71,6 +71,7 @@ public class TeleopController extends BaseManualController {
         updateBeamBreakTest();
         updatePositionControl();
     }
+
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
         //fix??
@@ -82,31 +83,31 @@ public class TeleopController extends BaseManualController {
             } else if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, -90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
-            }
-            else {
+            } else {
                 db.climber.set(EClimberData.DESIRED_VEL_pct, 0);
             }
         }
     }
+
     private void updateHangerPneumatics() {
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            } if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
+            }
+            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.RELEASED);
             }
 
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            } if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
+            }
+            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
             }
         }
@@ -144,6 +145,7 @@ public class TeleopController extends BaseManualController {
             }
         }
     }
+
     private void updateHangerManual() {
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {
@@ -158,8 +160,7 @@ public class TeleopController extends BaseManualController {
             }
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 setIntakeArmEnabled(true);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
@@ -180,6 +181,7 @@ public class TeleopController extends BaseManualController {
     }
 
     private Enums.ERungState mLastRungState = Enums.ERungState.NULL;
+
     protected void updateRungState() {
         Enums.ERungState newState = mLastRungState;
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
@@ -228,12 +230,12 @@ public class TeleopController extends BaseManualController {
                         newState = Enums.ERungState.BALANCING;
                     }
                     break;
-                    // If angle = balanced angle, then go to RELEASE_MID state
+                // If angle = balanced angle, then go to RELEASE_MID state
                 case RELEASING_MID:
                     //Instantaneously move to next stage to traversal once released
                     //newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
-                    if(moveToTraversalTimer.get() > 1.0) {
-                         newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
+                    if (moveToTraversalTimer.get() > 1.0) {
+                        newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
                     }
                     break;
                 case MOVE_TO_TRAVERSAL:
@@ -246,8 +248,7 @@ public class TeleopController extends BaseManualController {
                 case GRAB_TRAVERSAL:
                     if (db.operatorinput.isSet(InputMap.HANGER.CONFIRM_CLAMPED_ON_TRAVERSAL_RELEASE_HIGH)) {
                         newState = Enums.ERungState.RELEASE_HIGH;
-                    }
-                    else {
+                    } else {
                         newState = Enums.ERungState.GRAB_TRAVERSAL;
                     }
                     break;
@@ -349,9 +350,9 @@ public class TeleopController extends BaseManualController {
             }
             if (db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
                 fireCargo();
-            // } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
-            //    db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-            //    intakeCargo();
+                // } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+                //    db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
+                //    intakeCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
                 placeCargo();
@@ -371,6 +372,7 @@ public class TeleopController extends BaseManualController {
         }
         mPrevPressed = mPressed;
     }
+
     private void updateIntake() {
         if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
@@ -384,71 +386,84 @@ public class TeleopController extends BaseManualController {
     private void updateIntakeMotor() {
 
         //A_BTN
-        if(db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(ROLLER_STATE,Enums.ERollerState.PERCENT_OUTPUT);
-            db.intake.set(DESIRED_ROLLER_pct,0.2);
+        if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
+            db.intake.set(DESIRED_ROLLER_pct, 0.2);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
             setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
         }
         //X_BTN
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(ROLLER_STATE,Enums.ERollerState.VELOCITY);
-            db.intake.set(SET_ROLLER_VEL_ft_s,0.2);
-            db.intake.set(DESIRED_ROLLER_pct,0.0);
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(ROLLER_STATE, Enums.ERollerState.VELOCITY);
+            db.intake.set(SET_ROLLER_VEL_ft_s, 0.2);
+            db.intake.set(DESIRED_ROLLER_pct, 0.0);
             setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
         }
         //Y_BTN
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.EXTEND);
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE, Enums.EArmState.EXTEND);
             setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
         }
         //DPAD_DOWN
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.intake.set(PNEUMATIC_STATE,Enums.EArmState.RETRACT);
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            db.intake.set(PNEUMATIC_STATE, Enums.EArmState.RETRACT);
             setLED(Enums.LEDColorMode.BLUE, Enums.LEDState.SOLID);
-        }
-        else {
-            db.intake.set(DESIRED_ROLLER_pct,0.0);
+        } else {
+            db.intake.set(DESIRED_ROLLER_pct, 0.0);
             db.intake.set(SET_ROLLER_VEL_ft_s, 0.0);
             setLED(Enums.LEDColorMode.DEFAULT, Enums.LEDState.SOLID);
         }
     }
+
     private void updatePneumaticTest() {
-        if(db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
+        if (db.operatorinput.isSet(InputMap.OPERATOR.SHOOT_CARGO)) {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.RED);
-        }
-        else {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);
+        } else {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
             db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.WHITE);
         }
     }
+
     private void updateBeamBreakTest() {
-        if(db.intake.get(BEAM_BROKEN) == 1.0) {
+        if (db.intake.get(BEAM_BROKEN) == 1.0) {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-        }
-        else {
-            db.climber.set(EClimberData.IS_SINGLE_CLAMPED,Enums.EClampMode.RELEASED);
+        } else {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
         }
     }
+
+    private Enums.ERungState mRungState = Enums.ERungState.POSITION_TEST;
 
     private void updatePositionControl() {
-        db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
 
-            if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-                db.climber.set(EClimberData.DESIRED_POS_deg, -90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-                db.climber.set(EClimberData.DESIRED_POS_deg, 90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-                db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
-            }
-            else {
-                db.climber.set(EClimberData.DESIRED_POS_deg, 0.0);
-            }
+        Enums.ERungState newState = mRungState;
+
+        switch (mRungState) {
+            case POSITION_TEST:
+                //
+                // IF BUTTON PRESSED, SET 1ST CASE TO 2ND CASE
+                // ELSE SET POSITION TO NO VALUE
+                // WHEN SET TO 2ND CASE, SET HANGER STATE TO PERCENT OUTPUT & SET DESIRED POS TO ANGLE
+                //
+                if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+                    newState = Enums.ERungState.POSITION_CHILD;
+                } else {
+                    db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.NULL.getAngle());
+                }
+                break;
+        }
+        switch (newState) {
+            case POSITION_CHILD:
+                db.climber.set(EClimberData.DESIRED_POS_deg,Enums.EClimberMode.POSITION);
+                //db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
+                //db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.BALANCED.getAngle());
+                break;
+        }
+
+
     }
 }
+
+
+

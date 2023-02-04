@@ -45,7 +45,12 @@ public class Enums {
 
         // Autoated entry after N seconds of RELEASE_HIGH state
         // Move to final traversal position.
-        FINAL_LIFT
+        FINAL_LIFT,
+
+        //tests the arm position to see if it actually works
+        POSITION_TEST,
+
+        POSITION_CHILD
     }
 
     public enum EClampMode {

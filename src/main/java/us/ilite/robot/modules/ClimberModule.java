@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import us.ilite.common.config.Settings;
@@ -46,7 +47,9 @@ public class ClimberModule extends Module{
     public static final double kMaxClimberSpeed = 6380 * kClimberRatio;
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kClimberRatio;
 
+
     public ClimberModule() {
+
         mSingleBreak = new DigitalBeamSensor(5);
         mCLMR11 = new TalonFX(13);
         mCL12 = new TalonFX(14);
@@ -87,6 +90,7 @@ public class ClimberModule extends Module{
 
         HardwareUtils.setGains(mCL12, kPositionGains);
         HardwareUtils.setGains(mCLMR11, kPositionGains);
+
     }
 
     @Override
