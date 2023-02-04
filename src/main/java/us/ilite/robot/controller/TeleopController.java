@@ -433,13 +433,13 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updatePositionControl() {
-        db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
+        db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
 
-            if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, -90);
             }
-            else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+            else if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 90);
             }

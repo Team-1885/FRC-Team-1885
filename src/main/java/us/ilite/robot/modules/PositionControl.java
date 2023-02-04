@@ -45,7 +45,7 @@ public class PositionControl extends Module {
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kClimberRatio;
 
     public PositionControl() {
-        mPositionMotor = new TalonFX(10);
+        mPositionMotor = new TalonFX(12);
         mPositionPID = new PIDController(kPositionGains, -kMaxClimberSpeed, kMaxClimberSpeed, Settings.kControlLoopPeriod);
         mVelocityPID = new PIDController(kVelocityGains,-kMaxClimberSpeed,kMaxClimberSpeed,Settings.kControlLoopPeriod);
         mTable = NetworkTableInstance.getDefault().getTable("pidposition");
@@ -84,7 +84,7 @@ public class PositionControl extends Module {
                 mPositionMotor.set(ControlMode.Velocity, desiredVel);
                 break;
             case POSITION:
-                double desiredPos = mPositionPID.calculate(db.climber.get(ACTUAL_POSITION_deg), clock.getCurrentTimeInMillis());
+                double desiredPos = mPositionPID.calculate(db.climber.get(DESIRED_POS_deg), clock.getCurrentTimeInMillis());
                 mPositionMotor.set(ControlMode.Position, desiredPos);
                 break;
         }
