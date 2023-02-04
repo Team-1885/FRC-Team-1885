@@ -1,10 +1,13 @@
 package us.ilite.robot.controller;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import us.ilite.common.Field2022;
 import us.ilite.common.config.InputMap;
+import us.ilite.common.io.CodexNetworkTables;
+import us.ilite.common.lib.util.NetworkTablesConstantsBase;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
@@ -15,6 +18,11 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
+
+// test for network tables for glass
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import static us.ilite.common.types.drive.EDriveData.L_DESIRED_VEL_FT_s;
 import static us.ilite.common.types.drive.EDriveData.R_DESIRED_VEL_FT_s;
 
@@ -26,6 +34,9 @@ public class TeleopController extends BaseManualController {
 
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
+
+    // test for gyro
+    private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("angle");
 
 
     public static TeleopController getInstance() {
@@ -383,9 +394,11 @@ public class TeleopController extends BaseManualController {
     {
         // while B and Y are pressed
         if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
+            mTable.getEntry("test").setNumber(gyro.getAngle());
             // spin while the angle turned is less than 90 degress
             if (gyro.getAngle() >= 90)
             {
+
                 Robot.DATA.drivetrain.set(R_DESIRED_VEL_FT_s, 0);
                 Robot.DATA.drivetrain.set(L_DESIRED_VEL_FT_s, 0);
             }
