@@ -20,6 +20,10 @@ import us.ilite.robot.hardware.HardwareUtils;
 import static us.ilite.common.types.EClimberData.*;
 
 public class ClimberModule extends Module{
+
+    private double kP;
+    private double kI;
+    private double kD;
     private final TalonFX mCLMR11;
     private final TalonFX mCL12;
     private final DoubleSolenoid mCLPNDouble;
