@@ -1,27 +1,17 @@
 package us.ilite.robot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
 import us.ilite.common.types.EClimberData;
-import us.ilite.common.types.EIntakeData;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.robot.Enums;
-import us.ilite.robot.hardware.DigitalBeamSensor;
-import us.ilite.robot.hardware.HardwareUtils;
-
 import static us.ilite.common.types.EClimberData.*;
-import static us.ilite.common.types.EClimberData.IS_SINGLE_CLAMPED;
 
 public class PositionControl extends Module {
 
@@ -104,9 +94,9 @@ public class PositionControl extends Module {
     }
     @Override
     public void readInputs() {
-        // ===================================================
-        //  HONESTLY I HAVE NO IDEA WHAT THIS STUFF DOES BRUH
-        // ===================================================
+        // ==============================================
+        //  HONESTLY I HAVE NO IDEA WHAT THIS STUFF DOES
+        // ==============================================
         db.climber.set(ACTUAL_VEL_rpm, mMotorID12.getSelectedSensorVelocity() * kScaledUnitsToRPM);
         db.climber.set(ACTUAL_POSITION_deg,ticksToClimberDegrees(mMotorID12.getSelectedSensorPosition()));
         db.climber.set(ACTUAL_CLIMBER_PCT, (mMotorID12.getSelectedSensorVelocity() * kScaledUnitsToRPM) / (6380 * kClimberRatio));
@@ -160,6 +150,11 @@ public class PositionControl extends Module {
 
         mTable.getEntry("ID11pos").setNumber(mMotorID11.getSelectedSensorPosition());
         mTable.getEntry("ID12pos").setNumber(mMotorID12.getSelectedSensorPosition());
+    }
+
+    public void climberPosition() {
+        mPositionPID.reset();
+
     }
 
     // =========================
