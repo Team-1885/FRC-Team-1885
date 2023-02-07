@@ -15,50 +15,48 @@ import us.ilite.robot.Enums;
 import static us.ilite.common.types.EIntakeData.*;
 
 public class falconMotor extends Module {
-    private TalonFX mMotor;
+    private TalonFX mTalonFX;
     private DoubleSolenoid mThingy;
     private final NetworkTable mTable;
     public falconMotor() {
-        mMotor = new TalonFX(9);
-        mTable = NetworkTableInstance.getDefault().getTable("falconMotor");
-        mThingy = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
-        mThingy.set(DoubleSolenoid.Value.kForward);
-        db.intake.set(PNEUMATIC_STATE, 1.0);
+        mTalonFX = new TalonFX(9);
+        mTable = NetworkTableInstance.getDefault().getTable("intake");
     }
-    public void modeInit(EMatchMode mode) {
+    @Override
+    public void modeInit(EMatchMode pMode) {
 
     }
+
+    @Override
     public void readInputs() {
-        db.intake.set(EIntakeData.ROLLER_PCT, mMotor.getMotorOutputPercent());
-        db.intake.set(ROLLER_VEL_ft_s, mMotor.getSelectedSensorVelocity() * IntakeModule.kFeetSpeedConversion);
-
+        db.intake.set(ROLLER_PCT, (mTalonFX.getSelectedSensorVelocity() * IntakeModule.kScaledUnitsToRPM) / IntakeModule.kMaxFalconSpeed);
+        db.intake.set(ROLLER_VEL_ft_s, mTalonFX.getSelectedSensorVelocity() * IntakeModule.kFeetSpeedConversion);
     }
+    @Override
     public void setOutputs() {
         setRollerState();
         idk();
-        mMotor.set(TalonFXControlMode.Position, db.intake.get(EIntakeData.DESIRED_ARM_STATE));
-        mTable.getEntry(" Roller_Pct" ).setNumber(db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
-        mTable.getEntry("Velocity").setNumber(db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
-        mTable.getEntry("Position").setNumber(db.intake.get(EIntakeData.ARM_STATE));
+        mTable.getEntry("Roller_Pct").setNumber(db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
+        mTable.getEntry("Velocity").setNumber(db.intake.get(SET_ROLLER_VEL_ft_s));
+        mTable.getEntry("Position").setNumber(db.intake.get(PNEUMATIC_STATE));
     }
     public void setRollerState() {
-        Enums.ERollerState mode = db.intake.get(ROLLER_STATE, Enums.ERollerState.class);
-        if (mode == null) {
-            mode = Enums.ERollerState.PERCENT_OUTPUT;
+        Enums.ERollerState state = db.intake.get(ROLLER_STATE,Enums.ERollerState.class);
+        if (state == null) {
+            state = Enums.ERollerState.PERCENT_OUTPUT;
         }
-        switch (mode) {
+        switch(state) {
             case PERCENT_OUTPUT:
-                mMotor.set(TalonFXControlMode.PercentOutput, db.intake.get(DESIRED_ROLLER_pct));
-                db.intake.set(ROLLER_STATE, 0.2);
+                mTalonFX.set(TalonFXControlMode.PercentOutput, db.intake.get(EIntakeData.DESIRED_ROLLER_pct));
                 break;
             case VELOCITY:
-                mMotor.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
-                db.intake.set(ROLLER_STATE, 0.2);
+                mTalonFX.set(TalonFXControlMode.Velocity, db.intake.get(EIntakeData.SET_ROLLER_VEL_ft_s));
+
                 break;
         }
     }
     public void idk() {
-        Enums.EArmState mode = db.intake.get(PNEUMATIC_STATE, Enums.EArmState.class);
+        Enums.EArmState mode = db.intake.get(ARM_STATE, Enums.EArmState.class);
         if (mode == null) {
             return;
         }

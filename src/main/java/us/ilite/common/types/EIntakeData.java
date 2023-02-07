@@ -15,6 +15,7 @@ public enum EIntakeData implements CodexOf<Double> {
     INTAKE_STATOR_CURRENT,
     COMPRESSOR_PSI,
     ROLLER_STATE,
-    PNEUMATIC_STATE;
+    PNEUMATIC_STATE,
+    BEAM_BROKEN;
 
 }

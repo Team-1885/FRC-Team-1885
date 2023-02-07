@@ -73,6 +73,9 @@ public class Robot extends TimedRobot {
     private falconMotor mFalconMotor;
     private Pnuematics mPnuematics;
     private PnuematicsLEDs mPnuematicsLEDs;
+    private BeamBrake mBeamBrake;
+    private positionControl mpositionControl;
+
     @Override
     public void robotInit() {
         mClimberSelector = new ClimbModeSelection();
@@ -101,6 +104,8 @@ public class Robot extends TimedRobot {
         mFalconMotor = new falconMotor();
         mPnuematics = new Pnuematics();
         mPnuematicsLEDs = new PnuematicsLEDs();
+        mBeamBrake = new BeamBrake();
+        mpositionControl = new positionControl();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -191,6 +196,8 @@ public class Robot extends TimedRobot {
         // mRunningModules.addModule(mPixy);
         mRunningModules.addModule(mPnuematics);
         mRunningModules.addModule(mPnuematicsLEDs);
+        mRunningModules.addModule(mBeamBrake);
+        mRunningModules.addModule(mpositionControl);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
