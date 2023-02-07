@@ -22,20 +22,22 @@ import us.ilite.robot.hardware.HardwareUtils;
 
 import static us.ilite.common.types.EClimberData.*;
 import static us.ilite.common.types.EClimberData.IS_SINGLE_CLAMPED;
+import static us.ilite.common.types.EIntakeData.PNEUMATIC_STATE;
 
 public class positionControl extends Module {
     private final TalonFX mCL12;
     private final TalonFX mCLMR11;
 
     private PIDController mVelocityPID;
-    private PIDController mPositionPID;
+
     private ProfileGains kPositionGains = new ProfileGains().p(0.035).f(0.0010).slot(0);
 
     private ProfileGains kVelocityGains = new ProfileGains().p(0.0).f(0.0001);
+    private final NetworkTable mTable;
     public positionControl() {
         mCLMR11 = new TalonFX(11);
         mCL12 = new TalonFX(12);
-        mCLMR11.setNeutralMode(NeutralMode.Brake);
+         mCLMR11.setNeutralMode(NeutralMode.Brake);
         mCL12.setNeutralMode(NeutralMode.Brake);
         mCL12.configClosedloopRamp(0.5);
         mCLMR11.configClosedloopRamp(0.5);
@@ -71,6 +73,9 @@ public class positionControl extends Module {
         HardwareUtils.setGains(mCL12, kPositionGains);
         HardwareUtils.setGains(mCLMR11, kPositionGains);
 
+
+        mTable = NetworkTableInstance.getDefault().getTable("positionControl");
+
     }
     private double ticksToClimberDegrees(double pTicks) {
         return pTicks / 2048 * ClimberModule.kClimberRatio * 360;
@@ -92,6 +97,7 @@ public class positionControl extends Module {
         db.climber.set(ACTUAL_OUTPUT_CURRENT_11, mCLMR11.getStatorCurrent());
         db.climber.set(ACTUAL_BUS_VOLTAGE, mCL12.getMotorOutputVoltage());
         db.climber.set(ACTUAL_CLIMBER_PCT, (mCL12.getSelectedSensorVelocity() * ClimberModule.kScaledUnitsToRPM) / (6380 * ClimberModule.kClimberRatio));
+
     }
     public void setOutputs() {
         Enums.EClimberMode mode = db.climber.get(EClimberData.HANGER_STATE, Enums.EClimberMode.class);
@@ -121,7 +127,7 @@ public class positionControl extends Module {
                 mCLMR11.set(ControlMode.Position, climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
                 break;
         }
-
+        mTable.getEntry("Position").setNumber(db.climber.get(DESIRED_POS_deg));
 
 
 

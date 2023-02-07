@@ -66,6 +66,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateMotor();
         updatePnuematics();
+        updatePositionControl();
 
     }
      private void updateHangerMotors() {
@@ -436,25 +437,19 @@ public class TeleopController extends BaseManualController {
     }
     private void updatePositionControl() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-        if(db.driverinput.isSet(InputMap.DRIVER.MID_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+        if(db.driverinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER)) {
 
             db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-            db.climber.set(EClimberData.DESIRED_POS_deg, -30);
+            db.climber.set(EClimberData.DESIRED_POS_deg, 5);
         }
-        else if(db.driverinput.isSet(InputMap.HANGER.HIGH_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
+        else if(db.driverinput.isSet(InputMap.OPERATOR.SPIN_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
 
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-                db.climber.set(EClimberData.DESIRED_POS_deg, 30);
+                db.climber.set(EClimberData.DESIRED_POS_deg, -5);
 
 
 
         }
-        else if(db.driverinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG) && db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
-            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-            db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
-        }
-        else {
-            db.climber.set(EClimberData.DESIRED_POS_deg, 0.0);
-        }
+
     }
 }
