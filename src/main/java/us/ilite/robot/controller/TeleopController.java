@@ -433,35 +433,14 @@ public class TeleopController extends BaseManualController {
         }
     }
 
-    private Enums.ERungState mRungState = Enums.ERungState.POSITION_TEST;
+
 
     private void updatePositionControl() {
-
-        Enums.ERungState newState = mRungState;
-
-        switch (mRungState) {
-            case POSITION_TEST:
-                //
-                // IF BUTTON PRESSED, SET 1ST CASE TO 2ND CASE
-                // ELSE SET POSITION TO NO VALUE
-                // WHEN SET TO 2ND CASE, SET HANGER STATE TO PERCENT OUTPUT & SET DESIRED POS TO ANGLE
-                //
-                if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
-                    newState = Enums.ERungState.POSITION_CHILD;
-                } else {
-                    db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.NULL.getAngle());
-                }
-                break;
+        if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+            System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
+            db.climber.set(EClimberData.DESIRED_POS_deg,10.0);
         }
-        switch (newState) {
-            case POSITION_CHILD:
-                db.climber.set(EClimberData.DESIRED_POS_deg,Enums.EClimberMode.POSITION);
-                //db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-                //db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.BALANCED.getAngle());
-                break;
-        }
-
-
     }
 }
 

@@ -63,16 +63,21 @@ public class PositionControl extends Module {
         mMotorID11 = new TalonFX(11);
         mMotorID12 = new TalonFX(12);
 
-        // ================================================================================================================================
-        // CONSTRUCTING TWO PID CONTROLLERS (POSITION AND VELOCITY), SETTING INPUT AND OUTPUT RANGE TO #'S, AND SETTING CONTINUOUS TO TRUE
-        // ================================================================================================================================
+        // =========================================================
+        // CONSTRUCTING TWO PID CONTROLLERS (POSITION AND VELOCITY)
+        // =========================================================
 
         mVelocityPID = new PIDController(kVelocityGains, -kMaxClimberSpeed, kMaxClimberSpeed, Settings.kControlLoopPeriod);
         mPositionPID = new PIDController(kPositionGains, -kMaxClimberSpeed, kMaxClimberSpeed, Settings.kControlLoopPeriod);
 
-        mPositionPID.setInputRange(-180.0f,180.0f);
-        mPositionPID.setOutputRange(-90,90);
-        mPositionPID.setContinuous(true);
+
+        // ============================
+        // SETS kP, kI, kD VALUES TO 0
+        // ============================
+
+        kP = 0.0;
+        kI = 0.0;
+        kD = 0.0;
 
         // ========================================================
         //  CREATES A TABLE FOR GLASS, CAN BE USED TO TROUBLESHOOT
@@ -138,23 +143,29 @@ public class PositionControl extends Module {
                 mMotorID11.set(ControlMode.Velocity, desiredVel);
                 break;
             case POSITION:
+                System.out.print("ccccccccccccccccccccccc");
                 double desiredPos = mPositionPID.calculate(db.climber.get(ACTUAL_POSITION_deg), clock.getCurrentTimeInMillis());
-                mMotorID12.set(ControlMode.Position, desiredPos);
-                mMotorID11.set(ControlMode.Position, desiredPos);
+                mMotorID12.set(ControlMode.Position, climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+                mMotorID11.set(ControlMode.Position, climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+                //mMotorID11.set(ControlMode.PercentOutput,0.25);
+
+                mTable.getEntry("ID11pos").setNumber(mMotorID11.getSelectedSensorPosition());
+                mTable.getEntry("ID12pos").setNumber(mMotorID12.getSelectedSensorPosition());
+                mTable.getEntry("DESIRED_POS_deg").setNumber(db.climber.get(DESIRED_POS_deg));
+                mTable.getEntry("climberDegreesToTicks").setNumber(climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+
                 break;
         }
 
         // ====================================================================================================
         // CREATES TWO TABLE ENTRIES FOR GLASS, ID11POS AND ID12POS, SETTING THEM TO GETSELECTEDSENSORPOSITION
         // ====================================================================================================
-
-        mTable.getEntry("ID11pos").setNumber(mMotorID11.getSelectedSensorPosition());
-        mTable.getEntry("ID12pos").setNumber(mMotorID12.getSelectedSensorPosition());
-    }
-
-    public void climberPosition() {
-        mPositionPID.reset();
-
+        /*
+            mTable.getEntry("ID11pos").setNumber(mMotorID11.getSelectedSensorPosition());
+            mTable.getEntry("ID12pos").setNumber(mMotorID12.getSelectedSensorPosition());
+            mTable.getEntry("DESIRED_POS_deg").setNumber(db.climber.get(DESIRED_POS_deg));
+            mTable.getEntry("climberDegreesToTicks").setNumber(climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+        */
     }
 
     // =========================
