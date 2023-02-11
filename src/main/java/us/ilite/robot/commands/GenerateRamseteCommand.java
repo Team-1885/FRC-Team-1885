@@ -39,7 +39,7 @@ public class GenerateRamseteCommand {
         );
         mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
-        mLeftDrivePID = new PIDController(Settings.kP, 0, 0);
+        mLeftDrivePID = new PIDController(Settings.kP, 0, 0); //0.975
         mRightDrivePID = new PIDController(Settings.kP, 0, 0);
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
@@ -69,9 +69,9 @@ public class GenerateRamseteCommand {
                         // Start at the origin facing the +X direction
                         new Pose2d(0, 0, new Rotation2d(0)),
                         // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(1, new Rotation2d(0))),
+                        List.of(new Translation2d(1, new Rotation2d(0)), new Translation2d(2, new Rotation2d(0)), new Translation2d(3, new Rotation2d(0)), new Translation2d(4, new Rotation2d(0))),
                         // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(2, 0, new Rotation2d(0)),
+                        new Pose2d(5, 0, new Rotation2d(0)),
                         // Pass config
                         config);
 

@@ -211,7 +211,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         db.imu.set(EGyro.YAW_OMEGA_DEGREES, -mGyro.getYawRate().getDegrees());
         db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
-        mPose2d = mOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)),
+        mPose2d = mOdometry.update(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
@@ -269,6 +269,9 @@ public class NeoDriveModule extends Module implements Subsystem {
             case VELOCITY:
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                mTable.getEntry("left bus volts").setNumber(mLeftMaster.getVoltageCompensationNominalVoltage());
+                mTable.getEntry("right bus volts").setNumber(mRightMaster.getVoltageCompensationNominalVoltage());
+                mTable.getEntry("current heading").setNumber(mGyro.getHeading().getDegrees());
                 break;
             case TURN_TO:
                 mTurnToDegreePID.setSetpoint(db.drivetrain.get(DESIRED_TURN_ANGLE_deg));
