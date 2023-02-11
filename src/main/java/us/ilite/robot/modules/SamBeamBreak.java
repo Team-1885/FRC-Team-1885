@@ -10,7 +10,7 @@ public class SamBeamBreak extends Module{
 
 
     public SamBeamBreak(){
-    mSingleBreak = new DigitalBeamSensor(3);
+    // mSingleBreak = new DigitalBeamSensor(3); commented out temporarily
 }
 
     @Override
