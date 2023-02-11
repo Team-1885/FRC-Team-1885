@@ -62,6 +62,7 @@ public class TeleopController extends BaseManualController {
         updateIntake();
         updateTargetLock();
         updateReferenceModule();
+        updateTelescopeArm();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -378,6 +379,9 @@ public class TeleopController extends BaseManualController {
             db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
             db.climber.set(EClimberData.DESIRED_POS_deg,10.0);
         }
+    }
+    private void updateTelescopeArm() {
+
     }
 
 }
