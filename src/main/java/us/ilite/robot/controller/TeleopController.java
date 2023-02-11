@@ -406,8 +406,12 @@ public class TeleopController extends BaseManualController {
         if (db.operatorinput.isSet(ELogitech310.RIGHT_JOYSTICK_BTN)) {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.ARM_POSITION);
             db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
+        }
 
-
+        // /!\ EXTENDARM /!\ \\
+        if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
+            db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.EXTEND_POSITION);
+            db.arm.set(EArmData.DESIRED_ARM_POS_deg, 1.0);
         }
 
 

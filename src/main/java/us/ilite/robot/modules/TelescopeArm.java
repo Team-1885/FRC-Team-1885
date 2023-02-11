@@ -20,6 +20,7 @@ public class TelescopeArm extends Module{
 
     private TalonFX mLevel;
     private TalonFX mMoveArm;
+    private TalonFX mSpring;
 
     // ==============================================
     // DECLARES PIDCONTROLLERS POSITION AND VELOCITY
@@ -55,6 +56,7 @@ public class TelescopeArm extends Module{
 
         mLevel = new TalonFX(0);
         mMoveArm = new TalonFX(0);
+        mSpring = new TalonFX(0);
 
         // =========================================================
         // CONSTRUCTING TWO PID CONTROLLERS (POSITION AND VELOCITY)
@@ -111,12 +113,12 @@ public class TelescopeArm extends Module{
                 break;
             case ARM_POSITION:
                 mMoveArm.set(ControlMode.Position,climberDegreesToTicks(db.arm.get(EArmData.DESIRED_ARM_POS_deg)));
-                mTable.getEntry("ArmPos").setNumber(mLevel.getSelectedSensorPosition());
-
                 mMoveArm.set(ControlMode.Velocity, db.arm.get(EArmData.DESIRED_VEL_rpm));
+                mTable.getEntry("ArmPos").setNumber(mLevel.getSelectedSensorPosition());
                 break;
             case EXTEND_POSITION:
-                
+                mSpring.set(ControlMode.Position,climberDegreesToTicks(db.arm.get(EArmData.DESIRED_ARM_POS_deg)));
+                mTable.getEntry("Spring").setNumber(mSpring.getSelectedSensorPosition());
                 break;
 
         }
