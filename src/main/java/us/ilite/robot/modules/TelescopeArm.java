@@ -72,6 +72,6 @@ public class TelescopeArm extends Module{
     }
     @Override
     public void readInputs() {
-        //test
+
     }
 }

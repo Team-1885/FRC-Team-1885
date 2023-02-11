@@ -72,6 +72,8 @@ public class Robot extends TimedRobot {
     private TestController mTestController;
     private ReferenceModule mReferenceModule;
 
+    private TelescopeArm mTelescopeArm;
+
     @Override
     public void robotInit() {
         mClimberSelector = new ClimbModeSelection();
@@ -98,6 +100,7 @@ public class Robot extends TimedRobot {
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
         mReferenceModule = new ReferenceModule();
+        mTelescopeArm = new TelescopeArm();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -190,6 +193,7 @@ public class Robot extends TimedRobot {
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
         mRunningModules.addModule(mReferenceModule);
+        mRunningModules.addModule(mTelescopeArm);
     }
 
     @Override
