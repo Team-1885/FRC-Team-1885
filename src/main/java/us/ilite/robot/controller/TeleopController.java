@@ -64,6 +64,7 @@ public class TeleopController extends BaseManualController {
         updateReferenceModule();
         updateTelescopeArm();
     }
+
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
 
@@ -75,31 +76,31 @@ public class TeleopController extends BaseManualController {
             } else if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, -90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.HIGH_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 90);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
-            }
-            else {
+            } else {
                 db.climber.set(EClimberData.DESIRED_VEL_pct, 0);
             }
         }
     }
+
     private void updateHangerPneumatics() {
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            } if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
+            }
+            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.RELEASED);
             }
 
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            } if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
+            }
+            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
             }
         }
@@ -137,6 +138,7 @@ public class TeleopController extends BaseManualController {
             }
         }
     }
+
     private void updateHangerManual() {
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {
@@ -151,8 +153,7 @@ public class TeleopController extends BaseManualController {
             }
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_DOUBLE)) {
                 db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
-            }
-            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
+            } else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                 setIntakeArmEnabled(true);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
@@ -173,6 +174,7 @@ public class TeleopController extends BaseManualController {
     }
 
     private Enums.ERungState mLastRungState = Enums.ERungState.NULL;
+
     protected void updateRungState() {
         Enums.ERungState newState = mLastRungState;
         if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
@@ -221,12 +223,12 @@ public class TeleopController extends BaseManualController {
                         newState = Enums.ERungState.BALANCING;
                     }
                     break;
-                    // If angle = balanced angle, then go to RELEASE_MID state
+                // If angle = balanced angle, then go to RELEASE_MID state
                 case RELEASING_MID:
                     //Instantaneously move to next stage to traversal once released
                     //newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
-                    if(moveToTraversalTimer.get() > 1.0) {
-                         newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
+                    if (moveToTraversalTimer.get() > 1.0) {
+                        newState = Enums.ERungState.MOVE_TO_TRAVERSAL;
                     }
                     break;
                 case MOVE_TO_TRAVERSAL:
@@ -239,8 +241,7 @@ public class TeleopController extends BaseManualController {
                 case GRAB_TRAVERSAL:
                     if (db.operatorinput.isSet(InputMap.HANGER.CONFIRM_CLAMPED_ON_TRAVERSAL_RELEASE_HIGH)) {
                         newState = Enums.ERungState.RELEASE_HIGH;
-                    }
-                    else {
+                    } else {
                         newState = Enums.ERungState.GRAB_TRAVERSAL;
                     }
                     break;
@@ -364,6 +365,7 @@ public class TeleopController extends BaseManualController {
         }
         mPrevPressed = mPressed;
     }
+
     private void updateIntake() {
         if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
@@ -373,6 +375,7 @@ public class TeleopController extends BaseManualController {
             }
         }
     }
+
     private void updateReferenceModule() {
        /* if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
             System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -382,7 +385,9 @@ public class TeleopController extends BaseManualController {
 
         */
     }
+
     private void updateTelescopeArm() {
+
         //
         // 1) IF RIGHT PRESSED, GO UP AND STAY AT POS, ELSE IF LEFT PRESSED GO DOWN AND STAY AT POS, ELSE STAY AT POS
         // 2) IF JOYSTICK MOVED, MOVE ARM IN DIRECTION IN WHICH JOYSTICK WAS MOVED
@@ -394,17 +399,13 @@ public class TeleopController extends BaseManualController {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
             db.arm.set(EArmData.DESIRED_POS_deg, 1.0);
         }
-        else if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
-            db.arm.set(EArmData.DESIRED_POS_deg,0.0);
+            db.arm.set(EArmData.DESIRED_POS_deg, 0.0);
         }
         else {
             db.arm.set(EArmData.DESIRED_POS_deg, EArmData.ACTUAL_POSITION_deg);
         }
-
-        // /!\ MOVEARM /!\ \\
-
-
+            // /!\ MOVEARM /!\ \\
     }
-
 }
