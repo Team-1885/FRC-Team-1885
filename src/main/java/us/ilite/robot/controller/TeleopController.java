@@ -400,7 +400,7 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updatepneumaticspractice() {
-        if(db.feeder.get(ENTRY_BEAM)==0)
+        if(db.feeder.get(ENTRY_BEAM)==1)
         {
             db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
         }
