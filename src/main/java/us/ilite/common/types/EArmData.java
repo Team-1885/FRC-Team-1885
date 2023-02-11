@@ -5,7 +5,9 @@ public enum EArmData {
     ACTUAL_VEL_rpm,
     ACTUAL_CLIMBER_PCT,
     HANGER_STATE,
-    DESIRED_POS_deg,
+    DESIRED_ARM_POS_deg,
+    DESIRED_LEVEL_POS_deg,
+    DESIRED_VEL_rpm,
 
 
 
