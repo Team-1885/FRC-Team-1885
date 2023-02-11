@@ -61,6 +61,7 @@ public class TeleopController extends BaseManualController {
 
         updateIntake();
         updateTargetLock();
+        updateReferenceModule();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -371,4 +372,12 @@ public class TeleopController extends BaseManualController {
             }
         }
     }
+    private void updateReferenceModule() {
+        if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+            System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
+            db.climber.set(EClimberData.DESIRED_POS_deg,10.0);
+        }
+    }
+
 }
