@@ -69,7 +69,7 @@ public class Limelight extends Module implements ITargetDataProvider {
     public void setOutputs() {
         mGoal = Field2022.FieldElement.values()[(int) db.limelight.get(ELimelightData.TARGET_ID)];
         db.limelight.set(PIPELINE, 1);
-        db.limelight.set(PIPELINE, mGoal.pipeline());
+//        db.limelight.set(PIPELINE, mGoal.pipeline());
 
         setNetworkTableValue("ledMode", LED_MODE);
         setNetworkTableValue("camMode", CAM_MODE);
