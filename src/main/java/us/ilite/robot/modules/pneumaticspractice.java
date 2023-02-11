@@ -30,7 +30,6 @@ public class pneumaticspractice extends Module{
     @Override
     public void readInputs(){
 
-
     }
 
     @Override

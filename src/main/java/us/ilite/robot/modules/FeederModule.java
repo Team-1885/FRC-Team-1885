@@ -59,6 +59,7 @@ public class FeederModule extends Module {
         db.feeder.set(EXIT_BALL_VELOCITY_rpm, mIntakeFeeder.getSelectedSensorVelocity() * 600.0 / 2048.0);
         db.feeder.set(ENTRY_BEAM, mEntryBeamBreaker.isBroken());
    //     db.feeder.set(EXIT_BEAM, mExitBeamBreaker.isBroken());
+        System.out.println(mEntryBeamBreaker.isBroken());
     }
 
     @Override
