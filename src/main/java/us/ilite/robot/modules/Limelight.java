@@ -68,6 +68,7 @@ public class Limelight extends Module implements ITargetDataProvider {
     @Override
     public void setOutputs() {
         mGoal = Field2022.FieldElement.values()[(int) db.limelight.get(ELimelightData.TARGET_ID)];
+        db.limelight.set(PIPELINE, 1);
         db.limelight.set(PIPELINE, mGoal.pipeline());
 
         setNetworkTableValue("ledMode", LED_MODE);
