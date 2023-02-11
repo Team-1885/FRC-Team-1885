@@ -102,20 +102,23 @@ public class TelescopeArm extends Module{
 
         switch(mode) {
             case LEVEL_POSITION:
-                double desiredPos = mPositionPID.calculate(db.arm.get(EArmData.ACTUAL_POSITION_deg), clock.getCurrentTimeInMillis());
-                mLevel.set(ControlMode.Position, climberDegreesToTicks(db.arm.get(EArmData.DESIRED_POS_deg)));
+                double desiredPos = mPositionPID.calculate(db.arm.get(EArmData.DESIRED_LEVEL_POS_deg), clock.getCurrentTimeInMillis());
+                mLevel.set(ControlMode.Position, climberDegreesToTicks(db.arm.get(EArmData.DESIRED_LEVEL_POS_deg)));
                 //mMotorID11.set(ControlMode.PercentOutput,0.25);
                 mTable.getEntry("LevelPos").setNumber(mLevel.getSelectedSensorPosition());
-                mTable.getEntry("DESIRED_POS_deg").setNumber(db.arm.get(EArmData.DESIRED_POS_deg));
-                mTable.getEntry("climberDegreesToTicks").setNumber(climberDegreesToTicks(db.arm.get(EArmData.DESIRED_POS_deg)));
+                mTable.getEntry("DESIRED_POS_deg").setNumber(db.arm.get(EArmData.DESIRED_LEVEL_POS_deg));
+                mTable.getEntry("climberDegreesToTicks").setNumber(climberDegreesToTicks(db.arm.get(EArmData.DESIRED_LEVEL_POS_deg)));
                 break;
             case ARM_POSITION:
-                mMoveArm.set(ControlMode.Position,climberDegreesToTicks(db.arm.get(EArmData.DESIRED_POS_deg)));
+                mMoveArm.set(ControlMode.Position,climberDegreesToTicks(db.arm.get(EArmData.DESIRED_ARM_POS_deg)));
                 mTable.getEntry("ArmPos").setNumber(mLevel.getSelectedSensorPosition());
+
+                mMoveArm.set(ControlMode.Velocity, db.arm.get(EArmData.DESIRED_VEL_rpm));
                 break;
             case EXTEND_POSITION:
-
+                
                 break;
+
         }
     }
     private double ticksToClimberDegrees(double pTicks) {
