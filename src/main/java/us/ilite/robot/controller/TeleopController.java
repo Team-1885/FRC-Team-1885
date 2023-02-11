@@ -400,15 +400,23 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updatepneumaticspractice() {
-        if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
+        if(db.feeder.get(ENTRY_BEAM)==0)
+        {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
+        }
+        else
+        {
+            db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
+        }
+
+        /*if (db.operatorinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
 
             }
             if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
                 db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
-            }
-        }
+            }*/
     }
 
     private void updateLEDpractice(){
