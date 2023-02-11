@@ -7,15 +7,19 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.types.EClimberData;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.robot.Enums;
+import us.ilite.robot.hardware.DigitalBeamSensor;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static us.ilite.common.types.EClimberData.IS_SINGLE_CLAMPED;
+import static us.ilite.common.types.EClimberData.SINGLE_BEAM_BROKEN;
 
 public class pneumaticspractice extends Module{
     private final DoubleSolenoid mCLPNSingle;
-    private int setValue;
+
+
 
     public pneumaticspractice(){
         mCLPNSingle = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, 4, 5);
+
     }
 
     @Override
