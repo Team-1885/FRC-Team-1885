@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
@@ -39,6 +41,7 @@ public class NeoDriveModule extends Module {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    private NetworkTable mTable;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -81,7 +84,7 @@ public class NeoDriveModule extends Module {
             .velocityConversion(kDriveNEOVelocityFactor);
     public static ProfileGains kTurnToProfileGains = new ProfileGains().p(0.02).f(0.1);
     //Old value is 0.0075
-    public static ProfileGains kTargetAngleLockGains = new ProfileGains().p(0.01);
+    public static ProfileGains kTargetAngleLockGains = new ProfileGains().p(0.02); //.i(.051429).d(.001575)
 
     // ========================================
     // DO NOT MODIFY THESE OTHER CONSTANTS
@@ -90,6 +93,8 @@ public class NeoDriveModule extends Module {
     private DifferentialDriveOdometry mOdometry;
 
     public NeoDriveModule() {
+        mTable = NetworkTableInstance.getDefault().getTable("target lock");
+
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
@@ -225,8 +230,9 @@ public class NeoDriveModule extends Module {
                         targetLockOutput = mTargetLockPID.calculate(-db.limelight.get(ELimelightData.TX), clock.dt());
                         turn = targetLockOutput;
                     }
-                    turn += 0.1 * Math.signum(turn);
-                    turn *= (1/(1-throttle)) * 0.5;
+//                    turn += 0.1 * Math.signum(turn);
+//                    turn *= (1/(1-throttle)) * 0.5;
+                    mTable.getEntry("turn").setNumber(turn);
                 } else if (db.pixydata.isSet(EPixyData.SIGNATURE)) {
                     double targetLockOutput = 0;
                     if (db.pixydata.get(EPixyData.TARGET_VALID) == 1) {
@@ -236,7 +242,6 @@ public class NeoDriveModule extends Module {
                     turn += 0.1 * Math.signum(turn);
                     turn *= (1/(1-throttle)) * 0.5;
                 }
-
                 mLeftMaster.set(throttle+turn);
                 mRightMaster.set(throttle-turn);
                 break;
