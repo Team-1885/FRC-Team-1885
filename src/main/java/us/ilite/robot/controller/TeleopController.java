@@ -383,11 +383,28 @@ public class TeleopController extends BaseManualController {
         */
     }
     private void updateTelescopeArm() {
-        if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
-            System.out.print("bbbbbbbbbbbb");
-            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-            db.climber.set(EClimberData.DESIRED_POS_deg,10.0);
+        //
+        // 1) IF RIGHT PRESSED, GO UP AND STAY AT POS, ELSE IF LEFT PRESSED GO DOWN AND STAY AT POS, ELSE STAY AT POS
+        // 2) IF JOYSTICK MOVED, MOVE ARM IN DIRECTION IN WHICH JOYSTICK WAS MOVED
+        // 3) EXTEND ARM IF BUTTON PRESSED /!\ NOT SAME AS LEVEL, TO SCORE BETTER /!\
+        //
+
+        // /!\ LEVEL /!\ \\
+        if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
+            db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
+            db.arm.set(EArmData.DESIRED_POS_deg, 1.0);
         }
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+            db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
+            db.arm.set(EArmData.DESIRED_POS_deg,0.0);
+        }
+        else {
+            db.arm.set(EArmData.DESIRED_POS_deg, EArmData.ACTUAL_POSITION_deg);
+        }
+
+        // /!\ MOVEARM /!\ \\
+
+
     }
 
 }

@@ -50,6 +50,7 @@ public class Data {
     public final RobotCodex<ELimelightData> limelight = new RobotCodex(NULL_CODEX_VALUE , ELimelightData.class);
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
     public final RobotCodex<EPixyData> pixydata = new RobotCodex(NULL_CODEX_VALUE, EPixyData.class);
+    public final RobotCodex<EArmData> arm = new RobotCodex(NULL_CODEX_VALUE, EArmData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
             operatorinput,
@@ -61,6 +62,7 @@ public class Data {
             intake,
             climber,
             pixydata,
+            arm,
     };
 
     public final Map<String, RobotCodex> mMappedCodex = new HashMap<>();
@@ -77,6 +79,7 @@ public class Data {
             intake,
             climber,
             pixydata,
+            arm,
     };
 
     //Stores writers per codex needed for CSV logging

@@ -202,4 +202,10 @@ public class Enums {
         VELOCITY;
     }
 
+    public enum EArmMode {
+        LEVEL_POSITION,
+        ARM_POSITION,
+        EXTEND_POSITION;
+    }
+
 }
