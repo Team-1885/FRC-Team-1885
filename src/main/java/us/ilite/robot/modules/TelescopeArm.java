@@ -1,12 +1,19 @@
 package us.ilite.robot.modules;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
+import us.ilite.common.types.EClimberData;
 import us.ilite.common.types.EMatchMode;
+import us.ilite.robot.Enums;
+
+import static us.ilite.common.types.EClimberData.*;
+import static us.ilite.common.types.EClimberData.ACTUAL_CLIMBER_PCT;
 
 public class TelescopeArm extends Module{
 
@@ -63,15 +70,60 @@ public class TelescopeArm extends Module{
         mTable = NetworkTableInstance.getDefault().getTable("pidposition");
     }
     @Override
-    public void modeInit(EMatchMode pMode) {
+    public void modeInit(EMatchMode mode) {
+        // ===================
+        // SETS THE ACTUAL POSITIN DEGREES TO MMOTORIDGETSELECTEDSENSORPOSITION
+        // ===================
 
-    }
-    @Override
-    public void setOutputs() {
-
+        if (mode == EMatchMode.TELEOPERATED) {
+            db.climber.set(ACTUAL_POSITION_deg, ticksToClimberDegrees(mMotorID.getSelectedSensorPosition()));
+        }
     }
     @Override
     public void readInputs() {
+        // ==============================================
+        //  HONESTLY I HAVE NO IDEA WHAT THIS STUFF DOES
+        // ==============================================
+        db.climber.set(ACTUAL_VEL_rpm, mMotorID.getSelectedSensorVelocity() * kScaledUnitsToRPM);
+        db.climber.set(ACTUAL_POSITION_deg,ticksToClimberDegrees(mMotorID.getSelectedSensorPosition()));
+        db.climber.set(ACTUAL_CLIMBER_PCT, (mMotorID.getSelectedSensorVelocity() * kScaledUnitsToRPM) / (6380 * kClimberRatio));
+    }
+    @Override
+    public void setOutputs() {
+        // ==========================================================================================
+        // SETS VARIABLE MODE TO HANGER STATE FROM ECLIMBERMODE CLASS, IDK WHAT THE OTHER STUFF DOES
+        // ==========================================================================================
 
+        Enums.EClimberMode mode = db.climber.get(EClimberData.HANGER_STATE, Enums.EClimberMode.class);
+        if (mode == null) return;
+
+        if (db.climber.isSet(EClimberData.SET_COAST)) {
+            mMotorID.setNeutralMode(NeutralMode.Coast);
+        } else {
+            mMotorID.setNeutralMode(NeutralMode.Brake);
+        }
+
+        // ===========================================================================================================================================================================
+        // SWITCH STATEMENT: PERCENT OUTPUT SETS BOTH MOTORS TO DESIRED VEL PCT, VELOCITY SETS BOTH MOTORS TO PID VALUE DESIREDVEL, POSITION SETS BOTH MOTORS TO PID VALUE DESIREDPOS
+        // ===========================================================================================================================================================================
+
+        switch(mode) {
+
+            case POSITION:
+                System.out.print("ccccccccccccccccccccccc");
+                double desiredPos = mPositionPID.calculate(db.climber.get(ACTUAL_POSITION_deg), clock.getCurrentTimeInMillis());
+                mMotorID.set(ControlMode.Position, climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+                //mMotorID11.set(ControlMode.PercentOutput,0.25);
+                mTable.getEntry("ID11pos").setNumber(mMotorID.getSelectedSensorPosition());
+                mTable.getEntry("DESIRED_POS_deg").setNumber(db.climber.get(DESIRED_POS_deg));
+                mTable.getEntry("climberDegreesToTicks").setNumber(climberDegreesToTicks(db.climber.get(DESIRED_POS_deg)));
+                break;
+        }
+    }
+    private double ticksToClimberDegrees(double pTicks) {
+        return pTicks / 2048 * kClimberRatio * 360;
+    }
+    private double climberDegreesToTicks(double pDegrees) {
+        return pDegrees * 2048 / kClimberRatio / 360;
     }
 }
