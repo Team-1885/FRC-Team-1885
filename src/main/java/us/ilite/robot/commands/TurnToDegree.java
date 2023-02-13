@@ -1,14 +1,9 @@
 package us.ilite.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import us.ilite.common.Angle;
-import us.ilite.common.config.Settings;
-import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.hardware.ECommonNeutralMode;
-import us.ilite.robot.modules.FalconDriveModule;
-import us.ilite.common.types.sensor.EGyro;
 import edu.wpi.first.math.controller.PIDController;
 
 import com.flybotix.hfr.util.log.ILog;

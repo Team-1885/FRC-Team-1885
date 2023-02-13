@@ -5,7 +5,6 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.util.Utils;
 import us.ilite.common.types.ELimelightData;
-import us.ilite.robot.modules.FalconDriveModule;
 import us.ilite.robot.modules.targetData.ITargetDataProvider;
 
 /**
