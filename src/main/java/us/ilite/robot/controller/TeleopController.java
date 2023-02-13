@@ -401,29 +401,16 @@ public class TeleopController extends BaseManualController {
         }
         else if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
-<<<<<<< HEAD
-            db.arm.set(EArmData.DESIRED_POS_deg, 0.0);
-=======
             db.arm.set(EArmData.DESIRED_LEVEL_POS_deg,0.0);
->>>>>>> Telescope-Arm
         }
         else {
             db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, EArmData.ACTUAL_POSITION_deg);
         }
-<<<<<<< HEAD
-            // /!\ MOVEARM /!\ \\
-=======
-
         // /!\ MOVEARM /!\ \\
         if (db.operatorinput.isSet(ELogitech310.RIGHT_JOYSTICK_BTN)) {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.ARM_POSITION);
             db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
-
-
         }
 
-
-
->>>>>>> Telescope-Arm
     }
 }
