@@ -43,6 +43,15 @@ public class WpilibPigeonModule extends Module
 
     }
 
+    protected void setOutputs() // use values from codex to do actions
+    {
+
+    }
+    protected void readInputs() // take values from encoders and log into codex
+    {
+
+    }
+
 }
 
 
