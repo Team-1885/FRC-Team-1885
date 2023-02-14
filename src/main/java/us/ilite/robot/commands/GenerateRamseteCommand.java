@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
+import us.ilite.robot.TrajectoryCommandUtils;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import javax.swing.*;
@@ -68,16 +69,16 @@ public class GenerateRamseteCommand {
                 TrajectoryGenerator.generateTrajectory(
                         // Start at the origin facing the +X direction
                         new Pose2d(0, 0, new Rotation2d(0)),
-                        // Pass through these two interior waypoints, making an 's' curve path     
+                        // Pass through these two interior waypoints, making an 's' curve path
                         List.of(new Translation2d(0.25, 0.25), new Translation2d(0.5, -0.25)),
                         // End 3 meters straight ahead of where we started, facing forward
                         new Pose2d(1.5, 0, new Rotation2d(0)),
                         // Pass config
                         config);
-
+        Trajectory driveStraightTest = TrajectoryCommandUtils.getJSONTrajectory();
         mRamseteCommand =
                 new RamseteCommand(
-                        exampleTrajectory,
+                        driveStraightTest,
                         mRobotDrive::getPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
                         mRamseteController,
                         mFeedForward,
@@ -90,7 +91,7 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 );
         // Reset odometry to the starting pose of the trajectory.
-        mRobotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        mRobotDrive.resetOdometry(driveStraightTest.getInitialPose());
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
 
