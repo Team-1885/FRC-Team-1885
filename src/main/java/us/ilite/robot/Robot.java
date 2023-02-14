@@ -75,6 +75,8 @@ public class Robot extends TimedRobot {
     private TestController mTestController;
     private GenerateRamseteCommand mGenerateRamseteCommand;
 
+    private WpilibPigeonModule mWpilibPigeonModule;
+
     @Override
     public void robotInit() {
         mClimberSelector = new ClimbModeSelection();
@@ -101,6 +103,9 @@ public class Robot extends TimedRobot {
         mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
         mGenerateRamseteCommand = new GenerateRamseteCommand();
+
+        mWpilibPigeonModule = new WpilibPigeonModule();
+
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -189,6 +194,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mClimber);
         mRunningModules.addModule(mLEDControl);
+        mRunningModules.addModule(mWpilibPigeonModule);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;

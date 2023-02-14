@@ -12,7 +12,7 @@ import us.ilite.robot.Robot;
 import static us.ilite.common.types.drive.EDriveData.L_DESIRED_VEL_FT_s;
 import static us.ilite.common.types.drive.EDriveData.R_DESIRED_VEL_FT_s;
 
-public class WpilibPigeonModule
+public class WpilibPigeonModule extends Module
 {
     private WPI_PigeonIMU gyro;
     private Data db;
@@ -24,6 +24,25 @@ public class WpilibPigeonModule
         db = Robot.DATA;
         mTable = NetworkTableInstance.getDefault().getTable("angle"); // glass
     }
+
+    // Turn degrees clockwise
+    public void turnClockwiseDegrees(double desiredDegrees)
+    {
+        // save original yaw degrees value
+        // set motors to turn until the difference between the original degrees and the current degrees is equal to desiredDegrees
+    }
+    // Turn degrees counter clockwise
+    public void turnCounterClockwiseDegrees(double desiredDegrees)
+    {
+        // save original yaw degrees value
+        // set motors to turn until the difference between the original degrees and the current degrees is equal to desiredDegrees
+    }
+    // Face toward the given degree
+    public void turnToDegrees(double desiredYawValueInDegrees)
+    {
+
+    }
+
 }
 
 
