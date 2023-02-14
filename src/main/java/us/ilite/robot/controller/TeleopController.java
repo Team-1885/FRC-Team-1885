@@ -58,10 +58,19 @@ public class TeleopController extends BaseManualController {
             //Add in methods from DCMP
             updateHangerMotors();
             updateHangerPneumatics();
+            updateNewIntakeModule();
         }
 
         updateIntake();
         updateTargetLock();
+    }
+    private void updateNewIntakeModule() {
+        if(db.driverinput.isSet(ELogitech310.A_BTN)) {
+            db.intake.set(DESIRED_ROLLER_pct, 0.4);
+        }
+        else {
+            db.intake.set(DESIRED_ROLLER_pct, 0.0);
+        }
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -373,4 +382,6 @@ public class TeleopController extends BaseManualController {
         }
     }
 
+
 }
+
