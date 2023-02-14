@@ -31,8 +31,8 @@ import java.util.List;
 
 public class TrajectoryCommandUtils {
 
-    public static Trajectory getJSONTrajectory() {
-        String trajectoryJSON = "pathplanner/generatedJSON/DriveStraight.wpilib.json";
+    public static Trajectory getJSONTrajectory(String name) {
+        String trajectoryJSON = "pathplanner/generatedJSON/" + name + ".wpilib.json";
         Trajectory trajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);

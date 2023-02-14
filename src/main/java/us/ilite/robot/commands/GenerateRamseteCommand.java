@@ -75,10 +75,13 @@ public class GenerateRamseteCommand {
                         new Pose2d(2, 0, new Rotation2d(0)),
                         // Pass config
                         config);
-        Trajectory driveStraightTest = TrajectoryCommandUtils.getJSONTrajectory();
+        Trajectory DriveStraight = TrajectoryCommandUtils.getJSONTrajectory("DriveStraight");
+        Trajectory LeftPathPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPathPiece");
+        Trajectory LeftPathOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftPathOrigin");
+        Trajectory desiredTrajectory = DriveStraight;
         mRamseteCommand =
                 new RamseteCommand(
-                        driveStraightTest,
+                        desiredTrajectory,
                         mRobotDrive::getPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
                         mRamseteController,
                         mFeedForward,
@@ -91,7 +94,7 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 );
         // Reset odometry to the starting pose of the trajectory.
-        mRobotDrive.resetOdometry(driveStraightTest.getInitialPose());
+        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
 
