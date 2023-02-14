@@ -8,6 +8,7 @@ import us.ilite.common.config.InputMap;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.common.types.sensor.EClawData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 
@@ -63,6 +64,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateReferenceModule();
         updateTelescopeArm();
+        updateClaw();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
@@ -413,9 +415,20 @@ public class TeleopController extends BaseManualController {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.EXTEND_POSITION);
             db.arm.set(EArmData.DESIRED_ARM_POS_deg, 1.0);
         }
-
-
-
+    }
+    public void updateClaw() {
+        if (db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+            //================================================
+            // IF DPAD DOWN AND UP ARE PRESSED VELOCITY IS .2
+            //================================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, .2);
+        }
+        else {
+            //===========================================
+            //IF NOTHING IS PRESSED VELOCITY IS SET TO 0
+            //===========================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, 0);
+        }
     }
 
 }
