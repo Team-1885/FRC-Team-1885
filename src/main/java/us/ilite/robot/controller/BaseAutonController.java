@@ -102,7 +102,7 @@ public class BaseAutonController extends AbstractController {
         mMotorPidController = new PIDController(0.00051968,0,0);
         mTimer = new Timer();
         mFirstLeg = new Timer();
-        mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(FalconDriveModule.kTrackWidthFeet));
+        mDriveKinematics = new DifferentialDriveKinematics(Settings.kTrackWidthMeters);
         SmartDashboard.putNumber("trajectory-seconds",-1);
 
 

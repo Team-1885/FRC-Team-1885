@@ -8,7 +8,7 @@ import us.ilite.robot.BaseTest;
 
 @Category(CriticalTest.class)
 public class DriveTrainUnitTest extends BaseTest {
-    private IntakeModule mIntake;
+//    private IntakeModule mIntake;
 
     @Test
     @Category(CriticalTest.class)
