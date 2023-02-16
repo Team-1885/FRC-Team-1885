@@ -71,8 +71,8 @@ public class Robot extends TimedRobot {
     private AbstractController mActiveController = null;
     private TestController mTestController;
     private ReferenceModule mReferenceModule;
-
     private TelescopeArm mTelescopeArm;
+    private ClawModule mClawModule;
 
     @Override
     public void robotInit() {
@@ -101,6 +101,7 @@ public class Robot extends TimedRobot {
         mLimelight = new Limelight();
         mReferenceModule = new ReferenceModule();
         mTelescopeArm = new TelescopeArm();
+        mClawModule = new ClawModule();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -194,6 +195,7 @@ public class Robot extends TimedRobot {
         mRunningModules.modeInit(TELEOPERATED);
         mRunningModules.addModule(mReferenceModule);
         mRunningModules.addModule(mTelescopeArm);
+        mRunningModules.addModule(mClawModule);
     }
 
     @Override

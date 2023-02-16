@@ -8,6 +8,7 @@ import us.ilite.common.config.InputMap;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.common.types.sensor.EClawData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 
@@ -63,6 +64,7 @@ public class TeleopController extends BaseManualController {
         updateTargetLock();
         updateReferenceModule();
         updateTelescopeArm();
+        updateClaw();
     }
 
     private void updateHangerMotors() {
@@ -387,32 +389,52 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateTelescopeArm() {
+<<<<<<< HEAD
 
         //
+=======
+        // ===========================================================================================================
+>>>>>>> Telescope-Arm
         // 1) IF RIGHT PRESSED, GO UP AND STAY AT POS, ELSE IF LEFT PRESSED GO DOWN AND STAY AT POS, ELSE STAY AT POS
         // 2) IF JOYSTICK MOVED, MOVE ARM IN DIRECTION IN WHICH JOYSTICK WAS MOVED
         // 3) EXTEND ARM IF BUTTON PRESSED /!\ NOT SAME AS LEVEL, TO SCORE BETTER /!\
-        //
+        // ===========================================================================================================
 
         // /!\ LEVEL /!\ \\
         if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
-            db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.LEVEL_POSITION);
             db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, 1.0);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT,1.0);
+            db.claw.set(EClawData.DESIRED_POS_DEG, 90 - (db.arm.get(EArmData.DESIRED_ARM_POS_deg) + db.claw.get(EClawData.ACTUAL_POS_DEG)));
+
         }
+<<<<<<< HEAD
         else if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.LEVEL_POSITION);
+=======
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.LEVEL_POSITION);
+>>>>>>> Telescope-Arm
             db.arm.set(EArmData.DESIRED_LEVEL_POS_deg,0.0);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT,0.0);
         }
         else {
-            db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, EArmData.ACTUAL_POSITION_deg);
+            db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, EArmData.ACTUAL_LEVEL_POS_deg);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT, EArmData.ACTUAL_PERCENT_OUTPUT);
         }
+<<<<<<< HEAD
         // /!\ MOVEARM /!\ \\
+=======
+
+        // /!\ MOVE /!\ \\
+>>>>>>> Telescope-Arm
         if (db.operatorinput.isSet(ELogitech310.RIGHT_JOYSTICK_BTN)) {
-            db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.ARM_POSITION);
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.ARM_POSITION);
             db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
 
 
         }
+<<<<<<< HEAD
 
         // /!\ EXTENDARM /!\ \\
         if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
@@ -421,5 +443,21 @@ public class TeleopController extends BaseManualController {
 
         }
 
+=======
+    }
+    public void updateClaw() {
+        if (db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+            //================================================
+            // IF DPAD DOWN AND UP ARE PRESSED VELOCITY IS .2
+            //================================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, .2);
+        }
+        else {
+            //===========================================
+            //IF NOTHING IS PRESSED VELOCITY IS SET TO 0
+            //===========================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, 0);
+        }
+>>>>>>> Telescope-Arm
     }
 }

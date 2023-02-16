@@ -207,5 +207,10 @@ public class Enums {
         ARM_POSITION,
         EXTEND_POSITION;
     }
+    public enum EClawMode {
+        SPIN_MOTOR,
+        SET_MOTOR_ANGLE_PARALLEL;
+
+    }
 
 }
