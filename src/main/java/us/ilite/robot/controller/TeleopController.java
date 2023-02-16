@@ -411,6 +411,7 @@ public class TeleopController extends BaseManualController {
             db.arm.set(EArmData.HANGER_STATE, Enums.EArmMode.ARM_POSITION);
             db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
 
+
         }
 
         // /!\ EXTENDARM /!\ \\

@@ -12,7 +12,7 @@ import us.ilite.common.types.EMatchMode;
 import us.ilite.robot.Enums;
 
 
-public class TelescopeArm extends Module{
+public class TelescopeArm extends Module {
 
     // ============================================================
     // DECLARES MOTOR, TO BE CHANGED WHEN WE KNOW WHAT MOTOR IT IS
@@ -124,9 +124,11 @@ public class TelescopeArm extends Module{
         }
     }
     private double ticksToClimberDegrees(double pTicks) {
+
         return pTicks / 2048 * kArmRatio * 360;
     }
-    private double climberDegreesToTicks(double pDegrees) {
+    private double climberDegreesToTicks(double pDegrees)
+    {
         return pDegrees * 2048 / kArmRatio / 360;
     }
 }
