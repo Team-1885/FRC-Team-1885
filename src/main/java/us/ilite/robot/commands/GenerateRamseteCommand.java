@@ -76,9 +76,14 @@ public class GenerateRamseteCommand {
                         // Pass config
                         config);
         Trajectory DriveStraight = TrajectoryCommandUtils.getJSONTrajectory("DriveStraight");
-        Trajectory LeftPathPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPathPiece");
-        Trajectory LeftPathOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftPathOrigin");
-        Trajectory desiredTrajectory = DriveStraight;
+        Trajectory LeftPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPiece");
+        Trajectory LeftOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftOrigin");
+        Trajectory LeftScore = TrajectoryCommandUtils.getJSONTrajectory("LeftScore");
+        Trajectory MiddlePieceDock = TrajectoryCommandUtils.getJSONTrajectory("MiddlePieceDock");
+        Trajectory RightOrigin = TrajectoryCommandUtils.getJSONTrajectory("RightOrigin");
+        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
+        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
+        Trajectory desiredTrajectory = LeftScore;
         mRamseteCommand =
                 new RamseteCommand(
                         desiredTrajectory,

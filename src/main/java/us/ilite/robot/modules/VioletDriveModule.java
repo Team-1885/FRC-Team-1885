@@ -296,7 +296,7 @@ public class VioletDriveModule extends Module {
 
         mRightMaster.setClosedLoopRampRate(0.2);
         mRightFollower.setClosedLoopRampRate(0.2);
-        resetOdometry(TrajectoryCommandUtils.getJSONTrajectory().getInitialPose());
+//        resetOdometry(TrajectoryCommandUtils.getJSONTrajectory().getInitialPose());
         initialXPosition = mOdometry.getPoseMeters().getX();
         initialYPosition = mOdometry.getPoseMeters().getY();
         SmartDashboard.putNumber("Odometry init posX", mOdometry.getPoseMeters().getX());

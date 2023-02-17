@@ -180,7 +180,7 @@ public class FalconDriveModule extends Module {
 	public void modeInit(EMatchMode mode) {
 		reset();
 		mGyro.zeroAll();
-		resetOdometry(TrajectoryCommandUtils.getJSONTrajectory().getInitialPose());
+//		resetOdometry(TrajectoryCommandUtils.getJSONTrajectory().getInitialPose());
 		kInitialXPosition = mOdometry.getPoseMeters().getX();
 		kInitialYPosition = mOdometry.getPoseMeters().getY();
 		kInitialLeftPosition = mLeftMaster.getSelectedSensorPosition();
