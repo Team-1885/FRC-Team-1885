@@ -44,6 +44,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    //private WpilibPigeonModule mGyro;
     private DifferentialDriveKinematics mKinematics;
     private Pose2d mPose2d;
     private final NetworkTable mTable;
@@ -116,7 +117,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
         mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
-
+        //mGyro = WpilibPigeonModule.getInstance();
+o
         mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
         mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
         mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);

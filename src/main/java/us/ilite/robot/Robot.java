@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
         mLimelight = new Limelight();
         mGenerateRamseteCommand = new GenerateRamseteCommand();
 
-        mWpilibPigeonModule = new WpilibPigeonModule();
+        mWpilibPigeonModule = WpilibPigeonModule.getInstance();
 
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {

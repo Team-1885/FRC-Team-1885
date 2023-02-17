@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.Data;
 import us.ilite.common.config.InputMap;
+import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Robot;
 
@@ -26,27 +27,129 @@ public class WpilibPigeonModule extends Module
     //private double desiredHeading; // do i need?
 
     // ----- Make WpilibPigeonModule a Singleton ----- //
-    private WpilibPigeonModule instance;
+    private static final WpilibPigeonModule instance = new WpilibPigeonModule();
+    public static WpilibPigeonModule getInstance() { return instance; }
     private WpilibPigeonModule() {
         gyro = new WPI_PigeonIMU(30); // initializes and zeros gyro
         db = Robot.DATA;
         mTable = NetworkTableInstance.getDefault().getTable("angle"); // glass
     }
-    public WpilibPigeonModule getInstance(int deviceNumber)
-    {
-        return instance;
-    }
     // ----- End Singleton ----- //
 
-    /**
-     * Create a Pigeon object that communicates with Pigeon on CAN Bus.
-     *
-     * @param deviceNumber
-     *            CAN Device Id of Pigeon [0,62]
-     * @param version Version of the PigeonIMU
-     * @param canbus Name of the CANbus; can be a SocketCAN interface (on Linux),
-     *               or a CANivore device name or serial number
-     */
+    // drive straight, robot should re-align with given angle when bumped
+    // TODO figure out how to keep checking the angle in setOutputs or readInputs and keep setting the velocities based
+    // TODO on the desired action, turnByDegree, turnToDegree, driveStraightForward. driveStraightForward would keep
+    // TODO going until turned off. turnByDegree and turnToDegree will keep going until the desired angle is reached.
+    public void driveStraightForward(double desiredAngle)
+    {
+        desiredYaw = desiredAngle;
+
+        double leftMotorVelocity;
+        double rightMotorVelocity;
+
+        // keep the robot going in a straight line forward
+        if (db.imu.get(EGyro.YAW_DEGREES) < desiredYaw) // needs to curve left to align robot with angle
+        {
+            // left motor speed < right motor speed
+
+            // how fast do the left motors need to spin to bring the robot back into a straight line without being jerky
+            // the greater difference between the Desired Angle and Actual Angle, the faster the robot will correct
+            // (the faster the left motors will spin)
+            leftMotorVelocity = (desiredYaw - db.imu.get(EGyro.YAW_DEGREES))/360; // divides by 360 to scale the speed between 0 and 1
+            // keep right velocity same as before
+            rightMotorVelocity = (db.drivetrain.get(EDriveData.R_DESIRED_VEL_FT_s));
+        }
+        else if (db.imu.get(EGyro.YAW_DEGREES) > desiredYaw) // needs to curve right to align robot with angle
+        {
+            // left motor speed > right motor speed
+
+            // keep right velocity same as before
+            leftMotorVelocity = (db.drivetrain.get(EDriveData.L_DESIRED_VEL_FT_s));
+            // how fast do the right motors need to spin to bring the robot back into a straight line without being jerky
+            // the greater difference between the Actual Angle and Desired Angle, the faster the robot will correct
+            // (the faster the right motors will spin)
+            rightMotorVelocity = (db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+        }
+        else // keep the velocities the same
+        {
+            leftMotorVelocity = db.drivetrain.get(EDriveData.L_DESIRED_VEL_FT_s);
+            rightMotorVelocity = db.drivetrain.get(EDriveData.R_DESIRED_VEL_FT_s);
+        }
+
+        // set new velocities to keep robot moving forward in a straight line
+        db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, leftMotorVelocity);
+        db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, rightMotorVelocity);
+    }
+
+    // Turn in place in the direction with the smallest angle
+    public void turnByDegreesEfficient(double desiredDegrees)
+    {
+        // calculate a number in [-1, 1]
+        // positive angles will accelerate the robot forward, and negative backward
+        // the bigger the angle, the faster the turn
+
+        desiredYaw = db.imu.get(EGyro.YAW_DEGREES) + desiredDegrees; // new angle will be current plus amount to turn
+
+        double leftMotorVelocity;
+        double rightMotorVelocity;
+
+        if (db.imu.get(EGyro.YAW_DEGREES) - desiredYaw > 180) // it's faster to turn left
+        {
+            // left motor speed < right motor speed
+            leftMotorVelocity = -Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+            rightMotorVelocity = Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+        }
+        else if (db.imu.get(EGyro.YAW_DEGREES) - desiredYaw < 180) // it's faster to turn right
+        {
+            // left motor speed > right motor speed
+            leftMotorVelocity = Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+            rightMotorVelocity = -Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+        }
+        else // keep the velocities the same
+        {
+            leftMotorVelocity = db.drivetrain.get(EDriveData.L_DESIRED_VEL_FT_s);
+            rightMotorVelocity = db.drivetrain.get(EDriveData.R_DESIRED_VEL_FT_s);
+        }
+
+        // set new velocities to turn the robot in the most efficient direction
+        db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, leftMotorVelocity);
+        db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, rightMotorVelocity);
+    }
+
+    // Turn to the specific degrees
+    public void turnToDegreesEfficient(double desiredDegrees)
+    {
+        // calculate a number in [-1, 1]
+        // positive angles will accelerate the robot forward, and negative backward
+        // the bigger the angle, the faster the turn
+
+        desiredYaw = desiredDegrees;
+
+        double leftMotorVelocity;
+        double rightMotorVelocity;
+
+        if (db.imu.get(EGyro.YAW_DEGREES) - desiredYaw > 180) // it's faster to turn left
+        {
+            // left motor speed < right motor speed
+            leftMotorVelocity = -Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+            rightMotorVelocity = Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+        }
+        else if (db.imu.get(EGyro.YAW_DEGREES) - desiredYaw < 180) // it's faster to turn right
+        {
+            // left motor speed > right motor speed
+            leftMotorVelocity = Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+            rightMotorVelocity = -Math.abs(db.imu.get(EGyro.YAW_DEGREES) - desiredYaw)/360; // divides by 360 to scale the speed between 0 and 1
+        }
+        else // keep the velocities the same
+        {
+            leftMotorVelocity = db.drivetrain.get(EDriveData.L_DESIRED_VEL_FT_s);
+            rightMotorVelocity = db.drivetrain.get(EDriveData.R_DESIRED_VEL_FT_s);
+        }
+
+        // set new velocities to turn the robot in the most efficient direction
+        db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, leftMotorVelocity);
+        db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, rightMotorVelocity);
+    }
 
     // Turn degrees clockwise
     public void turnClockwiseDegrees(double desiredDegrees)
@@ -81,13 +184,23 @@ public class WpilibPigeonModule extends Module
     {
         if (db.imu.get(EGyro.YAW_DEGREES) != desiredYaw)
         {
-            // correct problem
+            // should the robot turn left or right
+//            if (180 - desiredYaw > 0) // turn left
+//            {
+//
+//            }
+//            else // turn right
+//            {
+//
+//            }
+
+
         }
         if (db.imu.get(EGyro.PITCH_DEGREES) != desiredPitch)
         {
             // correct problem
         }
-        if (db.imu.get(EGyro.YAW_DEGREES) != desiredRoll)
+        if (db.imu.get(EGyro.ROLL_DEGREES) != desiredRoll)
         {
             // correct problem
         }
