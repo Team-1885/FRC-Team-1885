@@ -84,7 +84,7 @@ public class NeoDriveModule extends Module {
             .velocityConversion(kDriveNEOVelocityFactor);
     public static ProfileGains kTurnToProfileGains = new ProfileGains().p(0.02).f(0.1);
     //Old value is 0.0075
-    public static ProfileGains kTargetAngleLockGains = new ProfileGains().p(0.02); //.i(.051429).d(.001575)
+    public static ProfileGains kTargetAngleLockGains = new ProfileGains().p(0.01); //.i(.051429).d(.001575)
 
     // ========================================
     // DO NOT MODIFY THESE OTHER CONSTANTS
