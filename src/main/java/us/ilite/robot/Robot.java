@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
     private FeederModule mFeeder;
-    private IntakeModule mIntake;
     private ClimberModule mClimber;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
@@ -92,7 +91,6 @@ public class Robot extends TimedRobot {
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
         mFeeder = new FeederModule();
-        mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
         mNeoDrive = new NeoDriveModule();
@@ -151,7 +149,6 @@ public class Robot extends TimedRobot {
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
         mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
@@ -179,7 +176,6 @@ public class Robot extends TimedRobot {
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
         mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mClimber);

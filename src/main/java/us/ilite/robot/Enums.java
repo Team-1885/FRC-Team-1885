@@ -54,6 +54,11 @@ public class Enums {
         RELEASED
     }
 
+    public enum EIntakeState {
+        EXTENDED,
+        RETRACTED,
+    }
+
     public enum EClimberAngle {
         //Angles at desired rung
 

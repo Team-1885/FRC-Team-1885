@@ -6,7 +6,6 @@ import us.ilite.common.*;
 
 
 import static us.ilite.common.types.EFeederData.*;
-import static us.ilite.common.types.EIntakeData.DESIRED_ROLLER_pct;
 import static us.ilite.common.types.drive.EDriveData.*;
 
 import us.ilite.common.lib.util.XorLatch;
@@ -100,15 +99,6 @@ public abstract class AbstractController {
         db.drivetrain.set(DESIRED_TURN_PCT, 0.0);
     }
 
-    protected void setIntakeArmEnabled(boolean enabled) {
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
-        if (enabled) {
-            db.intake.set(EIntakeData.ARM_STATE, EArmState.EXTEND);
-        } else {
-            db.intake.set(DESIRED_ROLLER_pct, 0.0);
-            db.intake.set(EIntakeData.ARM_STATE, EArmState.RETRACT);
-        }
-    }
 
     protected abstract void updateImpl();
 
@@ -149,28 +139,6 @@ public abstract class AbstractController {
         if (db.feeder.get(EXIT_BEAM) == 1d) {
             db.feeder.set(SET_FEEDER_pct, 0.4);
         }
-    }
-
-    protected void placeCargo() {
-        db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.feeder.set(EFeederData.SET_FEEDER_pct, -0.2);
-        db.intake.set(EIntakeData.DESIRED_ROLLER_pct, -0.1);
-        mNumBalls = 0;
-    }
-
-    protected void intakeCargo() {
-        setIntakeArmEnabled(true);
-        db.intake.set(EIntakeData.ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
-        db.intake.set(EIntakeData.DESIRED_ROLLER_pct, 1.0);
-        indexCargo();
-//        activateFeeder();
-    }
-
-    protected void reverseCargo() {
-        db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.feeder.set(SET_FEEDER_pct, -1.0);
-        mNumBalls = 0;
-        db.intake.set(DESIRED_ROLLER_pct, -1.0);
     }
 
     protected void setLED(Enums.LEDColorMode pColor, Enums.LEDState pState) {
@@ -228,7 +196,6 @@ public abstract class AbstractController {
 
     public void fireFeeder(double pSpeed, double pPulseSpeed) {
         db.feeder.set(EFeederData.STATE, EFeederState.VELOCITY);
-        setIntakeArmEnabled(false);
         if (mExitGate.get() == XorLatch.State.XOR) {
             mShotTimer.start();
             //If there haven't been any balls shot during the fire period go ahead and fire
@@ -252,26 +219,9 @@ public abstract class AbstractController {
             mNumBalls--;
         }
     }
-    public void placeFeeder() {
-        db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
-        db.feeder.set(SET_FEEDER_pct, -0.2);
-        db.intake.set(EIntakeData.DESIRED_ROLLER_pct, -0.1);
-        if (mEntryGate.get() == XorLatch.State.BOTH) {
-            mEntryGate.reset();
-            mNumBalls--;
-        }
-    }
-    public void reverseFeeder() {
-        db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
-        db.feeder.set(SET_FEEDER_pct, -1.0);
-        db.intake.set(DESIRED_ROLLER_pct, -1.0);
-        if (mEntryGate.get() == XorLatch.State.BOTH) {
-            mEntryGate.reset();
-            mNumBalls--;
-        }
-    }
+
+
+
     /**
      * Provides a way to report on what is used in our codex vs not used. This should help reduce the
      * amount of raw null values we log.

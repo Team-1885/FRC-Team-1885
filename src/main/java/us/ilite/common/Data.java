@@ -108,9 +108,6 @@ public class Data {
         drivetrain.createSimpleEnumConverter(EDriveData.STATE, Enums.EDriveState.class);
         drivetrain.createSimpleEnumConverter(EDriveData.NEUTRAL_MODE, ECommonNeutralMode.class);
 
-        intake.createSimpleEnumConverter(EIntakeData.ARM_STATE, Enums.EArmState.class);
-        intake.createSimpleEnumConverter(EIntakeData.ROLLER_STATE, Enums.ERollerState.class);
-
         feeder.createSimpleBooleanConverter(EFeederData.ENTRY_BEAM);
         feeder.createSimpleEnumConverter(EFeederData.STATE, Enums.EFeederState.class);
 
@@ -127,8 +124,6 @@ public class Data {
         mConvertedFields.add(EDriveData.IS_CURRENT_LIMITING.name());
         mConvertedFields.add(EDriveData.STATE.name());
         mConvertedFields.add(EDriveData.NEUTRAL_MODE.name());
-        mConvertedFields.add(EIntakeData.ARM_STATE.name());
-        mConvertedFields.add(EIntakeData.ROLLER_STATE.name());
         mConvertedFields.add(EFeederData.ENTRY_BEAM.name());
         mConvertedFields.add(EFeederData.STATE.name());
         mConvertedFields.add(EClimberData.HANGER_STATE.name());

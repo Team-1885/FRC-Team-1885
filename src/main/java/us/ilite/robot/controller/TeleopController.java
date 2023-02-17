@@ -66,10 +66,10 @@ public class TeleopController extends BaseManualController {
     }
     private void updateNewIntakeModule() {
         if(db.driverinput.isSet(ELogitech310.A_BTN)) {
-            db.intake.set(DESIRED_ROLLER_pct, 0.4);
+            db.intake.set(EIntakeData.PNEUMATIC_STATE, Enums.EIntakeState.EXTENDED);
         }
         else {
-            db.intake.set(DESIRED_ROLLER_pct, 0.0);
+            db.intake.set(EIntakeData.PNEUMATIC_STATE, Enums.EIntakeState.RETRACTED);
         }
     }
     private void updateHangerMotors() {
@@ -162,7 +162,6 @@ public class TeleopController extends BaseManualController {
             }
             else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
                 db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-                setIntakeArmEnabled(true);
                 db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
             }
             if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
@@ -309,14 +308,12 @@ public class TeleopController extends BaseManualController {
                     break;
                 case GRAB_TRAVERSAL:
                     //dont let it go from this state to the go to traversal until a timer has hit one second
-                    setIntakeArmEnabled(true);
                     db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                     db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.TRAVERSAL.getAngle());
                     db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
                     db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
                     break;
                 case RELEASE_HIGH:
-                    setIntakeArmEnabled(true);
                     db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
                     db.climber.set(EClimberData.DESIRED_POS_deg, Enums.EClimberAngle.TRAVERSAL.getAngle());
                     db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
@@ -336,7 +333,6 @@ public class TeleopController extends BaseManualController {
     private void updateCargo() {
         db.feeder.set(ADJUSTABLE_FEEDER_PCT, mFeederFireSpeed);
         if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
-            db.intake.set(ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
             if (db.operatorinput.isSet(InputMap.OPERATOR.INCREASE_FEEDER_SPEED) ||
                     db.operatorinput.isSet(InputMap.OPERATOR.DECREASE_FEEDER_SPEED)) {
                 mPressed = true;
@@ -352,13 +348,10 @@ public class TeleopController extends BaseManualController {
                 fireCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-                intakeCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.PLACE_CARGO)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-                placeCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RELEASE_BALLS)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
-                reverseCargo();
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) {
                 db.feeder.set(STATE, Enums.EFeederState.PERCENT_OUTPUT);
                 stageBalls();
@@ -367,7 +360,6 @@ public class TeleopController extends BaseManualController {
                 mBallsShot = 0;
                 mShotTimer.reset();
                 db.feeder.set(SET_FEEDER_pct, 0d);
-                db.intake.set(DESIRED_ROLLER_pct, 0d);
             }
         }
         mPrevPressed = mPressed;
@@ -375,9 +367,7 @@ public class TeleopController extends BaseManualController {
     private void updateIntake() {
         if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
             if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
-                setIntakeArmEnabled(true);
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
-                setIntakeArmEnabled(false);
             }
         }
     }
