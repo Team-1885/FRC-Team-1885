@@ -45,7 +45,7 @@ public class GenerateRamseteCommand {
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
 
-    public Command generateCommand() { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
+    public Command generateCommand(String trajectory) { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
@@ -75,15 +75,15 @@ public class GenerateRamseteCommand {
                         new Pose2d(2, 0, new Rotation2d(0)),
                         // Pass config
                         config);
-        Trajectory DriveStraight = TrajectoryCommandUtils.getJSONTrajectory("DriveStraight");
-        Trajectory LeftPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPiece");
-        Trajectory LeftOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftOrigin");
-        Trajectory LeftScore = TrajectoryCommandUtils.getJSONTrajectory("LeftScore");
-        Trajectory MiddlePieceDock = TrajectoryCommandUtils.getJSONTrajectory("MiddlePieceDock");
-        Trajectory RightOrigin = TrajectoryCommandUtils.getJSONTrajectory("RightOrigin");
-        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
-        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
-        Trajectory desiredTrajectory = LeftScore;
+//        Trajectory DriveStraight = TrajectoryCommandUtils.getJSONTrajectory("DriveStraight");
+//        Trajectory LeftPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPiece");
+//        Trajectory LeftOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftOrigin");
+//        Trajectory LeftScore = TrajectoryCommandUtils.getJSONTrajectory("LeftScore");
+//        Trajectory MiddlePieceDock = TrajectoryCommandUtils.getJSONTrajectory("MiddlePieceDock");
+//        Trajectory RightOrigin = TrajectoryCommandUtils.getJSONTrajectory("RightOrigin");
+//        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
+//        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
+        Trajectory desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
         mRamseteCommand =
                 new RamseteCommand(
                         desiredTrajectory,

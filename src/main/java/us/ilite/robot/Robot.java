@@ -165,7 +165,8 @@ public class Robot extends TimedRobot {
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
         //mActiveController.setEnabled(true);
-        mGenerateRamseteCommand.generateCommand().schedule(); // Autonomous Trajectory Command
+        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(); // Autonomous Trajectory Command
+//        mGenerateRamseteCommand.generateCommand("LeftOrigin").schedule();
     }
 
     @Override
