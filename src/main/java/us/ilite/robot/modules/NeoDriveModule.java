@@ -311,6 +311,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public Pose2d getPose() {
+        System.out.println(mPose2d.getRotation());
         return mPose2d;
     }
 

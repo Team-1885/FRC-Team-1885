@@ -26,6 +26,7 @@ import us.ilite.robot.auto.AutonSelection;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.commands.LeftOrigin;
 import us.ilite.robot.commands.LeftPiece;
+import us.ilite.robot.commands.SpinIntake;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -80,6 +81,7 @@ public class Robot extends TimedRobot {
 
     private LeftPiece mLeftScore;
     private LeftOrigin mLeftOrigin;
+    private SpinIntake mSpinIntake;
     public SequentialCommandGroup mCommandGroup;
 
     @Override
@@ -97,7 +99,8 @@ public class Robot extends TimedRobot {
         mReverseController = new TexasSwitchController();
         mLeftScore = new LeftPiece();
         mLeftOrigin = new LeftOrigin();
-        mCommandGroup = new SequentialCommandGroup(mLeftScore);
+        mSpinIntake = new SpinIntake();
+        mCommandGroup = new SequentialCommandGroup(mLeftScore, mLeftOrigin);
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
@@ -106,7 +109,7 @@ public class Robot extends TimedRobot {
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
         mFeeder = new FeederModule();
-        mIntake = new IntakeModule();
+        mIntake = IntakeModule.getInstance();
         mLEDControl = new LEDModule();
         mClimber = new ClimberModule();
         mNeoDrive = NeoDriveModule.getInstance();
