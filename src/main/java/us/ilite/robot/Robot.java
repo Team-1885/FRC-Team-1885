@@ -113,7 +113,6 @@ public class Robot extends TimedRobot {
         mClimber = new ClimberModule();
         mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
-        mGenerateRamseteCommand = new GenerateRamseteCommand();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -176,9 +175,9 @@ public class Robot extends TimedRobot {
         //mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
-        leftPiece = mGenerateRamseteCommand.generateCommand("LeftPiece");
-        leftOrigin = mGenerateRamseteCommand.generateCommand("LeftOrigin");
-        SequentialCommandGroup group = new SequentialCommandGroup(leftPiece, leftOrigin);
+//        leftPiece = mGenerateRamseteCommand.generateCommand("LeftPiece");
+//        leftOrigin = mGenerateRamseteCommand.generateCommand("LeftOrigin");
+//        SequentialCommandGroup group = new SequentialCommandGroup(leftPiece, leftOrigin);
 
         //mActiveController.setEnabled(true);
 //        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(false); // Autonomous Trajectory Command
@@ -205,8 +204,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
-        System.out.println("LP " + leftPiece.isFinished());
-        System.out.println("LO " + leftOrigin.isFinished());
         commonPeriodic();
     }
 
