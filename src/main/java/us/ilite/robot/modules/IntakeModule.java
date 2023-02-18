@@ -8,12 +8,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.robot.Enums;
 
+import java.lang.reflect.InaccessibleObjectException;
+
 import static us.ilite.common.types.EIntakeData.*;
 
-public class IntakeModule extends Module {
+public class IntakeModule extends Module implements Subsystem {
     private final TalonFX mIntakeRoller;
     private final DoubleSolenoid mArmSolenoid;
     private final Compressor mCompressor;
@@ -28,6 +31,7 @@ public class IntakeModule extends Module {
     public static final double kWheelCircumference = kWheelDiameter * Math.PI;
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kIntakeRollerRatio;
     public static final double kFeetSpeedConversion = (kScaledUnitsToRPM * kWheelCircumference) / 60.0;
+    public static final IntakeModule instance = new IntakeModule();
 
     public IntakeModule() {
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
@@ -43,6 +47,10 @@ public class IntakeModule extends Module {
         mCompressor.enableAnalog(100, 110);
         mArmSolenoid.set(DoubleSolenoid.Value.kForward);
         db.intake.set(PNEUMATIC_STATE, 1.0);
+    }
+
+    public static IntakeModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+        return instance;
     }
 
     @Override
