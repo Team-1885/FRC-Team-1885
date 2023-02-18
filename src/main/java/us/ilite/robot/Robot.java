@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
@@ -49,6 +50,8 @@ public class Robot extends TimedRobot {
     private ClimberModule mHanger;
     private Timer initTimer = new Timer();
 
+
+
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
     private FeederModule mFeeder;
@@ -74,7 +77,6 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
-    private GenerateRamseteCommand mGenerateRamseteCommand;
 
     private LeftPiece mLeftScore;
     private LeftOrigin mLeftOrigin;
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
+
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
@@ -173,6 +176,10 @@ public class Robot extends TimedRobot {
         //mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
+        leftPiece = mGenerateRamseteCommand.generateCommand("LeftPiece");
+        leftOrigin = mGenerateRamseteCommand.generateCommand("LeftOrigin");
+        SequentialCommandGroup group = new SequentialCommandGroup(leftPiece, leftOrigin);
+
         //mActiveController.setEnabled(true);
 //        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(false); // Autonomous Trajectory Command
 //        mGenerateRamseteCommand.generateCommand("LeftOrigin").schedule(false);
@@ -198,6 +205,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
+        System.out.println("LP " + leftPiece.isFinished());
+        System.out.println("LO " + leftOrigin.isFinished());
         commonPeriodic();
     }
 
