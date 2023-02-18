@@ -44,7 +44,7 @@ public class GenerateRamseteCommand {
         mRightDrivePID = new PIDController(Settings.kP, 0, 0);
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
-
+    private Trajectory desiredTrajectory;
     public Command generateCommand(String trajectory) { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
@@ -65,16 +65,16 @@ public class GenerateRamseteCommand {
                         .setKinematics(mDriveKinematics); // kDriveKinematics
 
         // An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
-                TrajectoryGenerator.generateTrajectory(
-                        // Start at the origin facing the +X direction
-                        new Pose2d(0, 0, new Rotation2d(0)),
-                        // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(0.25, 0.25), new Translation2d(0.5, -0.25)),
-                        // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(2, 0, new Rotation2d(0)),
-                        // Pass config
-                        config);
+//        Trajectory exampleTrajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        new Pose2d(0, 0, new Rotation2d(0)),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        List.of(new Translation2d(0.25, 0.25), new Translation2d(0.5, -0.25)),
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(2, 0, new Rotation2d(0)),
+//                        // Pass config
+//                        config);
 //        Trajectory DriveStraight = TrajectoryCommandUtils.getJSONTrajectory("DriveStraight");
 //        Trajectory LeftPiece = TrajectoryCommandUtils.getJSONTrajectory("LeftPiece");
 //        Trajectory LeftOrigin = TrajectoryCommandUtils.getJSONTrajectory("LeftOrigin");
@@ -83,7 +83,8 @@ public class GenerateRamseteCommand {
 //        Trajectory RightOrigin = TrajectoryCommandUtils.getJSONTrajectory("RightOrigin");
 //        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
 //        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
-        Trajectory desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
+          desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
+
         mRamseteCommand =
                 new RamseteCommand(
                         desiredTrajectory,
@@ -102,5 +103,7 @@ public class GenerateRamseteCommand {
         mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
-
+    public double getTotalTimeSeconds(){
+        return desiredTrajectory.getTotalTimeSeconds();
+    }
 }

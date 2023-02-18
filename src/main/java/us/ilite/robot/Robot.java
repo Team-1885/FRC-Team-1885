@@ -11,19 +11,20 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.MatchMetadata;
-import us.ilite.common.types.drive.EDriveData;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
 import us.ilite.robot.commands.GenerateRamseteCommand;
+import us.ilite.robot.commands.LeftOrigin;
+import us.ilite.robot.commands.LeftPiece;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -75,6 +76,10 @@ public class Robot extends TimedRobot {
     private TestController mTestController;
     private GenerateRamseteCommand mGenerateRamseteCommand;
 
+    private LeftPiece mLeftScore;
+    private LeftOrigin mLeftOrigin;
+    public SequentialCommandGroup mCommandGroup;
+
     @Override
     public void robotInit() {
         mClimberSelector = new ClimbModeSelection();
@@ -88,6 +93,11 @@ public class Robot extends TimedRobot {
         mThreeBallController = new ThreeBallController();
         mTwoBallController = new TwoBallController();
         mReverseController = new TexasSwitchController();
+        mLeftScore = new LeftPiece();
+        mLeftOrigin = new LeftOrigin();
+        if (mLeftScore != null) {
+            mCommandGroup = new SequentialCommandGroup(mLeftScore, mLeftOrigin);
+        }
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
@@ -147,7 +157,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         SmartDashboard.putData(FIELD);
     }
-
     @Override
     public void autonomousInit() {
         MODE = AUTONOMOUS;
@@ -165,9 +174,25 @@ public class Robot extends TimedRobot {
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
         //mActiveController.setEnabled(true);
-//        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(); // Autonomous Trajectory Command
-//        mGenerateRamseteCommand.generateCommand("LeftOrigin").schedule();
-        CommandScheduler.getInstance().schedule(false, mGenerateRamseteCommand.generateCommand("LeftPiece"),mGenerateRamseteCommand.generateCommand("LeftOrigin"));
+//        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(false); // Autonomous Trajectory Command
+//        mGenerateRamseteCommand.generateCommand("LeftOrigin").schedule(false);
+//        if (mLeftScore != null) {
+//            SequentialCommandGroup scheduler = new SequentialCommandGroup(mLeftScore);
+//            CommandGroup.schedule();
+//        }
+
+        mCommandGroup.schedule();
+//        SequentialCommandGroup scheduler = new SequentialCommandGroup(mGenerateRamseteCommand.generateCommand("LeftPiece"), mGenerateRamseteCommand.generateCommand("LeftOrigin"));
+//        SequentialCommandGroup scheduler = new SequentialCommandGroup(mGenerateRamseteCommand.generateCommand("LeftPiece"));
+//        scheduler.initialize();
+//        scheduler.schedule(false);
+//        scheduler.execute();
+//        mLeftScore.initialize();
+//        scheduler.addCommands(mGenerateRamseteCommand.generateCommand("LeftPiece"));
+//        scheduler.schedule(false);
+//        scheduler.execute();
+//        CommandScheduler.getInstance().schedule(false, mGenerateRamseteCommand.generateCommand("LeftPiece"));
+//        CommandScheduler.getInstance().schedule(false, mGenerateRamseteCommand.generateCommand("LeftOrigin"));
     }
 
     @Override
