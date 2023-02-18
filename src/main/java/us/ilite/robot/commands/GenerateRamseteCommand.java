@@ -45,6 +45,7 @@ public class GenerateRamseteCommand {
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
     private Trajectory desiredTrajectory;
+    private double trajectoryTime;
     public Command generateCommand(String trajectory) { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
@@ -84,6 +85,7 @@ public class GenerateRamseteCommand {
 //        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
 //        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
           desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
+          trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
 
         mRamseteCommand =
                 new RamseteCommand(
@@ -104,6 +106,6 @@ public class GenerateRamseteCommand {
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
     public double getTotalTimeSeconds(){
-        return desiredTrajectory.getTotalTimeSeconds();
+        return trajectoryTime;
     }
 }

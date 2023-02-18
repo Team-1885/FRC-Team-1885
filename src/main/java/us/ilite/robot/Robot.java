@@ -97,9 +97,7 @@ public class Robot extends TimedRobot {
         mReverseController = new TexasSwitchController();
         mLeftScore = new LeftPiece();
         mLeftOrigin = new LeftOrigin();
-        if (mLeftScore != null) {
-            mCommandGroup = new SequentialCommandGroup(mLeftScore, mLeftOrigin);
-        }
+        mCommandGroup = new SequentialCommandGroup(mLeftScore);
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
