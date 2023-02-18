@@ -30,6 +30,11 @@ public class LeftPiece extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        mTable.getEntry("left piece timer").setString("left piece end");
+    }
+
+    @Override
     public boolean isFinished() {
         mTable.getEntry("left piece timer").setNumber(mTimer.get());
         if(mTimer.get()>commandGenerator.getTotalTimeSeconds()){

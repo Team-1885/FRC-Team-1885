@@ -24,11 +24,17 @@ public class LeftOrigin extends CommandBase {
     public void initialize() {
         mTimer.start();
         commandGenerator.generateCommand("LeftOrigin").schedule(false);
+        mTable.getEntry("left origin default").setNumber(1);
     }
 
     @Override
     public void execute() {
+        mTable.getEntry("left origin default").setNumber(2);
+    }
 
+    @Override
+    public void end(boolean interrupted) {
+        mTable.getEntry("left origin timer").setString("left origin end");
     }
 
     @Override
