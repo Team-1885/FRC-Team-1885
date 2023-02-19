@@ -57,10 +57,10 @@ public class Robot extends TimedRobot {
 
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
-    private ShootMoveController mShootMoveController;
+//    private ShootMoveController mShootMoveController;
     private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
-    private FourBallTrajectoryAuton mFourBallAuton;
-    private ThreeBallTrajectoryController mThreeBallAuton;
+//    private FourBallTrajectoryAuton mFourBallAuton;
+//    private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
@@ -73,10 +73,10 @@ public class Robot extends TimedRobot {
         Arrays.stream(EForwardableConnections.values()).forEach(EForwardableConnections::addPortForwarding);
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
-        mShootMoveController = new ShootMoveController();
+//        mShootMoveController = new ShootMoveController();
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
-        mThreeBallAuton = new ThreeBallTrajectoryController();
-        mFourBallAuton = new FourBallTrajectoryAuton();
+//        mThreeBallAuton = new ThreeBallTrajectoryController();
+//        mFourBallAuton = new FourBallTrajectoryAuton();
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
