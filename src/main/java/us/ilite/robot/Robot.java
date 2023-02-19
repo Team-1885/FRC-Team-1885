@@ -74,10 +74,6 @@ public class Robot extends TimedRobot {
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
-    private FollowTrajectory mLeftPiece;
-    private FollowTrajectory mLeftOrigin;
-    private SpinIntake mSpinIntake;
-    private SequentialCommandGroup mCommandGroup;
 
     @Override
     public void robotInit() {
@@ -92,11 +88,6 @@ public class Robot extends TimedRobot {
         mThreeBallController = new ThreeBallController();
         mTwoBallController = new TwoBallController();
         mReverseController = new TexasSwitchController();
-        mLeftPiece = new FollowTrajectory("LeftPiece");
-        mLeftOrigin = new FollowTrajectory("LeftOrigin");
-        mSpinIntake = new SpinIntake();
-
-        mCommandGroup = new SequentialCommandGroup(mLeftPiece, mLeftOrigin);
 
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
