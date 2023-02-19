@@ -187,7 +187,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
+//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
+        mOdometry.resetPosition(pose, mGyro.getHeading()); // changed from above, maybe fix heading issue?
     }
     @Override
     public void readInputs() {
