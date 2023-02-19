@@ -73,6 +73,12 @@
         "open": false
       }
     },
+    "left origin": {
+      "open": true
+    },
+    "left piece": {
+      "open": true
+    },
     "ramsete command": {
       "open": true
     }
