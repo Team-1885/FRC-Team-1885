@@ -29,7 +29,7 @@ public class LeftOrigin extends CommandBase {
 
     @Override
     public void execute() {
-        mTable.getEntry("left origin default").setNumber(2);
+        mTable.getEntry("left origin default part 2").setNumber(2);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class LeftOrigin extends CommandBase {
     public boolean isFinished() {
         mTable.getEntry("left origin timer").setNumber(mTimer.get());
         if(mTimer.get()>commandGenerator.getTotalTimeSeconds()){
-
             System.out.println("ORIGIN FINISHED");
+            mTable.getEntry("left origin finish").setString("finsihed");
             return true;
         }
         return false;

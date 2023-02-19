@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
         //mAutoController.initialize();
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
-        mCommandGroup.schedule();
+        mCommandGroup.schedule(false);
     }
 
     @Override
