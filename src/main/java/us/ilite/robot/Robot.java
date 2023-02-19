@@ -22,8 +22,7 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
-import us.ilite.robot.commands.LeftOrigin;
-import us.ilite.robot.commands.LeftPiece;
+import us.ilite.robot.commands.FollowTrajectory;
 import us.ilite.robot.commands.SpinIntake;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
@@ -60,6 +59,7 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
+    private FollowTrajectory mFollowTrajectory;
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -71,16 +71,13 @@ public class Robot extends TimedRobot {
     private ThreeBallController mThreeBallController;
     private TexasSwitchController mReverseController;
     private TwoBallController mTwoBallController;
-    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
-    private FourBallTrajectoryAuton mFourBallAuton;
-    private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
-    private LeftPiece leftPiece;
-    private LeftOrigin mLeftOrigin;
+    private FollowTrajectory mLeftPiece;
+    private FollowTrajectory mLeftOrigin;
     private SpinIntake mSpinIntake;
-    public SequentialCommandGroup mCommandGroup;
+    private SequentialCommandGroup mCommandGroup;
 
     @Override
     public void robotInit() {
@@ -95,13 +92,12 @@ public class Robot extends TimedRobot {
         mThreeBallController = new ThreeBallController();
         mTwoBallController = new TwoBallController();
         mReverseController = new TexasSwitchController();
-        leftPiece = new LeftPiece();
-        mLeftOrigin = new LeftOrigin();
+        mLeftPiece = new FollowTrajectory("LeftPiece");
+        mLeftOrigin = new FollowTrajectory("LeftOrigin");
         mSpinIntake = new SpinIntake();
-        mCommandGroup = new SequentialCommandGroup(leftPiece, mLeftOrigin);
-        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
-        mThreeBallAuton = new ThreeBallTrajectoryController();
-        mFourBallAuton = new FourBallTrajectoryAuton();
+
+
+        mCommandGroup = new SequentialCommandGroup(mLeftPiece, mLeftOrigin);
 
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
