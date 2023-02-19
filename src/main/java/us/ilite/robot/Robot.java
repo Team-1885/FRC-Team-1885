@@ -96,7 +96,6 @@ public class Robot extends TimedRobot {
         mLeftOrigin = new FollowTrajectory("LeftOrigin");
         mSpinIntake = new SpinIntake();
 
-
         mCommandGroup = new SequentialCommandGroup(mLeftPiece, mLeftOrigin);
 
         MODE = INITIALIZING;
@@ -165,12 +164,13 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
-        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-        mActiveController = mAutoController;
+//        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+//        mActiveController = mAutoController;
         //mAutoController.initialize();
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
-        mCommandGroup.schedule(false);
+//        mCommandGroup.schedule(false);
+        mAutonSelection.getSelectedAutonController().schedule(false);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-        mActiveController.update();
+//        mActiveController.update();
         mRunningModules.safeSetOutputs();
         SmartDashboard.putNumber("common_periodic_dt", Timer.getFPGATimestamp() - start);
         SmartDashboard.putNumber("Clock Time", CLOCK.now());
