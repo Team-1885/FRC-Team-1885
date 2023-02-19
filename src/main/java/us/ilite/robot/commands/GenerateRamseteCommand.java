@@ -12,6 +12,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -32,8 +34,11 @@ public class GenerateRamseteCommand {
     private PIDController mRightDrivePID;
     private SimpleMotorFeedforward mFeedForward;
     private RamseteController mRamseteController;
+    private NetworkTable mTable;
 
     public GenerateRamseteCommand() {
+        mTable = NetworkTableInstance.getDefault().getTable("ramsete command");
+
         mRamseteController= new  RamseteController(
                 Settings.kRamseteB, // kRamseteB
                 Settings.kRamseteZeta // kRamseteZeta
@@ -103,6 +108,8 @@ public class GenerateRamseteCommand {
                 );
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
+        mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
+//        System.out.println(desiredTrajectory.getInitialPose()); // to test with pop, should print the init pose from path planner
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
     public double getTotalTimeSeconds(){

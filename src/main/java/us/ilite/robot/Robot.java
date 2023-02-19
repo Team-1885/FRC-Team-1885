@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
@@ -23,7 +22,6 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
-import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.commands.LeftOrigin;
 import us.ilite.robot.commands.LeftPiece;
 import us.ilite.robot.commands.SpinIntake;
@@ -79,7 +77,7 @@ public class Robot extends TimedRobot {
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
-    private LeftPiece mLeftScore;
+    private LeftPiece leftPiece;
     private LeftOrigin mLeftOrigin;
     private SpinIntake mSpinIntake;
     public SequentialCommandGroup mCommandGroup;
@@ -97,10 +95,10 @@ public class Robot extends TimedRobot {
         mThreeBallController = new ThreeBallController();
         mTwoBallController = new TwoBallController();
         mReverseController = new TexasSwitchController();
-        mLeftScore = new LeftPiece();
+        leftPiece = new LeftPiece();
         mLeftOrigin = new LeftOrigin();
         mSpinIntake = new SpinIntake();
-        mCommandGroup = new SequentialCommandGroup(mLeftScore, mLeftOrigin);
+        mCommandGroup = new SequentialCommandGroup(leftPiece, mLeftOrigin);
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
         mThreeBallAuton = new ThreeBallTrajectoryController();
         mFourBallAuton = new FourBallTrajectoryAuton();
@@ -174,32 +172,9 @@ public class Robot extends TimedRobot {
         BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
         mActiveController = mAutoController;
         //mAutoController.initialize();
-        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
+//        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
-//        leftPiece = mGenerateRamseteCommand.generateCommand("LeftPiece");
-//        leftOrigin = mGenerateRamseteCommand.generateCommand("LeftOrigin");
-//        SequentialCommandGroup group = new SequentialCommandGroup(leftPiece, leftOrigin);
-
-        //mActiveController.setEnabled(true);
-//        mGenerateRamseteCommand.generateCommand("LeftPiece").schedule(false); // Autonomous Trajectory Command
-//        mGenerateRamseteCommand.generateCommand("LeftOrigin").schedule(false);
-//        if (mLeftScore != null) {
-//            SequentialCommandGroup scheduler = new SequentialCommandGroup(mLeftScore);
-//            CommandGroup.schedule();
-//        }
-
         mCommandGroup.schedule();
-//        SequentialCommandGroup scheduler = new SequentialCommandGroup(mGenerateRamseteCommand.generateCommand("LeftPiece"), mGenerateRamseteCommand.generateCommand("LeftOrigin"));
-//        SequentialCommandGroup scheduler = new SequentialCommandGroup(mGenerateRamseteCommand.generateCommand("LeftPiece"));
-//        scheduler.initialize();
-//        scheduler.schedule(false);
-//        scheduler.execute();
-//        mLeftScore.initialize();
-//        scheduler.addCommands(mGenerateRamseteCommand.generateCommand("LeftPiece"));
-//        scheduler.schedule(false);
-//        scheduler.execute();
-//        CommandScheduler.getInstance().schedule(false, mGenerateRamseteCommand.generateCommand("LeftPiece"));
-//        CommandScheduler.getInstance().schedule(false, mGenerateRamseteCommand.generateCommand("LeftOrigin"));
     }
 
     @Override

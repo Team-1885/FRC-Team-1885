@@ -156,13 +156,14 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftFollower.burnFlash();
         mRightMaster.burnFlash();
         mRightFollower.burnFlash();
+        mGyro.zeroAll(); //moved from mode init
+
     }
     @Override
     public void modeInit(EMatchMode pMode) {
-        mGyro.zeroAll();
         reset();
         if(pMode == EMatchMode.AUTONOMOUS) {
-            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+//            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0))); //commented out 2:19, updating odom with with a pose that is not the initial position of the ramsete command
 //            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
 //            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
 //            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -242,7 +243,7 @@ public class NeoDriveModule extends Module implements Subsystem {
                 double x = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 double y = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 mGyro.zeroAll();
-                resetOdometry(new Pose2d(x, y, new Rotation2d(-mGyro.getYaw().getRadians())));
+//                resetOdometry(new Pose2d(x, y, new Rotation2d(-mGyro.getYaw().getRadians()))); //commented out 2/19: shouldn't matter, wasnt being called anywhere
                 break;
             case PERCENT_OUTPUT:
                 if (db.limelight.isSet(ELimelightData.TARGET_ID)) {

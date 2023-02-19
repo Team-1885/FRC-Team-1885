@@ -73,7 +73,7 @@
         "open": false
       }
     },
-    "drivetrain": {
+    "ramsete command": {
       "open": true
     }
   },
@@ -86,7 +86,7 @@
               "autoFit": true
             }
           ],
-          "height": 338,
+          "height": 127,
           "series": [
             {
               "color": [
