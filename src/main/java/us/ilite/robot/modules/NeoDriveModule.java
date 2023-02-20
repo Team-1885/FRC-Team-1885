@@ -45,8 +45,10 @@ public class NeoDriveModule extends Module {
     // ========================================
 
     //need to modify with new robot:
-    public static final double kGearboxRatio = (12.0 / 40.0) * (18.0 / 36.0);
-    public static final double kWheelDiameterFeet = 3.9 / 12.0;
+    public static final double kGearboxRatio = (12.0 / 40.0) * (16.0 / 38.0);
+    public static final double kWheelDiameterFeet = 0.5;
+    public static final double kWheelDiameterInches = 6;
+    //still need to change:
     public static final double kTrackWidthFeet = 22.0 / 12.0;
 
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
