@@ -133,7 +133,8 @@ public class Settings {
 //    public static final double kA =  3.2696 * Math.pow(10.0, -5.0);
 
 //    public static final double kP = 0;//  0.1139
-    public static final double kP = 0.0052984;
+//    public static final double kP = 0.0052984;
+    public static final double kP = 4;
 
     public static final double kTrackWidthMeters = 0.6858;
     public static final double kMaxSpeedMetersPerSecond = 2;

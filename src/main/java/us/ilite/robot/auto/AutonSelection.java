@@ -19,17 +19,21 @@ public class AutonSelection {
     private FollowTrajectory leftPiece;
     private FollowTrajectory leftOrigin;
     private FollowTrajectory DriveStraight;
+    private FollowTrajectory TurnTest;
     private SequentialCommandGroup mCommandGroup;
 
     public AutonSelection() {
         leftPiece = new FollowTrajectory("LeftPiece");
         leftOrigin = new FollowTrajectory("LeftOrigin");
         DriveStraight = new FollowTrajectory("DriveStraight");
-        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
+        TurnTest = new FollowTrajectory("TurnTest");
+//        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
 
         mSendableAutonControllers.addOption("left piece", leftPiece);
         mSendableAutonControllers.addOption("left origin", leftOrigin);
         mSendableAutonControllers.addOption("group", mCommandGroup);
+        mSendableAutonControllers.addOption("TurnTest", TurnTest);
+        mSendableAutonControllers.addOption("DriveStraight", DriveStraight);
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }
     public Command getSelectedAutonController() {

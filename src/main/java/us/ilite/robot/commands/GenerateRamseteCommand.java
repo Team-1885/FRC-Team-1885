@@ -1,5 +1,8 @@
 package us.ilite.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -90,7 +93,8 @@ public class GenerateRamseteCommand {
 //        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
 //        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
           desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
-          trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
+//        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(0.5,0.25));
+        trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
 
         mRamseteCommand =
                 new RamseteCommand(
