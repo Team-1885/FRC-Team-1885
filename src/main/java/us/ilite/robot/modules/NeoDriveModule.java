@@ -49,7 +49,7 @@ public class NeoDriveModule extends Module {
     public static final double kWheelDiameterFeet = 0.5;
     public static final double kWheelDiameterInches = 6;
     //still need to change:
-    public static final double kTrackWidthFeet = 22.0 / 12.0;
+    public static final double kTrackWidthFeet = 1.8;
 
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
     public static final double kDriveNEOPositionFactor = kGearboxRatio * kWheelCircumferenceFeet;
