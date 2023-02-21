@@ -48,7 +48,7 @@ public class GenerateRamseteCommand {
         );
         mRobotDrive = NeoDriveModule.getInstance();
         mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
-        mLeftDrivePID = new PIDController(Settings.kP, 0, 0); //0.975
+        mLeftDrivePID = new PIDController(Settings.kP, 0, 0);
         mRightDrivePID = new PIDController(Settings.kP, 0, 0);
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
@@ -95,11 +95,12 @@ public class GenerateRamseteCommand {
           desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
 //        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(0.5,0.25));
         trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
+        mTable.getEntry("state").setString(desiredTrajectory.sample(trajectoryTime + 1).toString());
 
         mRamseteCommand =
                 new RamseteCommand(
                         desiredTrajectory,
-                        mRobotDrive::getPose, //(Supplier<Pose2d>) getRobotPose(), //m_robotDrive::getPose,
+                        mRobotDrive::getPose,
                         mRamseteController,
                         mFeedForward,
                         mDriveKinematics,
@@ -111,7 +112,7 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 );
         // Reset odometry to the starting pose of the trajectory.
-//        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
+        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }

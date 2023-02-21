@@ -44,6 +44,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     private DifferentialDriveKinematics mKinematics;
     private Pose2d mPose2d;
     private final NetworkTable mTable;
+    private double angleSum;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -100,6 +101,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     private NeoDriveModule() {
+        angleSum = 0;
         mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
 
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
@@ -154,6 +156,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightMaster.burnFlash();
         mRightFollower.burnFlash();
         mGyro.zeroAll(); //moved from mode init
+        mTable.getEntry("INIT HEADING DEG").setNumber(mGyro.getHeading().getDegrees());
 
     }
     @Override
@@ -184,12 +187,13 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.zeroAll();
-//        mGyro.zeroAll();
+//        angleSum = pose.getRotation().getDegrees();
+//        mTable.getEntry("angle sum").setNumber(angleSum);
 //        mGyro.resetAngle(pose.getRotation()); //potentially need to zero gyro instead of doing this
 //        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
         mOdometry.resetPosition(pose, pose.getRotation()); // changed from mGyro.getHeading to pose.getRotiation
         mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
-        mTable.getEntry("gyro heading").setString(mGyro.getHeading().toString());
+//        mTable.getEntry("gyro heading").setString(pose.getRotation().toString());
     }
     @Override
     public void readInputs() {
@@ -217,9 +221,6 @@ public class NeoDriveModule extends Module implements Subsystem {
 
 
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
-        mTable.getEntry("CURRENT HEADING DEG").setNumber(mGyro.getHeading().getDegrees());
-        mTable.getEntry("r pos").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
-        mTable.getEntry("l pos").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)));
     }
 
     @Override
@@ -227,9 +228,10 @@ public class NeoDriveModule extends Module implements Subsystem {
         mPose2d = mOdometry.update(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
                 Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                 Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
+        angleSum += mGyro.getHeading().getDegrees();
+        mTable.getEntry("angleSum").setNumber(angleSum);
+
         mTable.getEntry("CURRENT HEADING DEG").setNumber(mGyro.getHeading().getDegrees());
-        mTable.getEntry("r pos").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
-        mTable.getEntry("l pos").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)));
         Enums.EDriveState state = db.drivetrain.get(STATE, Enums.EDriveState.class);
         double throttle = db.drivetrain.safeGet(DESIRED_THROTTLE_PCT, 0.0);
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
@@ -319,7 +321,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public Pose2d getPose() {
-        return mPose2d;
+        return mOdometry.getPoseMeters();
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -331,10 +333,12 @@ public class NeoDriveModule extends Module implements Subsystem {
 
     public void setVolts(double leftVolts, double rightVolts) {
         //safety check, only if the desired .set() value is less than one should it be set to the motors
-        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
-            mRightMaster.set(rightVolts / 12);
-            mLeftMaster.set(leftVolts / 12);
-        }
+//        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
+//            mRightMaster.set(rightVolts / 12);
+//            mLeftMaster.set(leftVolts / 12);
+//        }
+        mRightMaster.set(rightVolts / 12);
+        mLeftMaster.set(leftVolts / 12);
     }
     public void reset() {
         mLeftEncoder.setPosition(0.0);

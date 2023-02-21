@@ -125,7 +125,7 @@ public class Settings {
 
     public static final double kS =  0.14188; //correct!!
     public static final double kV = 2.8112;
-    public static final double kA =  0.4;
+    public static final double kA =  0.61942; //try 0.61942
 
     //2020 VALUES:
 //    public static final double kS =  0.64353 ;
@@ -134,7 +134,7 @@ public class Settings {
 
 //    public static final double kP = 0;//  0.1139
 //    public static final double kP = 0.0052984;
-    public static final double kP = 4;
+    public static final double kP = 5;
 
     public static final double kTrackWidthMeters = 0.6858;
     public static final double kMaxSpeedMetersPerSecond = 2;

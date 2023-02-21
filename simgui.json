@@ -86,6 +86,12 @@
     "TurnTest": {
       "open": true
     },
+    "drivetrain": {
+      "open": true
+    },
+    "follow traj": {
+      "open": true
+    },
     "left origin": {
       "open": true
     },
