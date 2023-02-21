@@ -111,12 +111,15 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 );
         // Reset odometry to the starting pose of the trajectory.
-        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
+//        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
-//        System.out.println(desiredTrajectory.getInitialPose()); // to test with pop, should print the init pose from path planner
         return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
     }
     public double getTotalTimeSeconds(){
         return trajectoryTime;
+    }
+
+    public Pose2d getTrajInitPose() {
+       return desiredTrajectory.getInitialPose();
     }
 }

@@ -186,9 +186,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         mGyro.zeroAll();
 //        mGyro.zeroAll();
 //        mGyro.resetAngle(pose.getRotation()); //potentially need to zero gyro instead of doing this
-        mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
 //        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
-        mOdometry.resetPosition(pose, mGyro.getHeading()); // changed from above, maybe fix heading issue?
+        mOdometry.resetPosition(pose, pose.getRotation()); // changed from mGyro.getHeading to pose.getRotiation
+        mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
         mTable.getEntry("gyro heading").setString(mGyro.getHeading().toString());
     }
     @Override
