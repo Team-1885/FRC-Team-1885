@@ -8,6 +8,7 @@ import us.ilite.common.config.InputMap;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 
@@ -57,6 +58,7 @@ public class TeleopController extends BaseManualController {
             //Add in methods from DCMP
             updateHangerMotors();
             updateHangerPneumatics();
+            updateTurn();
         }
 
         updateIntake();
@@ -368,6 +370,41 @@ public class TeleopController extends BaseManualController {
                 setIntakeArmEnabled(true);
             } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
                 setIntakeArmEnabled(false);
+            }
+        }
+    }
+
+    private void updateTurn() {
+        // for debug
+        mTable.getEntry("YAW_DEGREES").setNumber(db.imu.get(EGyro.YAW_DEGREES));
+        mTable.getEntry("PITCH_DEGREES").setNumber(db.imu.get(EGyro.PITCH_DEGREES));
+        mTable.getEntry("ROLL_DEGREES").setNumber(db.imu.get(EGyro.ROLL_DEGREES));
+        mTable.getEntry("HEADING_DEGREES").setNumber(db.imu.get(EGyro.HEADING_DEGREES));
+        mTable.getEntry("ACCEL_X").setNumber(db.imu.get(EGyro.ACCEL_X));
+        mTable.getEntry("ACCEL_Y").setNumber(db.imu.get(EGyro.ACCEL_Y));
+        mTable.getEntry("ACCEL_Z").setNumber(db.imu.get(EGyro.ACCEL_Z));
+        mTable.getEntry("YAW_OMEGA_DEGREES").setNumber(db.imu.get(EGyro.YAW_OMEGA_DEGREES));
+        //mTable.getEntry("YAW_OMEGA_DEGREES").set
+
+//        if (loopCount++ > 10)
+//        {
+//            loopCount = 0;
+//            double[] ypr = new double[3];
+//            _pigeon.getYawPitchRoll(ypr);
+//            System.out.println("Pigeon Yaw is: " + ypr[0]);
+//            mTable.getEntry("Pigeon Yaw is:").setNumber(ypr[0]);
+//        }
+
+
+        if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) { // A button pressed
+            //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
+            if (db.imu.get(EGyro.YAW_DEGREES) < 90) {
+                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
+                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.5);
+            }
+            else {
+                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0);
+                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0);
             }
         }
     }
