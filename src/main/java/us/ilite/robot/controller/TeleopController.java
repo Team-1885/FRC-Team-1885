@@ -1,5 +1,6 @@
 package us.ilite.robot.controller;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -24,6 +25,7 @@ public class TeleopController extends BaseManualController {
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
 
+    private NetworkTable mTable;
 
     public static TeleopController getInstance() {
         if (INSTANCE == null) {
