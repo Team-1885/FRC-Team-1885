@@ -60,11 +60,12 @@ public class TeleopController extends BaseManualController {
             //Add in methods from DCMP
             updateHangerMotors();
             updateHangerPneumatics();
-            updateTurn();
         }
 
         updateIntake();
         updateTargetLock();
+
+        updateTurn();
     }
     private void updateHangerMotors() {
         db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
