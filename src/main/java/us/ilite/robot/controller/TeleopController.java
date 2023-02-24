@@ -1,6 +1,7 @@
 package us.ilite.robot.controller;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -38,6 +39,8 @@ public class TeleopController extends BaseManualController {
         mClimbTimer = new Timer();
         mClimbTimer.reset();
         mClimbTimer.start();
+
+        mTable = NetworkTableInstance.getDefault().getTable("GryoValues"); // glass
     }
 
     @Override
