@@ -1,6 +1,6 @@
 package us.ilite.robot.network;
 
-import edu.wpi.first.util.net.PortForwarder;
+//import edu.wpi.first.util.net.PortForwarder;
 
 /**
  * The purpose of this class is to enumerate all of the external devices that need to be port forwarded.
@@ -41,6 +41,6 @@ public enum EForwardableConnections {
      * @param pExternalConnection
      */
     public static void addPortForwarding(EForwardableConnections pExternalConnection) {
-        PortForwarder.add(pExternalConnection.getPort(),pExternalConnection.gepIPAddress(), pExternalConnection.getPort());
+//        PortForwarder.add(pExternalConnection.getPort(),pExternalConnection.gepIPAddress(), pExternalConnection.getPort());
     }
 }

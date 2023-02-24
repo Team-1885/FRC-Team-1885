@@ -97,9 +97,11 @@ public class NeoDriveModule extends Module {
     public NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
         mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
 
+        
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
         mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
@@ -145,7 +147,7 @@ public class NeoDriveModule extends Module {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -177,7 +179,7 @@ public class NeoDriveModule extends Module {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
     @Override
     public void readInputs() {
