@@ -398,16 +398,16 @@ public class TeleopController extends BaseManualController {
 //        }
 
 
-        if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) { // A button pressed
-            //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
-            if (db.imu.get(EGyro.YAW_DEGREES) < 90) {
-                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
-                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.5);
-            }
-            else {
-                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0);
-                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0);
-            }
-        }
+//        if (db.operatorinput.isSet(InputMap.OPERATOR.STAGE_BALLS)) { // A button pressed
+//            //db.imu.set(EGyro.YAW_DEGREES, 0); // reset yaw
+//            if (db.imu.get(EGyro.YAW_DEGREES) < 90) {
+//                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.5);
+//                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.5);
+//            }
+//            else {
+//                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0);
+//                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0);
+//            }
+//        }
     }
 }
