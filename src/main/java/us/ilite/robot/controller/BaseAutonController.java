@@ -24,7 +24,6 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Enums;
-import us.ilite.robot.modules.FalconDriveModule;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.ArrayList;
@@ -103,7 +102,7 @@ public class BaseAutonController extends AbstractController {
         mMotorPidController = new PIDController(0.00051968,0,0);
         mTimer = new Timer();
         mFirstLeg = new Timer();
-        mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(FalconDriveModule.kTrackWidthFeet));
+        mDriveKinematics = new DifferentialDriveKinematics(Settings.kTrackWidthMeters);
         SmartDashboard.putNumber("trajectory-seconds",-1);
 
 

@@ -45,16 +45,12 @@ public class Robot extends TimedRobot {
     private ModuleList mRunningModules = new ModuleList();
     private final Settings mSettings = new Settings();
     private CSVLogger mCSVLogger;
-    private ClimberModule mHanger;
     private Timer initTimer = new Timer();
 
 
 
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
-    private FeederModule mFeeder;
-    private IntakeModule mIntake;
-    private ClimberModule mClimber;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
@@ -149,8 +145,6 @@ public class Robot extends TimedRobot {
         MODE = AUTONOMOUS;
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
-        mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
@@ -179,11 +173,8 @@ public class Robot extends TimedRobot {
         }
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
-        mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
-        mRunningModules.addModule(mClimber);
         mRunningModules.addModule(mLEDControl);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
