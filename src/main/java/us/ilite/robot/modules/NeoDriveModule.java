@@ -44,11 +44,9 @@ public class NeoDriveModule extends Module {
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
 
-    //need to modify with new robot:
     public static final double kGearboxRatio = (12.0 / 40.0) * (16.0 / 38.0);
     public static final double kWheelDiameterFeet = 0.5;
     public static final double kWheelDiameterInches = 6;
-    //still need to change:
     public static final double kTrackWidthFeet = 1.8;
 
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
@@ -95,11 +93,11 @@ public class NeoDriveModule extends Module {
     private DifferentialDriveOdometry mOdometry;
 
     public NeoDriveModule() {
-        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
-        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
+        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
 
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
 
         
         mLeftFollower.follow(mLeftMaster);
