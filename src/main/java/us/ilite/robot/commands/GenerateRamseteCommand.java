@@ -95,7 +95,7 @@ public class GenerateRamseteCommand {
           desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
 //        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(0.5,0.25));
         trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
-        mTable.getEntry("state").setString(desiredTrajectory.sample(trajectoryTime + 1).toString());
+//        mTable.getEntry("state").setString(desiredTrajectory.sample(trajectoryTime + 1).toString());
 
         mRamseteCommand =
                 new RamseteCommand(

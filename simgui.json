@@ -110,6 +110,9 @@
       }
     }
   },
+  "NetworkTables View": {
+    "visible": false
+  },
   "Plot": {
     "Plot <0>": {
       "plots": [
@@ -119,7 +122,7 @@
               "autoFit": true
             }
           ],
-          "height": 127,
+          "height": -14,
           "series": [
             {
               "color": [
