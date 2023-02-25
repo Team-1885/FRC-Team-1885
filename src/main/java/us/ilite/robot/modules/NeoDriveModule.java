@@ -350,5 +350,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightMaster.set(0.0);
     }
 
+    public Pigeon getGyro()
+    {
+        return mGyro;
+    }
 
 }

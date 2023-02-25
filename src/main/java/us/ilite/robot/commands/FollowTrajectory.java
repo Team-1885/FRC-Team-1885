@@ -44,7 +44,7 @@ public class FollowTrajectory extends CommandBase {
         mCommand = commandGenerator.generateCommand(mTrajectoryName);
 //        mCommand.beforeStarting(() -> mNeoDrive.resetOdometry(commandGenerator.getTrajInitPose()));
         mTable.getEntry("initial pose").setString(commandGenerator.getTrajInitPose().toString());
-        commandGenerator.generateCommand(mTrajectoryName).schedule(false);
+        commandGenerator.generateCommand(mTrajectoryName).schedule();
     }
 
     @Override

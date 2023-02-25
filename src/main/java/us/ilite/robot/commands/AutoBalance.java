@@ -8,7 +8,10 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Robot;
 
-
+// this command will need to start before the robot drives up onto the charge station
+// trajectory should end at the foot of the charge station
+// gyro should zero
+// get on top of the charge station and start the pid loop
 /** Balance the robot on top of the charge station game element:
  *
  * The AutoBalance Command is run once the robot is on top of the charge station.
