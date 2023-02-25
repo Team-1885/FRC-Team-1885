@@ -39,7 +39,7 @@ public class SparkMaxFactory {
 
     public static CANSparkMax createFollowerSparkMax(int pId, CANSparkMax pMaster, MotorType pMotorType) {
         CANSparkMax spark = createSparkMax(pId, kFollowConfiguration);
-        spark.follow(pMaster);
+//        spark.follow(pMaster);
         return spark;
     }
 
