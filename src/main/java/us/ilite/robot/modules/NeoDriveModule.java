@@ -91,8 +91,12 @@ public class NeoDriveModule extends Module {
     // ========================================
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
+    private static final NeoDriveModule instance = new NeoDriveModule();
 
-    public NeoDriveModule() {
+    public static NeoDriveModule getInstance() {
+        return instance;
+    }
+    private NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
 
@@ -145,7 +149,10 @@ public class NeoDriveModule extends Module {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(
+            mGyro.getHeading(),
+            Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+            Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -177,7 +184,11 @@ public class NeoDriveModule extends Module {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mOdometry.resetPosition(
+            mGyro.getHeading(),
+            Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+            Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)),
+            pose);
     }
     @Override
     public void readInputs() {
