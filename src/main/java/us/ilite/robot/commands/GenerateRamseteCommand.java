@@ -92,8 +92,8 @@ public class GenerateRamseteCommand {
 //        Trajectory RightOrigin = TrajectoryCommandUtils.getJSONTrajectory("RightOrigin");
 //        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
 //        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
-          desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
-//        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(0.5,0.25));
+//          desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
+        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(2,1));
         trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
 //        mTable.getEntry("state").setString(desiredTrajectory.sample(trajectoryTime + 1).toString());
 

@@ -25,9 +25,9 @@ public class AutonSelection {
     public AutonSelection() {
         leftPiece = new FollowTrajectory("LeftPiece");
         leftOrigin = new FollowTrajectory("LeftOrigin");
-        DriveStraight = new FollowTrajectory("DriveStraight");
+//        DriveStraight = new FollowTrajectory("DriveStraight");
         TurnTest = new FollowTrajectory("TurnTest");
-//        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
+        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin);
 
         mSendableAutonControllers.addOption("left piece", leftPiece);
         mSendableAutonControllers.addOption("left origin", leftOrigin);

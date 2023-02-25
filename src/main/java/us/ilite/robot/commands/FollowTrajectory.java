@@ -3,6 +3,7 @@ package us.ilite.robot.commands;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.team319.trajectory.Path;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -24,7 +25,7 @@ public class FollowTrajectory extends CommandBase {
     private Command mCommand;
     private NeoDriveModule mNeoDrive;
 
-    private Trajectory mTrajectory;
+    private PathPlannerTrajectory mTrajectory;
 
     public FollowTrajectory(String pTrajectoryName) {
         mTimer = new Timer();
@@ -33,7 +34,8 @@ public class FollowTrajectory extends CommandBase {
         commandGenerator = new GenerateRamseteCommand();
         mNeoDrive = NeoDriveModule.getInstance();
         mTrajectoryName = pTrajectoryName;
-        mTrajectory = TrajectoryCommandUtils.getJSONTrajectory(pTrajectoryName);
+        mTrajectory = PathPlanner.loadPath(pTrajectoryName, 2, 1);
+//        mTrajectory = TrajectoryCommandUtils.getJSONTrajectory(pTrajectoryName);
 
         addRequirements(mNeoDrive);
     }
