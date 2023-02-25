@@ -33,10 +33,10 @@ public class Settings {
             // ===============
             // DRIVETRAIN ID's
             // ===============
-            public static final int kDTMR2 = 2;
-            public static final int kDTR4 = 4;
-            public static final int kDTML1 = 1;
-            public static final int kDTL3 = 3;
+            public static final int kDTMR2 = 1;
+            public static final int kDTR4 = 3;
+            public static final int kDTML1 = 2;
+            public static final int kDTL3 = 4;
             public static final int kDTGyro = 30;
 
             // ======================
