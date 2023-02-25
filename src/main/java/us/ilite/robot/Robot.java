@@ -64,9 +64,6 @@ public class Robot extends TimedRobot {
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
     private ShootMoveController mShootMoveController;
-    private ThreeBallController mThreeBallController;
-    private TexasSwitchController mReverseController;
-    private TwoBallController mTwoBallController;
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
@@ -81,17 +78,11 @@ public class Robot extends TimedRobot {
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
         mShootMoveController = new ShootMoveController();
-        mThreeBallController = new ThreeBallController();
-        mTwoBallController = new TwoBallController();
-        mReverseController = new TexasSwitchController();
 
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
-        mFeeder = new FeederModule();
-        mIntake = IntakeModule.getInstance();
         mLEDControl = new LEDModule();
-        mClimber = new ClimberModule();
         mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
@@ -155,7 +146,7 @@ public class Robot extends TimedRobot {
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
 //        mCommandGroup.schedule(false);
-        mAutonSelection.getSelectedAutonController().schedule(false);
+        mAutonSelection.getSelectedAutonController().schedule();
     }
 
     @Override

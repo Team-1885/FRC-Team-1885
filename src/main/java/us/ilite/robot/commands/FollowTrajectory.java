@@ -44,7 +44,7 @@ public class FollowTrajectory extends CommandBase {
         mCommand = commandGenerator.generateCommand(mTrajectoryName);
 //        mCommand.beforeStarting(() -> mNeoDrive.resetOdometry(commandGenerator.getTrajInitPose()));
         mTable.getEntry("initial pose").setString(commandGenerator.getTrajInitPose().toString());
-        commandGenerator.generateCommand(mTrajectoryName).schedule(false);
+        mCommand.schedule();
     }
 
     @Override
@@ -54,12 +54,12 @@ public class FollowTrajectory extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
-        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
-            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
-        } else {
-            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) - 0.1));
-        }
+//        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
+//        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
+//            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
+//        } else {
+//            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) - 0.1));
+//        }
     }
 
     @Override

@@ -107,10 +107,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         angleSum = 0;
         mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
 
-        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
-        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
+        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
 
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
         mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
@@ -161,7 +159,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -203,7 +203,10 @@ public class NeoDriveModule extends Module implements Subsystem {
 //        mTable.getEntry("angle sum").setNumber(angleSum);
 //        mGyro.resetAngle(pose.getRotation()); //potentially need to zero gyro instead of doing this
 //        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
-        mOdometry.resetPosition(pose, pose.getRotation()); // changed from mGyro.getHeading to pose.getRotiation
+        mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
+                pose);
         mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
 //        mTable.getEntry("gyro heading").setString(pose.getRotation().toString());
     }

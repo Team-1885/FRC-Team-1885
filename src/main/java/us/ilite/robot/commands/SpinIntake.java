@@ -6,20 +6,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import us.ilite.common.types.EIntakeData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
-import us.ilite.robot.modules.IntakeModule;
+//import us.ilite.robot.modules.IntakeModule;
 
 public class SpinIntake extends CommandBase {
 
     Timer mTimer;
     GenerateRamseteCommand commandGenerator;
-    IntakeModule intake;
+//    IntakeModule intake;
 
 
     public SpinIntake() {
         mTimer = new Timer();
         commandGenerator = new GenerateRamseteCommand();
-        intake = IntakeModule.getInstance();
-        addRequirements(IntakeModule.getInstance());
+//        intake = IntakeModule.getInstance();
+//        addRequirements(IntakeModule.getInstance());
     }
 
     @Override
