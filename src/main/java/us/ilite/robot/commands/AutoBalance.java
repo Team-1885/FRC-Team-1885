@@ -22,13 +22,13 @@ import us.ilite.robot.Robot;
 public class AutoBalance extends CommandBase {
     private Data db = Robot.DATA;
     private NetworkTable mTable;
-    // set a range of pitch values where the robot is considered balanced. A range is needed because the robot will never be exactly horizontal
+    // set a range of roll values where the robot is considered balanced. A range is needed because the robot will never be exactly horizontal
     private double mBalancedRange = 6; // total degrees in range
     private double mCenterDegreeOfRange = 0; // degree considered the center of the range
     private double mBalancedLowBound; // lowest degree considered balanced
     private double mBalancedHighBound; // highest degree considered balanced
-    // keep track of the current robot pitch
-    private double mCurrentPitch;
+    // keep track of the current robot roll (the gyro is oriented so roll and pitch are swapped)
+    private double mCurrentRoll;
 
     @Override
     public void initialize() {
@@ -41,47 +41,44 @@ public class AutoBalance extends CommandBase {
 
     @Override
     public void execute() { // continuously executes until the command is finished
-        // update current pitch
-        mCurrentPitch = db.imu.get(EGyro.PITCH_DEGREES);
+        // update current roll
+        mCurrentRoll = db.imu.get(EGyro.ROLL_DEGREES);
     }
 
     @Override
     public void end(boolean interrupted) { // executes once after the command ends
         // robot is balanced, stop robot
-        db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0.0);
-        db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0.0);
+        db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0.0);
     }
 
     @Override
     public boolean isFinished() { // command scheduler continually checks if the command is finished
-        mTable.getEntry("Current Pitch").setNumber(mCurrentPitch);
+        mTable.getEntry("Current Roll").setNumber(mCurrentRoll);
 
 
-        if(mCurrentPitch > mBalancedHighBound) { // pitch too positive - drive forward to balance
+        if(mCurrentRoll > mBalancedHighBound) { // Roll too positive - drive forward to balance
             mTable.getEntry("AutoBalance Status").setString("Greater than high bound");
 
-            // identify the angle between the current pitch and the high bound
-            double errorAngle = mCurrentPitch - mBalancedHighBound; // always positive
+            // identify the angle between the current roll and the high bound
+            double errorAngle = mCurrentRoll - mBalancedHighBound; // always positive
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
 
             // drive forward
-            db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, newVelocity);
-            db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, newVelocity);
+            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
 
             return false;
         }
-        else if (mCurrentPitch < mBalancedLowBound) { // pitch too negative - drive backward to balance
+        else if (mCurrentRoll < mBalancedLowBound) { // roll too negative - drive backward to balance
             mTable.getEntry("AutoBalance Status").setString("Lower than low bound");
 
-            // identify the angle between the current pitch and the low bound
-            double errorAngle = mCurrentPitch - mBalancedLowBound; // always negative
+            // identify the angle between the current roll and the low bound
+            double errorAngle = mCurrentRoll - mBalancedLowBound; // always negative
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
 
             // drive backward
-            db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, newVelocity);
-            db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, newVelocity);
+            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
 
             return false;
         }
@@ -93,6 +90,23 @@ public class AutoBalance extends CommandBase {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
 //        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
 //            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));

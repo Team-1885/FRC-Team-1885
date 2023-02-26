@@ -21,9 +21,8 @@ public class AutoBalancePID extends SequentialCommandGroup {
         NeoDriveModule driveSubsystem;
 
         public Balance(NeoDriveModule driveSubsystem, double setpoint) {
-            super(new PIDController(kP, 0, 0), (DoubleSupplier) driveSubsystem.getGyro().getPitch(), setpoint, output -> {
-                db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, -output * Settings.kMaxSpeedMetersPerSecond);
-                db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, -output * Settings.kMaxSpeedMetersPerSecond);
+            super(new PIDController(kP, 0, 0), (DoubleSupplier) driveSubsystem.getGyro().getRoll(), setpoint, output -> {
+                db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, -output * Settings.kMaxSpeedMetersPerSecond);
                 }, driveSubsystem);
             this.driveSubsystem = driveSubsystem;
         }
@@ -36,21 +35,21 @@ public class AutoBalancePID extends SequentialCommandGroup {
         public void end(boolean interrupted) {
             super.end(interrupted);
             System.out.println("Robot Balanced!");
-            db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 0);
-            db.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, 0);
+            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0);
         }
     }
 
-    public AutoBalancePID(NeoDriveModule driveSubsystem) {
+    public AutoBalancePID() {
+        NeoDriveModule driveSubsystem = NeoDriveModule.getInstance();
         // Since we cannot zero the ROLL of the gyro, take the initial roll
         // Before we balance (the roll when the robot is flat) and make this our setpoint
-        final double initialPitch = driveSubsystem.getGyro().getPitch().getDegrees();
+        final double initialRoll = driveSubsystem.getGyro().getRoll().getDegrees();
         addCommands(
                 // drive on top of the charge station
                 //db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 1),
                 // TODO create path that puts the robot on chargestation
-                //new DefaultDriveCommand(driveSubsystem, new ChassisSpeeds(1, 0, 0)).withTimeout(3),
-                new Balance(driveSubsystem, initialPitch)
+                new FollowTrajectory("Drive onto charge station"),
+                new Balance(driveSubsystem, initialRoll)
         );
     }
 }

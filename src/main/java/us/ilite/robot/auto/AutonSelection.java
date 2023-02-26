@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import us.ilite.robot.commands.AutoBalance;
+import us.ilite.robot.commands.AutoBalancePID;
 import us.ilite.robot.commands.FollowTrajectory;
 import us.ilite.robot.controller.*;
 
@@ -21,6 +23,8 @@ public class AutonSelection {
     private FollowTrajectory DriveStraight;
     private FollowTrajectory TurnTest;
 
+    private AutoBalance autoBalance;
+    private AutoBalancePID autoBalancePID;
 
     private SequentialCommandGroup mCommandGroup;
 
@@ -30,12 +34,17 @@ public class AutonSelection {
         DriveStraight = new FollowTrajectory("DriveStraight");
         TurnTest = new FollowTrajectory("TurnTest");
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
+        autoBalance = new AutoBalance();
+        autoBalancePID = new AutoBalancePID();
 
         mSendableAutonControllers.addOption("left piece", leftPiece);
         mSendableAutonControllers.addOption("left origin", leftOrigin);
         mSendableAutonControllers.addOption("group", mCommandGroup);
         mSendableAutonControllers.addOption("TurnTest", TurnTest);
         mSendableAutonControllers.addOption("DriveStraight", DriveStraight);
+        mSendableAutonControllers.addOption("Auto Balance with PID, starting before mounting charge station", autoBalancePID);
+        mSendableAutonControllers.addOption("Auto Balance starting, starting on top of charge station", autoBalance);
+
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }
     public Command getSelectedAutonController() {
