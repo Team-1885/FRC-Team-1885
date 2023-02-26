@@ -104,6 +104,9 @@
     "transitory": {
       "follow traj": {
         "open": true
+      },
+      "ramsete command": {
+        "open": true
       }
     }
   },
@@ -116,7 +119,7 @@
               "autoFit": true
             }
           ],
-          "height": 0,
+          "height": -9,
           "series": [
             {
               "color": [
@@ -129,7 +132,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

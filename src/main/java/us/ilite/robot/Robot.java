@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
 //    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
 //    private FourBallTrajectoryAuton mFourBallAuton;
 //    private ThreeBallTrajectoryController mThreeBallAuton;
+    private ShootMoveController mShootMoveController;
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
@@ -82,6 +83,13 @@ public class Robot extends TimedRobot {
 //        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
 //        mThreeBallAuton = new ThreeBallTrajectoryController();
 //        mFourBallAuton = new FourBallTrajectoryAuton();
+        MODE = INITIALIZING;
+        mLogger.warn("===> ROBOT INIT Starting");
+        mOI = new OperatorInput();
+        mLEDControl = new LEDModule();
+        mNeoDrive = NeoDriveModule.getInstance();
+        mShootMoveController = new ShootMoveController();
+
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
@@ -150,6 +158,9 @@ public class Robot extends TimedRobot {
         mNeoDrive.readInputs();
 //        mCommandGroup.schedule(false);
         mAutonSelection.getSelectedAutonController().schedule();
+        if (mAutonSelection.getSelectedAutonController() != null) {
+            mAutonSelection.getSelectedAutonController().schedule();
+        }
     }
 
     @Override

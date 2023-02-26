@@ -50,11 +50,9 @@ public class NeoDriveModule extends Module implements Subsystem {
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
 
-    //need to modify with new robot:
     public static final double kGearboxRatio = (12.0 / 40.0) * (16.0 / 38.0);
     public static final double kWheelDiameterFeet = 0.5;
     public static final double kWheelDiameterInches = 6;
-    //still need to change:
     public static final double kTrackWidthFeet = 1.8;
 
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
@@ -109,11 +107,11 @@ public class NeoDriveModule extends Module implements Subsystem {
         angleSum = 0;
         mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
 
-        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
-        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
+        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
 
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
 
         
         mLeftFollower.follow(mLeftMaster);
@@ -208,7 +206,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
                 Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                 Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
-                pose); // changed from mGyro.getHeading to pose.getRotiation
+                pose);
         mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
 //        mTable.getEntry("gyro heading").setString(pose.getRotation().toString());
     }
