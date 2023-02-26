@@ -100,6 +100,11 @@
     },
     "ramsete command": {
       "open": true
+    },
+    "transitory": {
+      "follow traj": {
+        "open": true
+      }
     }
   },
   "Plot": {
@@ -111,7 +116,7 @@
               "autoFit": true
             }
           ],
-          "height": 127,
+          "height": 0,
           "series": [
             {
               "color": [

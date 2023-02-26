@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -23,7 +22,6 @@ import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
 import us.ilite.robot.commands.FollowTrajectory;
-import us.ilite.robot.commands.SpinIntake;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -64,7 +62,7 @@ public class Robot extends TimedRobot {
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
 //    private ShootMoveController mShootMoveController;
-    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
+//    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
 //    private FourBallTrajectoryAuton mFourBallAuton;
 //    private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
@@ -81,14 +79,14 @@ public class Robot extends TimedRobot {
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
 //        mShootMoveController = new ShootMoveController();
-        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
+//        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
 //        mThreeBallAuton = new ThreeBallTrajectoryController();
 //        mFourBallAuton = new FourBallTrajectoryAuton();
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
         mLEDControl = new LEDModule();
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
@@ -151,7 +149,7 @@ public class Robot extends TimedRobot {
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
 //        mCommandGroup.schedule(false);
-        mAutonSelection.getSelectedAutonController().schedule(false);
+        mAutonSelection.getSelectedAutonController().schedule();
     }
 
     @Override

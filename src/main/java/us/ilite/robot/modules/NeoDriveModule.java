@@ -161,7 +161,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -203,7 +205,10 @@ public class NeoDriveModule extends Module implements Subsystem {
 //        mTable.getEntry("angle sum").setNumber(angleSum);
 //        mGyro.resetAngle(pose.getRotation()); //potentially need to zero gyro instead of doing this
 //        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
-        mOdometry.resetPosition(pose, pose.getRotation()); // changed from mGyro.getHeading to pose.getRotiation
+        mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
+                pose); // changed from mGyro.getHeading to pose.getRotiation
         mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
 //        mTable.getEntry("gyro heading").setString(pose.getRotation().toString());
     }
@@ -353,6 +358,10 @@ public class NeoDriveModule extends Module implements Subsystem {
     public Pigeon getGyro()
     {
         return mGyro;
+    }
+    public Rotation2d getGyroRoll()
+    {
+        return mGyro.getRoll();
     }
 
 }

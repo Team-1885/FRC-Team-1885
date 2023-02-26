@@ -8,6 +8,7 @@ import us.ilite.common.Data;
 import us.ilite.common.config.Settings;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Robot;
+import us.ilite.robot.hardware.Pigeon;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import java.util.function.DoubleConsumer;
@@ -16,12 +17,13 @@ import java.util.function.DoubleSupplier;
 public class AutoBalancePID extends SequentialCommandGroup {
     private final double kP = Settings.kP;
     private Data db = Robot.DATA;
+    private Pigeon mGyro;
 
     private class Balance extends PIDCommand {
         NeoDriveModule driveSubsystem;
 
         public Balance(NeoDriveModule driveSubsystem, double setpoint) {
-            super(new PIDController(kP, 0, 0), (DoubleSupplier) driveSubsystem.getGyro().getRoll(), setpoint, output -> {
+            super(new PIDController(kP, 0, 0), driveSubsystem.getGyroRoll()::getDegrees, setpoint, output -> {
                 db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, -output * Settings.kMaxSpeedMetersPerSecond);
                 }, driveSubsystem);
             this.driveSubsystem = driveSubsystem;
