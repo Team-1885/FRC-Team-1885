@@ -29,7 +29,7 @@ public class AutonSelection {
     public AutonSelection() {
         leftPiece = new FollowTrajectory("LeftPiece");
         leftOrigin = new FollowTrajectory("LeftOrigin");
-        DriveStraight = new FollowTrajectory("DriveStraight");
+//        DriveStraight = new FollowTrajectory("DriveStraight");
         TurnTest = new FollowTrajectory("TurnTest");
         Left = new FollowTrajectory("Left");
         Right = new FollowTrajectory("Right");

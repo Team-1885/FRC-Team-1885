@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -23,7 +22,6 @@ import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
 import us.ilite.robot.commands.FollowTrajectory;
-import us.ilite.robot.commands.SpinIntake;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -45,16 +43,12 @@ public class Robot extends TimedRobot {
     private ModuleList mRunningModules = new ModuleList();
     private final Settings mSettings = new Settings();
     private CSVLogger mCSVLogger;
-    private ClimberModule mHanger;
     private Timer initTimer = new Timer();
 
 
 
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
-    private FeederModule mFeeder;
-    private IntakeModule mIntake;
-    private ClimberModule mClimber;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
@@ -68,9 +62,6 @@ public class Robot extends TimedRobot {
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
     private ShootMoveController mShootMoveController;
-    private ThreeBallController mThreeBallController;
-    private TexasSwitchController mReverseController;
-    private TwoBallController mTwoBallController;
     private AbstractController mActiveController = null;
     private TestController mTestController;
 
@@ -85,17 +76,11 @@ public class Robot extends TimedRobot {
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
         mShootMoveController = new ShootMoveController();
-        mThreeBallController = new ThreeBallController();
-        mTwoBallController = new TwoBallController();
-        mReverseController = new TexasSwitchController();
 
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
-        mFeeder = new FeederModule();
-        mIntake = IntakeModule.getInstance();
         mLEDControl = new LEDModule();
-        mClimber = new ClimberModule();
         mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
@@ -149,8 +134,6 @@ public class Robot extends TimedRobot {
         MODE = AUTONOMOUS;
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
-        mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
@@ -161,7 +144,9 @@ public class Robot extends TimedRobot {
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
 //        mCommandGroup.schedule(false);
-        mAutonSelection.getSelectedAutonController().schedule(false);
+        if (mAutonSelection.getSelectedAutonController() != null) {
+            mAutonSelection.getSelectedAutonController().schedule();
+        }
     }
 
     @Override
@@ -179,11 +164,8 @@ public class Robot extends TimedRobot {
         }
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
-        mRunningModules.addModule(mFeeder);
-        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
-        mRunningModules.addModule(mClimber);
         mRunningModules.addModule(mLEDControl);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;

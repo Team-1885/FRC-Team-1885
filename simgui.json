@@ -100,6 +100,14 @@
     },
     "ramsete command": {
       "open": true
+    },
+    "transitory": {
+      "follow traj": {
+        "open": true
+      },
+      "ramsete command": {
+        "open": true
+      }
     }
   },
   "Plot": {
@@ -124,7 +132,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

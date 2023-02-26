@@ -3,6 +3,7 @@ package us.ilite.robot.commands;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.team319.trajectory.Path;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -24,7 +25,7 @@ public class FollowTrajectory extends CommandBase {
     private Command mCommand;
     private NeoDriveModule mNeoDrive;
 
-    private Trajectory mTrajectory;
+    private PathPlannerTrajectory mTrajectory;
 
     public FollowTrajectory(String pTrajectoryName) {
         mTimer = new Timer();
@@ -33,7 +34,8 @@ public class FollowTrajectory extends CommandBase {
         commandGenerator = new GenerateRamseteCommand();
         mNeoDrive = NeoDriveModule.getInstance();
         mTrajectoryName = pTrajectoryName;
-        mTrajectory = TrajectoryCommandUtils.getJSONTrajectory(pTrajectoryName);
+        mTrajectory = PathPlanner.loadPath(pTrajectoryName, 2, 1);
+//        mTrajectory = TrajectoryCommandUtils.getJSONTrajectory(pTrajectoryName);
 
         addRequirements(mNeoDrive);
     }
@@ -44,7 +46,7 @@ public class FollowTrajectory extends CommandBase {
         mCommand = commandGenerator.generateCommand(mTrajectoryName);
 //        mCommand.beforeStarting(() -> mNeoDrive.resetOdometry(commandGenerator.getTrajInitPose()));
         mTable.getEntry("initial pose").setString(commandGenerator.getTrajInitPose().toString());
-        commandGenerator.generateCommand(mTrajectoryName).schedule(false);
+//        mCommand.schedule();
     }
 
     @Override
@@ -54,12 +56,12 @@ public class FollowTrajectory extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
-        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
-            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
-        } else {
-            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) - 0.1));
-        }
+//        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
+//        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
+//            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
+//        } else {
+//            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) - 0.1));
+//        }
     }
 
     @Override
