@@ -17,8 +17,6 @@ import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
-import us.ilite.robot.TrajectoryCommandUtils;
-import us.ilite.robot.modules.FalconDriveModule;
 import us.ilite.robot.modules.NeoDriveModule;
 
 public class FollowTrajectory implements ICommand {

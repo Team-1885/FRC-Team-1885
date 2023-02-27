@@ -1,5 +1,15 @@
 {
   "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": false
+      }
+    },
     "RoboRIO": {
       "6V Rail": {
         "open": false
@@ -62,6 +72,34 @@
       "Field": {
         "open": false
       }
+    },
+    "ramsete command": {
+      "open": true
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "autoFit": true
+            }
+          ],
+          "height": 127,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/drivetrain/left volts"
+            }
+          ]
+        }
+      ]
     }
   }
 }
