@@ -159,6 +159,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
+        mRunningModules.addModule(mDriveTrain);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
@@ -167,6 +168,8 @@ public class Robot extends TimedRobot {
         mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
+        mDriveTrain.resetOdometry((mAutoController.getStartPose()));
+        mDriveTrain.readInputs();
         mActiveController.setEnabled(true);
     }
 
