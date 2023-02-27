@@ -34,6 +34,7 @@ import static us.ilite.robot.vision.Ilite3DSolver.ySort;
  * A module for interfacing with the Goal Limelight
  */
 public class Limelight extends Module implements ITargetDataProvider {
+
     // These are for V2
     public static double llFOVVertical = 49.7; // TODO Confirm if this is true
     public static double llFOVHorizontal = 59.6;

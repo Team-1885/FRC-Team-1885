@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
     private ReferenceModule mReferenceModule;
     private TelescopeArm mTelescopeArm;
     private ClawModule mClawModule;
+    private Drivetrain mDriveTrain;
 
     @Override
     public void robotInit() {
@@ -102,6 +103,7 @@ public class Robot extends TimedRobot {
         mReferenceModule = new ReferenceModule();
         mTelescopeArm = new TelescopeArm();
         mClawModule = new ClawModule();
+        mDriveTrain = new Drivetrain();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -196,6 +198,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mReferenceModule);
         mRunningModules.addModule(mTelescopeArm);
         mRunningModules.addModule(mClawModule);
+        mRunningModules.addModule(mDriveTrain);
     }
 
     @Override

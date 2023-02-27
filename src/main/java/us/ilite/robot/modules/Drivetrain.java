@@ -3,11 +3,17 @@ package us.ilite.robot.modules;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import us.ilite.common.config.Settings;
+import us.ilite.common.lib.util.Units;
+import us.ilite.common.types.sensor.EGyro;
+import us.ilite.robot.Robot;
 
-public class Drivetrain extends Module{
+import static us.ilite.common.types.drive.EDriveData.*;
+
+public class Drivetrain extends Module {
 
     // ================================================
     // DECLARES NEO MOTORS FOR THE DRIVETRAIN PLS WORK
@@ -45,6 +51,7 @@ public class Drivetrain extends Module{
         mBackLeft = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
         mBackRight = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+
         leftEncoder = mFrontLeft.getEncoder();
         rightEncoder = mFrontRight.getEncoder();
 
@@ -58,6 +65,9 @@ public class Drivetrain extends Module{
 
         mBackLeft.follow(mFrontLeft);
         mBackRight.follow(mFrontRight);
+    }
+    public void readInputs() {
+
     }
 
 }
