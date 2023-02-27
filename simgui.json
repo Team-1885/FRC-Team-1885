@@ -25,10 +25,11 @@
       "/Shuffleboard/Auton Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Climber Mode": "String Chooser",
+      "/SmartDashboard/Autonomous Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
-      "/Shuffleboard/Auton Configuration/Choose Auton Controller": {
+      "/SmartDashboard/Autonomous Mode": {
         "window": {
           "visible": true
         }
@@ -63,6 +64,15 @@
     }
   },
   "NetworkTables": {
+    "DriveStraight": {
+      "open": true
+    },
+    "LeftOrigin": {
+      "open": true
+    },
+    "LeftPiece": {
+      "open": true
+    },
     "Shuffleboard": {
       "Auton Configuration": {
         "open": false
@@ -73,8 +83,31 @@
         "open": false
       }
     },
+    "TurnTest": {
+      "open": true
+    },
+    "drivetrain": {
+      "open": true
+    },
+    "follow traj": {
+      "open": true
+    },
+    "left origin": {
+      "open": true
+    },
+    "left piece": {
+      "open": true
+    },
     "ramsete command": {
       "open": true
+    },
+    "transitory": {
+      "follow traj": {
+        "open": true
+      },
+      "ramsete command": {
+        "open": true
+      }
     }
   },
   "Plot": {
@@ -86,7 +119,7 @@
               "autoFit": true
             }
           ],
-          "height": 127,
+          "height": -9,
           "series": [
             {
               "color": [
@@ -99,7 +132,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

@@ -11,8 +11,8 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -21,6 +21,7 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
+import us.ilite.robot.commands.FollowTrajectory;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -44,12 +45,15 @@ public class Robot extends TimedRobot {
     private CSVLogger mCSVLogger;
     private Timer initTimer = new Timer();
 
+
+
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
+    private FollowTrajectory mFollowTrajectory;
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -57,12 +61,10 @@ public class Robot extends TimedRobot {
 
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
-//    private ShootMoveController mShootMoveController;
-    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
-//    private FourBallTrajectoryAuton mFourBallAuton;
-//    private ThreeBallTrajectoryController mThreeBallAuton;
+    private ShootMoveController mShootMoveController;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+
 
     @Override
     public void robotInit() {
@@ -73,15 +75,13 @@ public class Robot extends TimedRobot {
         Arrays.stream(EForwardableConnections.values()).forEach(EForwardableConnections::addPortForwarding);
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
-//        mShootMoveController = new ShootMoveController();
-        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
-//        mThreeBallAuton = new ThreeBallTrajectoryController();
-//        mFourBallAuton = new FourBallTrajectoryAuton();
+        mShootMoveController = new ShootMoveController();
+
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
         mLEDControl = new LEDModule();
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
@@ -129,7 +129,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         SmartDashboard.putData(FIELD);
     }
-
     @Override
     public void autonomousInit() {
         MODE = AUTONOMOUS;
@@ -139,16 +138,20 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
-        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-        mActiveController = mAutoController;
-        mAutoController.initialize();
-        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
+//        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+//        mActiveController = mAutoController;
+        //mAutoController.initialize();
+//        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
-        mActiveController.setEnabled(true);
+//        mCommandGroup.schedule(false);
+        if (mAutonSelection.getSelectedAutonController() != null) {
+            mAutonSelection.getSelectedAutonController().schedule();
+        }
     }
 
     @Override
     public void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
         commonPeriodic();
     }
 
@@ -237,7 +240,7 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-        mActiveController.update();
+//        mActiveController.update();
         mRunningModules.safeSetOutputs();
         SmartDashboard.putNumber("common_periodic_dt", Timer.getFPGATimestamp() - start);
         SmartDashboard.putNumber("Clock Time", CLOCK.now());

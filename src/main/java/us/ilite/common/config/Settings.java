@@ -33,11 +33,19 @@ public class Settings {
             // ===============
             // DRIVETRAIN ID's
             // ===============
-            public static final int kDTMR2 = 1;
-            public static final int kDTR4 = 3;
-            public static final int kDTML1 = 2;
-            public static final int kDTL3 = 4;
-            public static final int kDTGyro = 21;
+            /*
+            right front (master): 1
+            right back: 3
+
+            left front (master): 2
+            left back: 4
+             */
+
+            public static final int kDTMR1 = 1;
+            public static final int kDTR3 = 3;
+            public static final int kDTML2 = 2;
+            public static final int kDTL4 = 4;
+            public static final int kDTGyro = 30;
 
             // ======================
             // FEEDER AND INTAKE ID's
@@ -118,15 +126,27 @@ public class Settings {
     // =============================================================================
     // RamseteCommand constants
     // =============================================================================
-    public static final double kS = 0.64353;
-    public static final double kV = 0.00046589;
-    public static final double kA = 3.2696 * Math.pow(10.0, -5.0);
 
-    public static final double kP = 0.1139;
+//    public static final double kS =  0.14188;
+//    public static final double kV = 2.8112;
+//    public static final double kA =  0.61942;
+
+    public static final double kS =  0.14188; //correct!!
+    public static final double kV = 2.8112;
+    public static final double kA =  0.61942; //try 0.61942
+
+    //2020 VALUES:
+//    public static final double kS =  0.64353 ;
+//    public static final double kV = 0.00046589;
+//    public static final double kA =  3.2696 * Math.pow(10.0, -5.0);
+
+//    public static final double kP = 0;//  0.1139
+//    public static final double kP = 0.0052984;
+    public static final double kP = 5;
 
     public static final double kTrackWidthMeters = 0.6858;
-    public static final double kMaxSpeedMetersPerSecond = 15;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 15;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;

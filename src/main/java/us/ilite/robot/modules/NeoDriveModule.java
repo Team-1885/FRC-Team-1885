@@ -4,8 +4,13 @@ import com.revrobotics.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
@@ -18,14 +23,11 @@ import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.TrajectoryCommandUtils;
-import us.ilite.robot.hardware.ECommonNeutralMode;
-import us.ilite.robot.hardware.HardwareUtils;
-import us.ilite.robot.hardware.Pigeon;
-import us.ilite.robot.hardware.SparkMaxFactory;
+import us.ilite.robot.hardware.*;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module {
+public class NeoDriveModule extends Module implements Subsystem {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -39,16 +41,18 @@ public class NeoDriveModule extends Module {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    private DifferentialDriveKinematics mKinematics;
+    private Pose2d mPose2d;
+    private final NetworkTable mTable;
+    private double angleSum;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
 
-    //need to modify with new robot:
     public static final double kGearboxRatio = (12.0 / 40.0) * (16.0 / 38.0);
     public static final double kWheelDiameterFeet = 0.5;
     public static final double kWheelDiameterInches = 6;
-    //still need to change:
     public static final double kTrackWidthFeet = 1.8;
 
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
@@ -93,13 +97,21 @@ public class NeoDriveModule extends Module {
     // ========================================
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
+    private static final NeoDriveModule instance = new NeoDriveModule(); // create singleton (only instance)
 
-    public NeoDriveModule() {
-        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
-        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
+    public static NeoDriveModule getInstance() { // create method so anyone can get access of NeoDriveModule's only instance
+        return instance;
+    }
 
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+    private NeoDriveModule() {
+        angleSum = 0;
+        mTable = NetworkTableInstance.getDefault().getTable("drivetrain");
+
+        mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
+        mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
+
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
 
         
         mLeftFollower.follow(mLeftMaster);
@@ -147,23 +159,31 @@ public class NeoDriveModule extends Module {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
         mRightMaster.burnFlash();
         mRightFollower.burnFlash();
+        mGyro.zeroAll(); //moved from mode init
+        mTable.getEntry("INIT HEADING DEG").setNumber(mGyro.getHeading().getDegrees());
+
     }
     @Override
     public void modeInit(EMatchMode pMode) {
-        mGyro.zeroAll();
         reset();
         if(pMode == EMatchMode.AUTONOMOUS) {
-            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0))); //commented out 2:19, updating odom with with a pose that is not the initial position of the ramsete command
+//            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            mRightFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         } else {
             mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
             mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -178,8 +198,17 @@ public class NeoDriveModule extends Module {
      */
     public void resetOdometry(Pose2d pose) {
         reset();
-        mGyro.resetAngle(pose.getRotation());
-//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mGyro.zeroAll();
+//        angleSum = pose.getRotation().getDegrees();
+//        mTable.getEntry("angle sum").setNumber(angleSum);
+//        mGyro.resetAngle(pose.getRotation()); //potentially need to zero gyro instead of doing this
+//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getRadians())); // was .degrees
+        mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
+                pose);
+        mTable.getEntry("pose rotation").setString(pose.getRotation().toString());
+//        mTable.getEntry("gyro heading").setString(pose.getRotation().toString());
     }
     @Override
     public void readInputs() {
@@ -204,19 +233,32 @@ public class NeoDriveModule extends Module {
         db.imu.set(EGyro.YAW_OMEGA_DEGREES, -mGyro.getYawRate().getDegrees());
         db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
-        mOdometry.update(mGyro.getHeading(),
-               Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
-               Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
+
+
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
     }
 
     @Override
     public void setOutputs() {
+        mPose2d = mOdometry.update(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
+        angleSum += mGyro.getHeading().getDegrees();
+        mTable.getEntry("angleSum").setNumber(angleSum);
+
+        mTable.getEntry("CURRENT HEADING DEG").setNumber(mGyro.getHeading().getDegrees());
         Enums.EDriveState state = db.drivetrain.get(STATE, Enums.EDriveState.class);
         double throttle = db.drivetrain.safeGet(DESIRED_THROTTLE_PCT, 0.0);
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
         double left = throttle + turn;
         double right = throttle - turn;
+
+//        mTable.getEntry("left").setNumber(left);
+//        mTable.getEntry("right").setNumber(right);
+//
+//        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
+//        mTable.getEntry("right m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
+
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
         if (state == null) return;
         switch (state) {
@@ -228,7 +270,7 @@ public class NeoDriveModule extends Module {
                 double x = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 double y = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 mGyro.zeroAll();
-                resetOdometry(new Pose2d(x, y, new Rotation2d(-mGyro.getYaw().getRadians())));
+//                resetOdometry(new Pose2d(x, y, new Rotation2d(-mGyro.getYaw().getRadians()))); //commented out 2/19: shouldn't matter, wasnt being called anywhere
                 break;
             case PERCENT_OUTPUT:
                 if (db.limelight.isSet(ELimelightData.TARGET_ID)) {
@@ -284,6 +326,26 @@ public class NeoDriveModule extends Module {
         }
     }
 
+    public Pose2d getPose() {
+        return mOdometry.getPoseMeters();
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s))
+        );
+    }
+
+    public void setVolts(double leftVolts, double rightVolts) {
+        //safety check, only if the desired .set() value is less than one should it be set to the motors
+//        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
+//            mRightMaster.set(rightVolts / 12);
+//            mLeftMaster.set(leftVolts / 12);
+//        }
+        mRightMaster.set(rightVolts / 12);
+        mLeftMaster.set(leftVolts / 12);
+    }
     public void reset() {
         mLeftEncoder.setPosition(0.0);
         mRightEncoder.setPosition(0.0);
