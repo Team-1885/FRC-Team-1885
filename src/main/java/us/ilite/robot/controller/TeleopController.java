@@ -375,4 +375,58 @@ public class TeleopController extends BaseManualController {
 //            }
 //        }
 //    }
+private void updateReferenceModule() {
+       /* if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_FEEDER) && db.operatorinput.isSet(InputMap.OPERATOR.SPIN_FEEDER)) {
+            System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
+            db.climber.set(EClimberData.DESIRED_POS_deg,10.0);
+        }
+
+        */
+}
+    private void updateTelescopeArm() {
+        // ===========================================================================================================
+        // 1) IF RIGHT PRESSED, GO UP AND STAY AT POS, ELSE IF LEFT PRESSED GO DOWN AND STAY AT POS, ELSE STAY AT POS
+        // 2) IF JOYSTICK MOVED, MOVE ARM IN DIRECTION IN WHICH JOYSTICK WAS MOVED
+        // 3) EXTEND ARM IF BUTTON PRESSED /!\ NOT SAME AS LEVEL, TO SCORE BETTER /!\
+        // ===========================================================================================================
+
+        // /!\ LEVEL /!\ \\
+        if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.LEVEL_POSITION);
+            db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, 1.0);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT,1.0);
+            db.claw.set(EClawData.DESIRED_POS_DEG, 90 - (db.arm.get(EArmData.DESIRED_ARM_POS_deg) + db.claw.get(EClawData.ACTUAL_POS_DEG)));
+
+        }
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.LEVEL_POSITION);
+            db.arm.set(EArmData.DESIRED_LEVEL_POS_deg,0.0);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT,0.0);
+        }
+        else {
+            db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, EArmData.ACTUAL_LEVEL_POS_deg);
+            db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT, EArmData.ACTUAL_PERCENT_OUTPUT);
+        }
+
+        // /!\ MOVE /!\ \\
+        if (db.operatorinput.isSet(ELogitech310.RIGHT_JOYSTICK_BTN)) {
+            db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.ARM_POSITION);
+            db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
+        }
+    }
+    public void updateClaw() {
+        if (db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+            //================================================
+            // IF DPAD DOWN AND UP ARE PRESSED VELOCITY IS .2
+            //================================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, .2);
+        }
+        else {
+            //===========================================
+            //IF NOTHING IS PRESSED VELOCITY IS SET TO 0
+            //===========================================
+            db.claw.set(EClawData.DESIRED_VEL_ft_s, 0);
+        }
+    }
 }
