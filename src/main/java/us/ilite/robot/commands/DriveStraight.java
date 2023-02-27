@@ -82,7 +82,7 @@ public class DriveStraight implements ICommand {
         if(mDistanceController.atSetpoint()) {
             return true;
         } else {
-//            Robot.DATA.drivetrain.set(NEUTRAL_MODE, ECommonNeutralMode.BRAKE);
+            Robot.DATA.drivetrain.set(NEUTRAL_MODE, ECommonNeutralMode.BRAKE);
             Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
             Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, throttle);
             Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, turn);

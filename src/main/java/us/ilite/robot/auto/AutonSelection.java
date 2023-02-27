@@ -17,9 +17,9 @@ public class AutonSelection {
      */
     private Class<?>[] mAutonControllers = {
             ShootMoveController.class,
-//            TwoBallController.class,
-//            ThreeBallController.class,
-//            TexasSwitchController.class,
+            TwoBallController.class,
+            ThreeBallController.class,
+            TexasSwitchController.class,
 //            FiveBallController.class,
 //            FourBallController.class,
 //            TwoBallTrajectoryController.class,
@@ -35,7 +35,7 @@ public class AutonSelection {
                .getDouble(0.0)))
                .intValue();
 
-//        mSendableAutonControllers.setDefaultOption("Default - Two ball", TwoBallController.class);
+        mSendableAutonControllers.setDefaultOption("Default - Two ball", TwoBallController.class);
         for (Class<?> c : mAutonControllers) {
             mSendableAutonControllers.addOption(c.getSimpleName(), c);
         }

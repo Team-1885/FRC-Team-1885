@@ -10,12 +10,12 @@ public class SimpleNetworkTable  {
     private NetworkTable netTable;
             
     public SimpleNetworkTable(String name) {
-//        NetworkTableInstance.getDefault().setUpdateRate(Settings.kNetworkTableUpdateRate);
-//        netTable = NetworkTableInstance.getDefault().getTable(name);
-//
-//        netTable.getInstance().setUpdateRate(Settings.kNetworkTableUpdateRate);
-//        netTable.getInstance().setServerTeam(1885);
-//        netTable.getInstance().startClientTeam(1885);
+        NetworkTableInstance.getDefault().setUpdateRate(Settings.kNetworkTableUpdateRate);
+        netTable = NetworkTableInstance.getDefault().getTable(name);
+
+        netTable.getInstance().setUpdateRate(Settings.kNetworkTableUpdateRate);
+        netTable.getInstance().setServerTeam(1885);
+        netTable.getInstance().startClientTeam(1885);
     }
     
     public void initKeys() {
@@ -27,11 +27,11 @@ public class SimpleNetworkTable  {
     }
   
     public synchronized void putDouble(String key, double value) {
-//    	netTable.getEntry(key).forceSetDouble(value);
+    	netTable.getEntry(key).forceSetDouble(value);
     }
     
     public synchronized void putNumber(String key, Integer value) {
-//        netTable.getEntry(key).forceSetNumber(value);
+        netTable.getEntry(key).forceSetNumber(value);
     }
     
     public synchronized void putNumberArray(String key, Integer[] values) {
@@ -39,7 +39,7 @@ public class SimpleNetworkTable  {
     }
     
     public synchronized void putString(String key, String value) {
-//    		netTable.getEntry(key).forceSetString(value);
+    		netTable.getEntry(key).forceSetString(value);
     }
     
     public synchronized NetworkTable getInstance() {

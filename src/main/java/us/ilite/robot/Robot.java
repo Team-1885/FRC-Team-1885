@@ -42,10 +42,14 @@ public class Robot extends TimedRobot {
     private ModuleList mRunningModules = new ModuleList();
     private final Settings mSettings = new Settings();
     private CSVLogger mCSVLogger;
+    private ClimberModule mHanger;
     private Timer initTimer = new Timer();
 
     private LEDModule mLEDControl;
     private SimulationModule mSimulation;
+    private FeederModule mFeeder;
+    private IntakeModule mIntake;
+    private ClimberModule mClimber;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
@@ -57,10 +61,13 @@ public class Robot extends TimedRobot {
 
     private final AbstractController mTeleopController = TeleopController.getInstance();
     private BaseAutonController mBaseAutonController;
-//    private ShootMoveController mShootMoveController;
+    private ShootMoveController mShootMoveController;
+    private ThreeBallController mThreeBallController;
+    private TexasSwitchController mReverseController;
+    private TwoBallController mTwoBallController;
     private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
-//    private FourBallTrajectoryAuton mFourBallAuton;
-//    private ThreeBallTrajectoryController mThreeBallAuton;
+    private FourBallTrajectoryAuton mFourBallAuton;
+    private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
     private ReferenceModule mReferenceModule;
@@ -77,14 +84,20 @@ public class Robot extends TimedRobot {
         Arrays.stream(EForwardableConnections.values()).forEach(EForwardableConnections::addPortForwarding);
         mAutonSelection = new AutonSelection();
         mBaseAutonController = new BaseAutonController();
-//        mShootMoveController = new ShootMoveController();
+        mShootMoveController = new ShootMoveController();
+        mThreeBallController = new ThreeBallController();
+        mTwoBallController = new TwoBallController();
+        mReverseController = new TexasSwitchController();
         mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
-//        mThreeBallAuton = new ThreeBallTrajectoryController();
-//        mFourBallAuton = new FourBallTrajectoryAuton();
+        mThreeBallAuton = new ThreeBallTrajectoryController();
+        mFourBallAuton = new FourBallTrajectoryAuton();
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
+        mFeeder = new FeederModule();
+        mIntake = new IntakeModule();
         mLEDControl = new LEDModule();
+        mClimber = new ClimberModule();
         mNeoDrive = new NeoDriveModule();
         mLimelight = new Limelight();
         mReferenceModule = new ReferenceModule();
@@ -143,6 +156,8 @@ public class Robot extends TimedRobot {
         MODE = AUTONOMOUS;
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
+        mRunningModules.addModule(mFeeder);
+        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mDriveTrain);
         mRunningModules.addModule(mLimelight);
@@ -172,8 +187,11 @@ public class Robot extends TimedRobot {
         }
         mRunningModules.clearModules();
         mRunningModules.addModule(mOI);
+        mRunningModules.addModule(mFeeder);
+        mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
+        mRunningModules.addModule(mClimber);
         mRunningModules.addModule(mLEDControl);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;

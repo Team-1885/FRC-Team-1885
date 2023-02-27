@@ -43,20 +43,15 @@ public class NeoDriveModule extends Module {
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
-
-    //need to modify with new robot:
-    public static final double kGearboxRatio = (12.0 / 40.0) * (16.0 / 38.0);
-    public static final double kWheelDiameterFeet = 0.5;
-    public static final double kWheelDiameterInches = 6;
-    //still need to change:
-    public static final double kTrackWidthFeet = 1.8;
-
+    public static final double kGearboxRatio = (12.0 / 40.0) * (18.0 / 36.0);
+    public static final double kWheelDiameterFeet = 3.9 / 12.0;
     public static final double kWheelCircumferenceFeet = kWheelDiameterFeet * Math.PI;
     public static final double kDriveNEOPositionFactor = kGearboxRatio * kWheelCircumferenceFeet;
     public static final double kDriveNEOVelocityFactor = kDriveNEOPositionFactor / 60.0;
     public static final double kMaxVelocityRPM = 5676;
     public static final double kPulsesPerRotation = 256.0;
     public static final double kCurrentLimitAmps = 60.0;
+    public static final double kTrackWidthFeet = 22.0 / 12.0;
     public static final int kMaxLimelightFOV = 22;
 
 
@@ -97,11 +92,9 @@ public class NeoDriveModule extends Module {
     public NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
-
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
         mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
 
-        
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
         mGyro = new Pigeon(Robot.CLOCK, Settings.HW.CAN.kDTGyro);
@@ -116,12 +109,7 @@ public class NeoDriveModule extends Module {
         mRightFollower.setSmartCurrentLimit(65);
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
-
-        mRightMaster.setClosedLoopRampRate(1.5);
-        mRightFollower.setClosedLoopRampRate(1.5);
-        mLeftMaster.setClosedLoopRampRate(1.5);
-        mLeftFollower.setClosedLoopRampRate(1.5);
-
+        
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
 
@@ -147,7 +135,7 @@ public class NeoDriveModule extends Module {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -179,7 +167,7 @@ public class NeoDriveModule extends Module {
     public void resetOdometry(Pose2d pose) {
         reset();
         mGyro.resetAngle(pose.getRotation());
-//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
     @Override
     public void readInputs() {
@@ -204,7 +192,7 @@ public class NeoDriveModule extends Module {
         db.imu.set(EGyro.YAW_OMEGA_DEGREES, -mGyro.getYawRate().getDegrees());
         db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
-        mOdometry.update(mGyro.getHeading(),
+        mOdometry.update(new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS)),
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
@@ -237,9 +225,18 @@ public class NeoDriveModule extends Module {
                         targetLockOutput = mTargetLockPID.calculate(-db.limelight.get(ELimelightData.TX), clock.dt());
                         turn = targetLockOutput;
                     }
-//                    turn += 0.1 * Math.signum(turn);
-//                    turn *= (1/(1-throttle)) * 0.5;
+                    turn += 0.1 * Math.signum(turn);
+                    turn *= (1/(1-throttle)) * 0.5;
+                } else if (db.pixydata.isSet(EPixyData.SIGNATURE)) {
+                    double targetLockOutput = 0;
+                    if (db.pixydata.get(EPixyData.TARGET_VALID) == 1) {
+                        targetLockOutput = mTargetLockPID.calculate(-db.pixydata.get(EPixyData.LARGEST_ANGLE_FROM_CAMERA), clock.dt());
+                        turn = targetLockOutput;
+                    }
+                    turn += 0.1 * Math.signum(turn);
+                    turn *= (1/(1-throttle)) * 0.5;
                 }
+
                 mLeftMaster.set(throttle+turn);
                 mRightMaster.set(throttle-turn);
                 break;
@@ -247,40 +244,40 @@ public class NeoDriveModule extends Module {
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
-//            case TURN_TO:
-//                mTurnToDegreePID.setSetpoint(db.drivetrain.get(DESIRED_TURN_ANGLE_deg));
-//                double turnOutput = mTurnToDegreePID.calculate(db.drivetrain.get(ACTUAL_HEADING_DEGREES), clock.getCurrentTimeInMillis());
-//                db.drivetrain.set(DESIRED_TURN_PCT, turnOutput);
-//                mLeftMaster.set(turnOutput);
-//                mRightMaster.set(-turnOutput);
-//                break;
-//            case SMART_MOTION:
-//                mLeftCtrl.setReference(db.drivetrain.get(L_DESIRED_POS_FT) / kDriveNEOPositionFactor,
-//                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
-//                mRightCtrl.setReference(db.drivetrain.get(R_DESIRED_POS_FT) / kDriveNEOPositionFactor,
-//                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
-//                break;
-//            case PATH_FOLLOWING_BASIC:
-//                mLeftPositionPID.setSetpoint(db.drivetrain.get(L_DESIRED_POS_FT));
-//                mRightPositionPID.setSetpoint(db.drivetrain.get(R_DESIRED_POS_FT));
-//                double lMeasurement = db.drivetrain.get(L_ACTUAL_POS_FT);
-//                double rMeasurement = db.drivetrain.get(R_ACTUAL_POS_FT);
-//                double leftPathOutput = mLeftPositionPID.calculate(lMeasurement, clock.getCurrentTimeInMillis());
-//                double rightPathOutput = mRightPositionPID.calculate(rMeasurement, clock.getCurrentTimeInMillis());
-//                mLeftMaster.set(leftPathOutput);
-//                mRightMaster.set(rightPathOutput);
-//                break;
-//            case PATH_FOLLOWING_RAMSETE:
-//                //Divide by 6.56 since that is the max velocity in ft/s
-//                double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
-//                double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
-////                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mDrive.feed();
-//                mLeftCtrl.setReference((vleft / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
-//                mRightCtrl.setReference((vright / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
-//                break;
+            case TURN_TO:
+                mTurnToDegreePID.setSetpoint(db.drivetrain.get(DESIRED_TURN_ANGLE_deg));
+                double turnOutput = mTurnToDegreePID.calculate(db.drivetrain.get(ACTUAL_HEADING_DEGREES), clock.getCurrentTimeInMillis());
+                db.drivetrain.set(DESIRED_TURN_PCT, turnOutput);
+                mLeftMaster.set(turnOutput);
+                mRightMaster.set(-turnOutput);
+                break;
+            case SMART_MOTION:
+                mLeftCtrl.setReference(db.drivetrain.get(L_DESIRED_POS_FT) / kDriveNEOPositionFactor,
+                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
+                mRightCtrl.setReference(db.drivetrain.get(R_DESIRED_POS_FT) / kDriveNEOPositionFactor,
+                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
+                break;
+            case PATH_FOLLOWING_BASIC:
+                mLeftPositionPID.setSetpoint(db.drivetrain.get(L_DESIRED_POS_FT));
+                mRightPositionPID.setSetpoint(db.drivetrain.get(R_DESIRED_POS_FT));
+                double lMeasurement = db.drivetrain.get(L_ACTUAL_POS_FT);
+                double rMeasurement = db.drivetrain.get(R_ACTUAL_POS_FT);
+                double leftPathOutput = mLeftPositionPID.calculate(lMeasurement, clock.getCurrentTimeInMillis());
+                double rightPathOutput = mRightPositionPID.calculate(rMeasurement, clock.getCurrentTimeInMillis());
+                mLeftMaster.set(leftPathOutput);
+                mRightMaster.set(rightPathOutput);
+                break;
+            case PATH_FOLLOWING_RAMSETE:
+                //Divide by 6.56 since that is the max velocity in ft/s
+                double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
+                double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
+//                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mDrive.feed();
+                mLeftCtrl.setReference((vleft / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                mRightCtrl.setReference((vright / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                break;
         }
     }
 

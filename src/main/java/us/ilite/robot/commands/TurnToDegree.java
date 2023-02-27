@@ -1,9 +1,14 @@
 package us.ilite.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import us.ilite.common.Angle;
+import us.ilite.common.config.Settings;
+import us.ilite.common.types.drive.EDriveData;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.hardware.ECommonNeutralMode;
+import us.ilite.robot.modules.FalconDriveModule;
+import us.ilite.common.types.sensor.EGyro;
 import edu.wpi.first.math.controller.PIDController;
 
 import com.flybotix.hfr.util.log.ILog;
@@ -82,7 +87,7 @@ public class TurnToDegree implements ICommand {
 //    }
 
     // Apply output, log, and return false for unfinished
-//    Robot.DATA.drivetrain.set(NEUTRAL_MODE, ECommonNeutralMode.BRAKE);
+    Robot.DATA.drivetrain.set(NEUTRAL_MODE, ECommonNeutralMode.BRAKE);
     Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
    // Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, 0.05);
     Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, mOutput);
