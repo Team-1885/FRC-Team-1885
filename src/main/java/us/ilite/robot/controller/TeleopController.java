@@ -415,7 +415,7 @@ public class TeleopController extends BaseManualController {
             db.arm.set(EArmData.DESIRED_VEL_rpm, 0.2);
         }
     }
-    //comment for push
+    //comment for pus
     public void updateClaw() {
         if (db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
             //================================================
