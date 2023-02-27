@@ -117,10 +117,10 @@ public class NeoDriveModule extends Module {
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
 
-        mRightMaster.setClosedLoopRampRate(1.5);
-        mRightFollower.setClosedLoopRampRate(1.5);
-        mLeftMaster.setClosedLoopRampRate(1.5);
-        mLeftFollower.setClosedLoopRampRate(1.5);
+        mRightMaster.setClosedLoopRampRate(0.5);
+        mRightFollower.setClosedLoopRampRate(0.5);
+        mLeftMaster.setClosedLoopRampRate(0.5);
+        mLeftFollower.setClosedLoopRampRate(0.5);
 
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
