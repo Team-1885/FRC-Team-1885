@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     private OperatorInput mOI;
     private MatchMetadata mMatchMeta = null;
 
-    private final AbstractController mTeleopController = TeleopController.getInstance();
+    private final AbstractController mTeleopController = new TeleopController();
     private BaseAutonController mBaseAutonController;
     private ShootMoveController mShootMoveController;
     private AbstractController mActiveController = null;
@@ -176,6 +176,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        CommandScheduler.getInstance().run(); //run any scheduled commands (will be scoring automation)
         commonPeriodic();
     }
 
