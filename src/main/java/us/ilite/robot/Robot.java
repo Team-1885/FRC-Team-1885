@@ -63,6 +63,10 @@ public class Robot extends TimedRobot {
 //    private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+    private ReferenceModule mReferenceModule;
+    private TelescopeArm mTelescopeArm;
+    private ClawModule mClawModule;
+    private Drivetrain mDriveTrain;
 
     @Override
     public void robotInit() {
@@ -83,6 +87,10 @@ public class Robot extends TimedRobot {
         mLEDControl = new LEDModule();
         mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
+        mReferenceModule = new ReferenceModule();
+        mTelescopeArm = new TelescopeArm();
+        mClawModule = new ClawModule();
+        mDriveTrain = new Drivetrain();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();
@@ -136,6 +144,7 @@ public class Robot extends TimedRobot {
         //Robot.DATA.registerAllWithShuffleboard();
         mRunningModules.clearModules();
         mRunningModules.addModule(mNeoDrive);
+        mRunningModules.addModule(mDriveTrain);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
@@ -144,6 +153,8 @@ public class Robot extends TimedRobot {
         mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
+        mDriveTrain.resetOdometry((mAutoController.getStartPose()));
+        mDriveTrain.readInputs();
         mActiveController.setEnabled(true);
     }
 
@@ -169,6 +180,10 @@ public class Robot extends TimedRobot {
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
+        mRunningModules.addModule(mReferenceModule);
+        mRunningModules.addModule(mTelescopeArm);
+        mRunningModules.addModule(mClawModule);
+        mRunningModules.addModule(mDriveTrain);
     }
 
     @Override

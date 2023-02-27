@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.common.types.sensor.EClawData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.common.types.sensor.EPowerDistPanel;
 import us.ilite.robot.Enums;
@@ -50,6 +51,8 @@ public class Data {
     public final RobotCodex<ELimelightData> limelight = new RobotCodex(NULL_CODEX_VALUE , ELimelightData.class);
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
     public final RobotCodex<EPixyData> pixydata = new RobotCodex(NULL_CODEX_VALUE, EPixyData.class);
+    public final RobotCodex<EArmData> arm = new RobotCodex(NULL_CODEX_VALUE, EArmData.class);
+    public final RobotCodex<EClawData> claw = new RobotCodex(NULL_CODEX_VALUE, EClawData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
             operatorinput,
@@ -61,6 +64,8 @@ public class Data {
             intake,
             climber,
             pixydata,
+            arm,
+            claw,
     };
 
     public final Map<String, RobotCodex> mMappedCodex = new HashMap<>();
@@ -77,6 +82,7 @@ public class Data {
             intake,
             climber,
             pixydata,
+            arm,
     };
 
     //Stores writers per codex needed for CSV logging
