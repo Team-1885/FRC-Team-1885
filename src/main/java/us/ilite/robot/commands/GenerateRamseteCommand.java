@@ -40,8 +40,11 @@ public class GenerateRamseteCommand {
     private RamseteController mRamseteController;
     private NetworkTable mTable;
 
+    private Command stopMoving;
+
     public GenerateRamseteCommand() {
         mTable = NetworkTableInstance.getDefault().getTable("ramsete command");
+        stopMoving = new StopMoving();
 
         mRamseteController= new  RamseteController(
                 Settings.kRamseteB, // kRamseteB
@@ -115,8 +118,8 @@ public class GenerateRamseteCommand {
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
-        return mRamseteCommand.andThen(mRobotDrive.setVolts(0,0));
-        return mRamseteCommand.andThen()
+//        return mRamseteCommand.andThen(mRobotDrive.setVolts(0,0));
+        return mRamseteCommand;
     }
     public double getTotalTimeSeconds(){
         return trajectoryTime;

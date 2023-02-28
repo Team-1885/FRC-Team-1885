@@ -339,8 +339,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void setVolts(double leftVolts, double rightVolts) {
         //safety check, only if the desired .set() value is less than one should it be set to the motors
         if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
-            mRightMaster.set(-rightVolts / 12);
-            mLeftMaster.set(-leftVolts / 12);
+            mRightMaster.set(rightVolts / 12);
+            mLeftMaster.set(leftVolts / 12);
         }
         mTable.getEntry("left volts").setNumber(leftVolts/12);
         mTable.getEntry("right volts").setNumber(rightVolts/12);
