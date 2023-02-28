@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
@@ -21,7 +22,6 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
-import us.ilite.robot.commands.FollowTrajectory;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
@@ -53,13 +53,13 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
-    private FollowTrajectory mFollowTrajectory;
+//    private FollowTrajectory mFollowTrajectory;
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
     private MatchMetadata mMatchMeta = null;
 
-    private final AbstractController mTeleopController = TeleopController.getInstance();
+    private final AbstractController mTeleopController = new TeleopController();
     private BaseAutonController mBaseAutonController;
 //    private ShootMoveController mShootMoveController;
 //    private TwoBallTrajectoryController mTwoBalltrajectorycontroller;
@@ -166,6 +166,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
+        if (mAutonSelection.getSelectedAutonController().isFinished()) {
+            mNeoDrive.setVolts(0,0);
+        }
         commonPeriodic();
     }
 
@@ -190,6 +193,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        CommandScheduler.getInstance().run(); //run any scheduled commands (will be scoring automation)
         commonPeriodic();
     }
 

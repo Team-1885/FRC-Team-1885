@@ -129,10 +129,10 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
 
-        mRightMaster.setClosedLoopRampRate(1.5);
-        mRightFollower.setClosedLoopRampRate(1.5);
-        mLeftMaster.setClosedLoopRampRate(1.5);
-        mLeftFollower.setClosedLoopRampRate(1.5);
+        mRightMaster.setClosedLoopRampRate(0.5);
+        mRightFollower.setClosedLoopRampRate(0.5);
+        mLeftMaster.setClosedLoopRampRate(0.5);
+        mLeftFollower.setClosedLoopRampRate(0.5);
 
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
@@ -259,7 +259,6 @@ public class NeoDriveModule extends Module implements Subsystem {
 //
 //        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
 //        mTable.getEntry("right m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));
-
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
         if (state == null) return;
         switch (state) {
@@ -340,14 +339,14 @@ public class NeoDriveModule extends Module implements Subsystem {
 
     public void setVolts(double leftVolts, double rightVolts) {
         //safety check, only if the desired .set() value is less than one should it be set to the motors
-//        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
-//            mRightMaster.set(rightVolts / 12);
-//            mLeftMaster.set(leftVolts / 12);
-//        }
-        mTable.getEntry("l volts").setNumber(leftVolts);
-        mTable.getEntry("r volts").setNumber(rightVolts);
-        mRightMaster.set(rightVolts / 12);
-        mLeftMaster.set(leftVolts / 12);
+        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
+            mRightMaster.set(rightVolts / 12);
+            mLeftMaster.set(leftVolts / 12);
+        }
+        mTable.getEntry("left volts").setNumber(leftVolts/12);
+        mTable.getEntry("right volts").setNumber(rightVolts/12);
+//        mRightMaster.set(-rightVolts / 12);
+//        mLeftMaster.set(-leftVolts / 12);
     }
     public void reset() {
         mLeftEncoder.setPosition(0.0);

@@ -1,5 +1,7 @@
 package us.ilite.robot.controller;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -10,6 +12,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+//import us.ilite.robot.commands.FollowTrajectory;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -22,19 +25,23 @@ public class TeleopController extends BaseManualController {
 
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
+//    private FollowTrajectory mScoringAutomation;
+    private NetworkTable mTable;
 
 
-    public static TeleopController getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new TeleopController();
-        }
-        return INSTANCE;
-    }
+//    public static TeleopController getInstance() {
+//        if (INSTANCE == null) {
+//            INSTANCE = new TeleopController();
+//        }
+//        return INSTANCE;
+//    }
 
-    private TeleopController() {
+    public TeleopController() {
         mClimbTimer = new Timer();
         mClimbTimer.reset();
         mClimbTimer.start();
+        mTable = NetworkTableInstance.getDefault().getTable("tele op controller");
+//        mScoringAutomation = new FollowTrajectory("ScoringAutomation");
     }
 
     @Override
@@ -61,6 +68,14 @@ public class TeleopController extends BaseManualController {
 
 //        updateIntake();
         updateTargetLock();
+        updateDriveAutomation();
+    }
+
+    private void updateDriveAutomation() {
+        mTable.getEntry("r btn").setString("r btn");
+        if (db.driverinput.isSet(ELogitech310.R_BTN)) {
+//            mScoringAutomation.schedule();
+        }
     }
 //    private void updateHangerMotors() {
 //        db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);

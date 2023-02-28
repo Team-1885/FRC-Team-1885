@@ -1,38 +1,99 @@
 package us.ilite.robot.auto;
 
+import com.pathplanner.lib.auto.RamseteAutoBuilder;
+import com.pathplanner.lib.commands.PPRamseteCommand;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import us.ilite.robot.commands.AutoBalance;
-import us.ilite.robot.commands.AutoBalancePID;
-import us.ilite.robot.commands.FollowTrajectory;
+import us.ilite.common.config.Settings;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathConstraints;
+//import com.pathplanner.lib.PathPlanner;
+import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.controller.*;
+import us.ilite.robot.modules.NeoDriveModule;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class AutonSelection {
+    private RamseteController mRamseteController;
 
     public static ShuffleboardTab mAutonConfiguration = Shuffleboard.getTab("Pre-Match Configuration");
     public static int mDelaySeconds;
-    private SendableChooser<Command> mSendableAutonControllers = new SendableChooser<>();
-    private FollowTrajectory leftPiece;
-    private FollowTrajectory leftOrigin;
-    private FollowTrajectory DriveStraight;
-    private FollowTrajectory TurnTest;
+    private SendableChooser<PPRamseteCommand> mSendableAutonControllers = new SendableChooser<>();
+    private PathPlannerTrajectory leftPiece;
+    private PathPlannerTrajectory leftOrigin;
+    private PathPlannerTrajectory scoringAutomation;
 
-    private AutoBalance autoBalance;
-    private AutoBalancePID autoBalancePID;
+    private PPRamseteCommand leftPieceCommand;
+    private PPRamseteCommand leftOriginCommand;
+    private PPRamseteCommand driveStraightCommand;
+    private PPRamseteCommand scoringAutomationCommand;
 
+
+    private PathPlannerTrajectory DriveStraight;
+    private PathPlannerTrajectory TurnTest;
+    private PathPlannerTrajectory Left;
+    private PathPlannerTrajectory Right;
+    private PathPlannerTrajectory CenterLeft;
+    private PathPlannerTrajectory CenterRight;
     private SequentialCommandGroup mCommandGroup;
+//    private PathPlannerTrajectory
+    private int kMAX_ACCELERATON = 1;
+    private int kMAX_VELOCITY = 2;
+    private NeoDriveModule mDrive;
+    private PPRamseteCommand mRamseteCommand;
+    private NeoDriveModule mRobotDrive; // get singleton instance
+    private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
+    private PIDController mLeftDrivePID;
+    private PIDController mRightDrivePID;
+    private SimpleMotorFeedforward mFeedForward;
+    GenerateRamseteCommand commandGenerator;
+
 
     public AutonSelection() {
-        leftPiece = new FollowTrajectory("LeftPiece");
-        leftOrigin = new FollowTrajectory("LeftOrigin");
+        commandGenerator = new GenerateRamseteCommand();
+        mDrive = NeoDriveModule.getInstance();
+        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        scoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+
+//        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("CenterLeft", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+
+        leftPieceCommand = commandGenerator.generateCommand(leftPiece);
+        leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
+        driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
+        scoringAutomationCommand = commandGenerator.generateCommand(scoringAutomation);
+//        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
+//                mRobotDrive::getPose,
+//                mRamseteController,
+//                mFeedForward,
+//                mDriveKinematics,
+//                mRobotDrive::getWheelSpeeds,
+//                mLeftDrivePID, // left controller
+//                mRightDrivePID, // right controller
+//                // RamseteCommand passes volts to the callback
+//                mRobotDrive::setVolts,
+//                mRobotDrive);
+//        RAutoBuilder.followPath(leftPiece);
+//        RAutoBuilder.followPath(leftOrigin);
+//        RAutoBuilder.followPathGroup(pathGroup1);
+
+//        leftPiece = new FollowTrajectory("LeftPiece");
+//        leftOrigin = new FollowTrajectory("LeftOrigin");
 //        DriveStraight = new FollowTrajectory("DriveStraight");
-        TurnTest = new FollowTrajectory("TurnTest");
+//        TurnTest = new FollowTrajectory("TurnTest");
 //        Left = new FollowTrajectory("Left");
 //        Right = new FollowTrajectory("Right");
 //        CenterLeft = new FollowTrajectory("CenterLeft");
@@ -41,19 +102,33 @@ public class AutonSelection {
         autoBalance = new AutoBalance();
         autoBalancePID = new AutoBalancePID();
 
-        mSendableAutonControllers.addOption("left piece", leftPiece);
-        mSendableAutonControllers.addOption("left origin", leftOrigin);
-        mSendableAutonControllers.addOption("group", mCommandGroup);
-        mSendableAutonControllers.addOption("TurnTest", TurnTest);
-        mSendableAutonControllers.addOption("DriveStraight", DriveStraight);
-        mSendableAutonControllers.addOption("Auto Balance with PID, starting before mounting charge station", autoBalancePID);
-        mSendableAutonControllers.addOption("Auto Balance starting, starting on top of charge station", autoBalance);
-
+        mSendableAutonControllers.addOption("left origin", leftOriginCommand);
+        mSendableAutonControllers.addOption("left piece", leftPieceCommand);
+        mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
+        mSendableAutonControllers.addOption("ScoringAutomation", scoringAutomationCommand);
+//        mSendableAutonControllers.addOption("path group", pathGroup1);
+//        mSendableAutonControllers.addOption("group", mCommandGroup);
+//        mSendableAutonControllers.addOption("TurnTest", TurnTest);
+//        mSendableAutonControllers.addOption("DriveStraight", DriveStraight);
+//        mSendableAutonControllers.addOption("LeftBall", Left);
+//        mSendableAutonControllers.addOption("RightBall", Right);
+//        mSendableAutonControllers.addOption("LeftToCharge", CenterLeft);
+//        mSendableAutonControllers.addOption("RightToCharge", CenterRight);
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
+        mRamseteController = new  RamseteController(
+                Settings.kRamseteB, // kRamseteB
+                Settings.kRamseteZeta // kRamseteZeta
+        );
     }
-    public Command getSelectedAutonController() {
+    public PPRamseteCommand getSelectedAutonController() {
         return mSendableAutonControllers.getSelected();
     }
+
+//    private PathPlannerRamseteCommand generatePathPlannerRamseteCommand(PathPlannerTrajectory pPathPlannerTrajectory) {
+//        PathPlannerRamseteCommand command = new PathPlannerRamseteCommand (
+//            pPathPlannerTrajectory, mDrive::getPose, mRamseteController
+//        )
+//    }
 
 //    public AutonSelection() {
 //       mDelaySeconds = ((Double) (mAutonConfiguration.add("Path Delay Seconds", 0)

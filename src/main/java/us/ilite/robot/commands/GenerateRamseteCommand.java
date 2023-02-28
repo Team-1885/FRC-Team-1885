@@ -3,6 +3,7 @@ package us.ilite.robot.commands;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,7 +31,7 @@ import java.util.List;
 
 public class GenerateRamseteCommand {
 
-    private RamseteCommand mRamseteCommand;
+    private PPRamseteCommand mRamseteCommand;
     private NeoDriveModule mRobotDrive; // get singleton instance
     private DifferentialDriveKinematics mDriveKinematics; // save instance kDriveKinematics for reuse
     private PIDController mLeftDrivePID;
@@ -39,8 +40,11 @@ public class GenerateRamseteCommand {
     private RamseteController mRamseteController;
     private NetworkTable mTable;
 
+    private Command stopMoving;
+
     public GenerateRamseteCommand() {
         mTable = NetworkTableInstance.getDefault().getTable("ramsete command");
+        stopMoving = new StopMoving();
 
         mRamseteController= new  RamseteController(
                 Settings.kRamseteB, // kRamseteB
@@ -52,9 +56,9 @@ public class GenerateRamseteCommand {
         mRightDrivePID = new PIDController(Settings.kP, 0, 0);
         mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
-    private Trajectory desiredTrajectory;
+    private PathPlannerTrajectory desiredTrajectory;
     private double trajectoryTime;
-    public Command generateCommand(String trajectory) { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
+    public PPRamseteCommand generateCommand(PathPlannerTrajectory trajectory) { // TODO implement with path weaver such that one may pass in the .json with the trajectory info
         // Create a voltage constraint to ensure we don't accelerate too fast
         TrajectoryConstraint autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
@@ -93,12 +97,12 @@ public class GenerateRamseteCommand {
 //        Trajectory RightPiece = TrajectoryCommandUtils.getJSONTrajectory("RightPiece");
 //        Trajectory RightScore = TrajectoryCommandUtils.getJSONTrajectory("RightScore");
 //          desiredTrajectory = TrajectoryCommandUtils.getJSONTrajectory(trajectory);
-        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(2,1));
-        trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
+//        desiredTrajectory = PathPlanner.loadPath(trajectory, new PathConstraints(2,1));
+//        trajectoryTime = desiredTrajectory.getTotalTimeSeconds();
 //        mTable.getEntry("state").setString(desiredTrajectory.sample(trajectoryTime + 1).toString());
-
+        desiredTrajectory = trajectory;
         mRamseteCommand =
-                new RamseteCommand(
+                new PPRamseteCommand(
                         desiredTrajectory,
                         mRobotDrive::getPose,
                         mRamseteController,
@@ -110,11 +114,26 @@ public class GenerateRamseteCommand {
                         // RamseteCommand passes volts to the callback
                         mRobotDrive::setVolts,
                         mRobotDrive
-                );
+                )
+                {
+//                @Override
+//                public void end(boolean interrupted) {
+////                    mRamseteCommand.timer.stop();
+////
+////                    if (interrupted
+////                            || Math.abs(transformedTrajectory.getEndState().velocityMetersPerSecond) < 0.1) {
+////                        this.output.accept(0.0, 0.0);
+////                    }
+//                    mRobotDrive.setVolts(0,0);
+//                }
+
+
+        };
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
-        return mRamseteCommand.andThen(() -> mRobotDrive.setVolts(0, 0));
+//        return mRamseteCommand.andThen(mRobotDrive.setVolts(0,0));
+        return mRamseteCommand;
     }
     public double getTotalTimeSeconds(){
         return trajectoryTime;
