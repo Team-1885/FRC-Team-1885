@@ -116,16 +116,16 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 )
                 {
-                @Override
-                public void end(boolean interrupted) {
-//                    mRamseteCommand.timer.stop();
-//
-//                    if (interrupted
-//                            || Math.abs(transformedTrajectory.getEndState().velocityMetersPerSecond) < 0.1) {
-//                        this.output.accept(0.0, 0.0);
-//                    }
-                    mRobotDrive.setVolts(0,0);
-                }
+//                @Override
+//                public void end(boolean interrupted) {
+////                    mRamseteCommand.timer.stop();
+////
+////                    if (interrupted
+////                            || Math.abs(transformedTrajectory.getEndState().velocityMetersPerSecond) < 0.1) {
+////                        this.output.accept(0.0, 0.0);
+////                    }
+//                    mRobotDrive.setVolts(0,0);
+//                }
 
 
         };
