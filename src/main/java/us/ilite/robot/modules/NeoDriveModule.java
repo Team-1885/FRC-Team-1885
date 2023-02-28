@@ -344,6 +344,8 @@ public class NeoDriveModule extends Module implements Subsystem {
 //            mRightMaster.set(rightVolts / 12);
 //            mLeftMaster.set(leftVolts / 12);
 //        }
+        mTable.getEntry("l volts").setNumber(leftVolts);
+        mTable.getEntry("r volts").setNumber(rightVolts);
         mRightMaster.set(rightVolts / 12);
         mLeftMaster.set(leftVolts / 12);
     }

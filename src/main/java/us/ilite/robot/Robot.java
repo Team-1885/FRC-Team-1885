@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
 //        mCommandGroup.schedule(false);
-        mAutonSelection.getSelectedAutonController().schedule();
+//        mAutonSelection.getSelectedAutonController().schedule();
         if (mAutonSelection.getSelectedAutonController() != null) {
             mAutonSelection.getSelectedAutonController().schedule();
         }

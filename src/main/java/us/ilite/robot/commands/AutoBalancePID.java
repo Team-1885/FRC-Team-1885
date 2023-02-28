@@ -21,9 +21,6 @@ public class AutoBalancePID extends SequentialCommandGroup {
     private Data db = Robot.DATA;
     private Pigeon mGyro;
 
-
-
-
     private class Balance extends PIDCommand {
         NeoDriveModule driveSubsystem;
 

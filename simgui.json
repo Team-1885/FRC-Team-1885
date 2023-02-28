@@ -102,6 +102,9 @@
       "open": true
     },
     "transitory": {
+      "drivetrain": {
+        "open": true
+      },
       "follow traj": {
         "open": true
       },

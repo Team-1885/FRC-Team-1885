@@ -44,18 +44,19 @@ public class FollowTrajectory extends CommandBase {
     public void initialize() {
         mTimer.start();
         mCommand = commandGenerator.generateCommand(mTrajectoryName);
-//        mCommand.beforeStarting(() -> mNeoDrive.resetOdometry(commandGenerator.getTrajInitPose()));
         mTable.getEntry("initial pose").setString(commandGenerator.getTrajInitPose().toString());
-//        mCommand.schedule();
+        mCommand.schedule();
+        System.out.println("init");
     }
 
     @Override
     public void execute() {
-
+        System.out.println("execute");
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("end: " + interrupted);
 //        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
 //        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
 //            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
