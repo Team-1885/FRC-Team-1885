@@ -111,12 +111,27 @@ public class GenerateRamseteCommand {
                         // RamseteCommand passes volts to the callback
                         mRobotDrive::setVolts,
                         mRobotDrive
-                );
+                )
+                {
+                @Override
+                public void end(boolean interrupted) {
+//                    mRamseteCommand.timer.stop();
+//
+//                    if (interrupted
+//                            || Math.abs(transformedTrajectory.getEndState().velocityMetersPerSecond) < 0.1) {
+//                        this.output.accept(0.0, 0.0);
+//                    }
+                    mRobotDrive.setVolts(0,0);
+                }
+
+
+        };
         // Reset odometry to the starting pose of the trajectory.
         mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
         mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
-        return mRamseteCommand.andThen(mRobotDrive.setVolts(0,0));
-        return mRamseteCommand.andThen()
+        //return mRamseteCommand.andThen(mRobotDrive.setVolts(0,0));
+        //return mRamseteCommand.andThen();
+        return mRamseteCommand;
     }
     public double getTotalTimeSeconds(){
         return trajectoryTime;
