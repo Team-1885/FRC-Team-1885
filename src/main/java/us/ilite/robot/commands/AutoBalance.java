@@ -8,6 +8,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.modules.NeoDriveModule;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
@@ -32,6 +33,7 @@ public class AutoBalance extends CommandBase {
     private double mBalancedHighBound; // highest degree considered balanced
     // keep track of the current robot roll (the gyro is oriented so roll and pitch are swapped)
     private double mCurrentRoll;
+    private NeoDriveModule mDrive;
 
     @Override
     public void initialize() {
@@ -40,22 +42,25 @@ public class AutoBalance extends CommandBase {
         // calculate the low and high bound of the range of degrees where the robot is considered balanced
         mBalancedLowBound = mCenterDegreeOfRange - (mBalancedRange / 2);
         mBalancedHighBound = mCenterDegreeOfRange + (mBalancedRange / 2);
+
+        mDrive = NeoDriveModule.getInstance();
     }
 
     @Override
     public void execute() { // continuously executes until the command is finished
         // update current roll
         mCurrentRoll = db.imu.get(EGyro.ROLL_DEGREES);
-        Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-        Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
-        Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
+        //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
+        //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
+        //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
     }
 
     @Override
     public void end(boolean interrupted) { // executes once after the command ends
         // robot is balanced, stop robot
-        db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
-        db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0.0);
+        mDrive.setVolts(0, 0);
+        //db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
+        //db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0.0);
     }
 
     @Override
@@ -70,14 +75,16 @@ public class AutoBalance extends CommandBase {
             double errorAngle = mCurrentRoll - mBalancedHighBound; // always positive
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
-
+            newVelocity *= 12; // never greater than 12
             // drive forward
+            mDrive.setVolts(newVelocity, newVelocity);
+
 //            db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
 //            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
 //            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, .2);
-            Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
-            Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
+            //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
+            //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
+            //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
             mTable.getEntry("throttle").setNumber(db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT));
             mTable.getEntry("finshed").setString("not finished");
 
@@ -90,11 +97,13 @@ public class AutoBalance extends CommandBase {
             double errorAngle = mCurrentRoll - mBalancedLowBound; // always negative
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
-
+            newVelocity *= 12; // never greater than 12
             // drive backward
-            Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, -.2);
-            Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
+            mDrive.setVolts(newVelocity, newVelocity);
+
+            //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
+            //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, -.2);
+            //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
 //            db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
 //            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
 //            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, .2);

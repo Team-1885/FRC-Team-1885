@@ -83,12 +83,12 @@ public class Robot extends TimedRobot {
 //        mTwoBalltrajectorycontroller = new TwoBallTrajectoryController();
 //        mThreeBallAuton = new ThreeBallTrajectoryController();
 //        mFourBallAuton = new FourBallTrajectoryAuton();
-        MODE = INITIALIZING;
-        mLogger.warn("===> ROBOT INIT Starting");
-        mOI = new OperatorInput();
-        mLEDControl = new LEDModule();
-        mNeoDrive = NeoDriveModule.getInstance();
-        mShootMoveController = new ShootMoveController();
+//        MODE = INITIALIZING;
+//        mLogger.warn("===> ROBOT INIT Starting");
+//        mOI = new OperatorInput();
+//        mLEDControl = new LEDModule();
+//        mNeoDrive = NeoDriveModule.getInstance();
+//        mShootMoveController = new ShootMoveController();
 
         MODE = INITIALIZING;
         mLogger.warn("===> ROBOT INIT Starting");
