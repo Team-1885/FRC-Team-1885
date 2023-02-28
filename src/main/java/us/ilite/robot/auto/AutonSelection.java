@@ -24,6 +24,15 @@ public class AutonSelection {
     private FollowTrajectory Right;
     private FollowTrajectory CenterLeft;
     private FollowTrajectory CenterRight;
+    private FollowTrajectory Preload1;
+    private FollowTrajectory Preload2;
+    private FollowTrajectory Preload3;
+    private FollowTrajectory Preload4;
+    private FollowTrajectory Preload5;
+    private FollowTrajectory Preload6;
+    private FollowTrajectory Preload7;
+    private FollowTrajectory Preload8;
+    private FollowTrajectory Preload9;
     private SequentialCommandGroup mCommandGroup;
 
     public AutonSelection() {
@@ -35,6 +44,17 @@ public class AutonSelection {
         Right = new FollowTrajectory("Right");
         CenterLeft = new FollowTrajectory("CenterLeft");
         CenterRight = new FollowTrajectory("CenterRight");
+        Preload1 = new FollowTrajectory("preload1");
+        Preload2 = new FollowTrajectory("preload2");
+        Preload3 = new FollowTrajectory("preload3");
+        Preload4 = new FollowTrajectory("preload4");
+        Preload5 = new FollowTrajectory("preload5");
+        Preload6 = new FollowTrajectory("preload6");
+        Preload7 = new FollowTrajectory("preload7");
+        Preload8 = new FollowTrajectory("preload8");
+        Preload9 = new FollowTrajectory("preload9");
+
+
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
 
         mSendableAutonControllers.addOption("left piece", leftPiece);
@@ -46,6 +66,17 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("RightBall", Right);
         mSendableAutonControllers.addOption("LeftToCharge", CenterLeft);
         mSendableAutonControllers.addOption("RightToCharge", CenterRight);
+        mSendableAutonControllers.addOption("preload1", Preload1);
+        mSendableAutonControllers.addOption("preload2", Preload2);
+        mSendableAutonControllers.addOption("preload3", Preload3);
+        mSendableAutonControllers.addOption("preload4", Preload4);
+        mSendableAutonControllers.addOption("preload5", Preload5);
+        mSendableAutonControllers.addOption("preload6", Preload6);
+        mSendableAutonControllers.addOption("preload7", Preload7);
+        mSendableAutonControllers.addOption("preload8", Preload8);
+        mSendableAutonControllers.addOption("preload9", Preload9);
+
+
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }
     public Command getSelectedAutonController() {
