@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.sensor.EClawData;
 
-public class ClawModule extends Module{
+public class ClawModule extends Module {
 
     // ============================
     // CREATES TWO MOTORS FOR CLAW

@@ -389,8 +389,6 @@ public class TeleopController extends BaseManualController {
     }
 
     private void updateTelescopeArm() {
-
-
         //
 
         // ===========================================================================================================

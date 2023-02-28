@@ -3,7 +3,7 @@ package us.ilite.robot.modules;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
-<<<<<<< HEAD
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -11,7 +11,7 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Robot;
-=======
+
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,7 +35,7 @@ import us.ilite.robot.hardware.Pigeon;
 import us.ilite.robot.hardware.SparkMaxFactory;
 
 import static us.ilite.common.types.drive.EDriveData.*;
->>>>>>> Telescope-Arm
+
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
@@ -396,8 +396,6 @@ public class Drivetrain extends Module {
         mFrontLeft.set(0.0);
         mFrontRight.set(0.0);
     }
-    public void readInputs() {
 
-    }
 
 }
