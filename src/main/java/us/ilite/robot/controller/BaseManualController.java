@@ -3,6 +3,7 @@ package us.ilite.robot.controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import us.ilite.common.config.InputMap;
 import us.ilite.common.config.Settings;
+import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.EInputScale;
 import us.ilite.common.types.input.ELogitech310;

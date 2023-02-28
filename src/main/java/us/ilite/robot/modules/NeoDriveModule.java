@@ -234,6 +234,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         db.drivetrain.set(X_ACTUAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getX());
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
 
+        mTable.getEntry("throttle").setNumber(db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT));
 
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
     }
@@ -253,7 +254,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         double left = throttle + turn;
         double right = throttle - turn;
 
-//        mTable.getEntry("left").setNumber(left);
+//        mTable.getEntry("throttle").setNumber(throttle);
 //        mTable.getEntry("right").setNumber(right);
 //
 //        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));

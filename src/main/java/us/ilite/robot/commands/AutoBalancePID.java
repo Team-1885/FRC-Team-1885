@@ -2,6 +2,8 @@ package us.ilite.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
@@ -19,14 +21,22 @@ public class AutoBalancePID extends SequentialCommandGroup {
     private Data db = Robot.DATA;
     private Pigeon mGyro;
 
+
+
+
     private class Balance extends PIDCommand {
         NeoDriveModule driveSubsystem;
+
+        private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
+
 
         public Balance(NeoDriveModule driveSubsystem, double setpoint) {
             super(new PIDController(kP, 0, 0), driveSubsystem.getGyroRoll()::getDegrees, setpoint, output -> {
                 db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, -output * Settings.kMaxSpeedMetersPerSecond);
                 }, driveSubsystem);
             this.driveSubsystem = driveSubsystem;
+
+            mTable.getEntry("Balance").setString("Created Balance Class");
         }
 
         @Override
@@ -42,6 +52,8 @@ public class AutoBalancePID extends SequentialCommandGroup {
     }
 
     public AutoBalancePID() {
+        NetworkTable mTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
+
         NeoDriveModule driveSubsystem = NeoDriveModule.getInstance();
         // Since we cannot zero the ROLL of the gyro, take the initial roll
         // Before we balance (the roll when the robot is flat) and make this our setpoint
@@ -50,9 +62,11 @@ public class AutoBalancePID extends SequentialCommandGroup {
                 // drive on top of the charge station
                 //db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 1),
                 // TODO create path that puts the robot on chargestation
-                new FollowTrajectory("Drive onto charge station"),
+//                new FollowTrajectory("Drive onto charge station"),
+//                new DriveStraight(10)
                 new Balance(driveSubsystem, initialRoll)
         );
+        mTable.getEntry("AutoBalanceCommands").setString("Added Commands");
     }
 }
 

@@ -33,10 +33,10 @@ public class AutonSelection {
         leftOrigin = new FollowTrajectory("LeftOrigin");
 //        DriveStraight = new FollowTrajectory("DriveStraight");
         TurnTest = new FollowTrajectory("TurnTest");
-        Left = new FollowTrajectory("Left");
-        Right = new FollowTrajectory("Right");
-        CenterLeft = new FollowTrajectory("CenterLeft");
-        CenterRight = new FollowTrajectory("CenterRight");
+//        Left = new FollowTrajectory("Left");
+//        Right = new FollowTrajectory("Right");
+//        CenterLeft = new FollowTrajectory("CenterLeft");
+//        CenterRight = new FollowTrajectory("CenterRight");
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
         autoBalance = new AutoBalance();
         autoBalancePID = new AutoBalancePID();
