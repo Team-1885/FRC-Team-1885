@@ -12,7 +12,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
-import us.ilite.robot.commands.FollowTrajectory;
+//import us.ilite.robot.commands.FollowTrajectory;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -25,7 +25,7 @@ public class TeleopController extends BaseManualController {
 
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
-    private FollowTrajectory mScoringAutomation;
+//    private FollowTrajectory mScoringAutomation;
     private NetworkTable mTable;
 
 
@@ -41,7 +41,7 @@ public class TeleopController extends BaseManualController {
         mClimbTimer.reset();
         mClimbTimer.start();
         mTable = NetworkTableInstance.getDefault().getTable("tele op controller");
-        mScoringAutomation = new FollowTrajectory("ScoringAutomation");
+//        mScoringAutomation = new FollowTrajectory("ScoringAutomation");
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TeleopController extends BaseManualController {
     private void updateDriveAutomation() {
         mTable.getEntry("r btn").setString("r btn");
         if (db.driverinput.isSet(ELogitech310.R_BTN)) {
-            mScoringAutomation.schedule();
+//            mScoringAutomation.schedule();
         }
     }
 //    private void updateHangerMotors() {
