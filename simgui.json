@@ -56,9 +56,6 @@
         "Third path": {
           "arrowSize": 15,
           "style": "Track"
-        },
-        "window": {
-          "visible": true
         }
       }
     }
@@ -102,6 +99,9 @@
       "open": true
     },
     "transitory": {
+      "drivetrain": {
+        "open": true
+      },
       "follow traj": {
         "open": true
       },
@@ -109,6 +109,9 @@
         "open": true
       }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   },
   "Plot": {
     "Plot <0>": {
