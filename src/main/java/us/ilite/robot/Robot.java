@@ -152,7 +152,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
-        System.out.println(mAutonSelection.getSelectedAutonController().isFinished());
+        if (mAutonSelection.getSelectedAutonController().isFinished()) {
+            mNeoDrive.setVolts(0,0);
+        }
         commonPeriodic();
     }
 
