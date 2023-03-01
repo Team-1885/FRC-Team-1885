@@ -254,8 +254,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         double left = throttle + turn;
         double right = throttle - turn;
 
-//        mTable.getEntry("throttle").setNumber(throttle);
-//        mTable.getEntry("right").setNumber(right);
+        mTable.getEntry("throttle").setNumber(throttle);
+//        mTable.getEntry("act l votls")
 //
 //        mTable.getEntry("left m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_VEL_FT_s)));
 //        mTable.getEntry("right m_s").setNumber(Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)));

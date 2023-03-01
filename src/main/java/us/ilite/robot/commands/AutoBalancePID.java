@@ -1,5 +1,9 @@
 package us.ilite.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
@@ -50,6 +54,9 @@ public class AutoBalancePID extends SequentialCommandGroup {
 
     public AutoBalancePID() {
         NetworkTable mTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
+        GenerateRamseteCommand mCommanndGenerator = new GenerateRamseteCommand();
+        PathPlannerTrajectory driveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(2, 1));
+        PPRamseteCommand driveStraightCommand = mCommanndGenerator.generateCommand(driveStraight);
 
         NeoDriveModule driveSubsystem = NeoDriveModule.getInstance();
         // Since we cannot zero the ROLL of the gyro, take the initial roll
@@ -61,8 +68,10 @@ public class AutoBalancePID extends SequentialCommandGroup {
                 // TODO create path that puts the robot on chargestation
 //                new FollowTrajectory("Drive onto charge station"),
 //                new DriveStraight(10)
+                driveStraightCommand,
                 new Balance(driveSubsystem, initialRoll)
         );
+        System.out.println(driveStraightCommand.isScheduled());
         mTable.getEntry("AutoBalanceCommands").setString("Added Commands");
     }
 }

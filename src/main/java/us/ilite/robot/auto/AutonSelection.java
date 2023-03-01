@@ -17,6 +17,8 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathConstraints;
 //import com.pathplanner.lib.PathPlanner;
+import us.ilite.robot.commands.AutoBalance;
+import us.ilite.robot.commands.AutoBalancePID;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.modules.NeoDriveModule;
@@ -29,7 +31,7 @@ public class AutonSelection {
 
     public static ShuffleboardTab mAutonConfiguration = Shuffleboard.getTab("Pre-Match Configuration");
     public static int mDelaySeconds;
-    private SendableChooser<PPRamseteCommand> mSendableAutonControllers = new SendableChooser<>();
+    private SendableChooser<Command> mSendableAutonControllers = new SendableChooser<>();
     private PathPlannerTrajectory leftPiece;
     private PathPlannerTrajectory leftOrigin;
     private PathPlannerTrajectory scoringAutomation;
@@ -41,6 +43,9 @@ public class AutonSelection {
 
 
     private PathPlannerTrajectory DriveStraight;
+
+    private AutoBalance autoBalance;
+    private AutoBalancePID autoBalancePID;
     private PathPlannerTrajectory TurnTest;
     private PathPlannerTrajectory Left;
     private PathPlannerTrajectory Right;
@@ -106,6 +111,8 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("left piece", leftPieceCommand);
         mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
         mSendableAutonControllers.addOption("ScoringAutomation", scoringAutomationCommand);
+        mSendableAutonControllers.addOption("auto balance w/pid", autoBalancePID);
+        mSendableAutonControllers.addOption("auto balance", autoBalancePID);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
@@ -120,7 +127,7 @@ public class AutonSelection {
                 Settings.kRamseteZeta // kRamseteZeta
         );
     }
-    public PPRamseteCommand getSelectedAutonController() {
+    public Command getSelectedAutonController() {
         return mSendableAutonControllers.getSelected();
     }
 
