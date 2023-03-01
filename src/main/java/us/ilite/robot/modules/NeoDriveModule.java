@@ -337,6 +337,13 @@ public class NeoDriveModule extends Module implements Subsystem {
         );
     }
 
+    public void setThrottlePct(double throttle) {
+        throttle = throttle / 15;
+        mLeftMaster.set(throttle);
+        mRightMaster.set(throttle);
+        System.out.println("throttle" + throttle);
+    }
+
     public void setVolts(double leftVolts, double rightVolts) {
         //safety check, only if the desired .set() value is less than one should it be set to the motors
         if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
@@ -348,6 +355,7 @@ public class NeoDriveModule extends Module implements Subsystem {
 //        mRightMaster.set(-rightVolts / 12);
 //        mLeftMaster.set(-leftVolts / 12);
     }
+
     public void reset() {
         mLeftEncoder.setPosition(0.0);
         mRightEncoder.setPosition(0.0);
@@ -361,7 +369,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
     public Rotation2d getGyroRoll()
     {
-        return mGyro.getRoll();
+        return new Rotation2d(0);
+//        return mGyro.getRoll();
     }
 
 }

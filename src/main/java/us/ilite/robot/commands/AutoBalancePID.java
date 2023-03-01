@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.common.Data;
 import us.ilite.common.config.Settings;
 import us.ilite.common.types.drive.EDriveData;
+import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.hardware.Pigeon;
 import us.ilite.robot.modules.NeoDriveModule;
@@ -21,20 +22,23 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 public class AutoBalancePID extends SequentialCommandGroup {
-    private final double kP = Settings.kP;
+    private final double kP = 0.1; //TODO tune this value
     private Data db = Robot.DATA;
     private Pigeon mGyro;
+    double mOutput;
+    PIDController mPIDController;
 
     private class Balance extends PIDCommand {
         NeoDriveModule driveSubsystem;
 
         private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
 
-
         public Balance(NeoDriveModule driveSubsystem, double setpoint) {
             super(new PIDController(kP, 0, 0), driveSubsystem.getGyroRoll()::getDegrees, setpoint, output -> {
-                db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, -output * Settings.kMaxSpeedMetersPerSecond);
-                }, driveSubsystem);
+//                driveSubsystem.setTurnPct(-output * Settings.kMaxSpeedMetersPerSecond),
+                        driveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
+                    },
+                driveSubsystem);
             this.driveSubsystem = driveSubsystem;
 
             mTable.getEntry("Balance").setString("Created Balance Class");
@@ -50,10 +54,16 @@ public class AutoBalancePID extends SequentialCommandGroup {
             System.out.println("Robot Balanced!");
             db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0);
         }
+//        @Override
+//        public void execute() {
+//            System.out.println(mPIDController.calculate(driveSubsystem.getGyro().getRoll().getDegrees(), 40));
+//        }
     }
 
     public AutoBalancePID() {
         NetworkTable mTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
+        db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+
         GenerateRamseteCommand mCommanndGenerator = new GenerateRamseteCommand();
         PathPlannerTrajectory driveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(2, 1));
         PPRamseteCommand driveStraightCommand = mCommanndGenerator.generateCommand(driveStraight);
@@ -62,14 +72,16 @@ public class AutoBalancePID extends SequentialCommandGroup {
         // Since we cannot zero the ROLL of the gyro, take the initial roll
         // Before we balance (the roll when the robot is flat) and make this our setpoint
         final double initialRoll = driveSubsystem.getGyro().getRoll().getDegrees();
+        Balance balanceCommand = new Balance(driveSubsystem, initialRoll);
+        mPIDController = balanceCommand.getController();
         addCommands(
                 // drive on top of the charge station
                 //db.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, 1),
-                // TODO create path that puts the robot on chargestation
+                // TODO create path that puts the robot on charge station
 //                new FollowTrajectory("Drive onto charge station"),
 //                new DriveStraight(10)
                 driveStraightCommand,
-                new Balance(driveSubsystem, initialRoll)
+                balanceCommand
         );
         System.out.println(driveStraightCommand.isScheduled());
         mTable.getEntry("AutoBalanceCommands").setString("Added Commands");

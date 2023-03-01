@@ -66,6 +66,9 @@ public class AutonSelection {
 
 
     public AutonSelection() {
+        autoBalance = new AutoBalance();
+        autoBalancePID = new AutoBalancePID();
+
         commandGenerator = new GenerateRamseteCommand();
         mDrive = NeoDriveModule.getInstance();
         leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
@@ -104,15 +107,14 @@ public class AutonSelection {
 //        CenterLeft = new FollowTrajectory("CenterLeft");
 //        CenterRight = new FollowTrajectory("CenterRight");
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
-        autoBalance = new AutoBalance();
-        autoBalancePID = new AutoBalancePID();
+
 
         mSendableAutonControllers.addOption("left origin", leftOriginCommand);
         mSendableAutonControllers.addOption("left piece", leftPieceCommand);
         mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
         mSendableAutonControllers.addOption("ScoringAutomation", scoringAutomationCommand);
         mSendableAutonControllers.addOption("auto balance w/pid", autoBalancePID);
-        mSendableAutonControllers.addOption("auto balance", autoBalancePID);
+        mSendableAutonControllers.addOption("auto balance", autoBalance);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);

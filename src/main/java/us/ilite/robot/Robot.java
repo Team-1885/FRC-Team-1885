@@ -19,6 +19,7 @@ import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.MatchMetadata;
+import us.ilite.common.types.drive.EDriveData;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
@@ -152,7 +153,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
 //        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-//        mActiveController = mAutoController;
+        mActiveController = mTeleopController;
         //mAutoController.initialize();
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose())); ///commented out 2/19: initial position was being set to the init pos of a controller we are not using
         mNeoDrive.readInputs();
@@ -166,6 +167,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
+
         if (mAutonSelection.getSelectedAutonController().isFinished()) {
             mNeoDrive.setVolts(0,0);
         }

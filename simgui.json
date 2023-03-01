@@ -105,6 +105,9 @@
       "AutoBalance": {
         "open": true
       },
+      "LiveWindow": {
+        "open": true
+      },
       "drivetrain": {
         "open": true
       },
