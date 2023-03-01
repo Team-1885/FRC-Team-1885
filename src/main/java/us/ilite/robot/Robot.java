@@ -6,13 +6,13 @@ import com.flybotix.hfr.codex.RobotCodex;
 import com.flybotix.hfr.util.log.ELevel;
 import com.flybotix.hfr.util.log.ILog;
 import com.flybotix.hfr.util.log.Logger;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
@@ -26,6 +26,9 @@ import us.ilite.robot.controller.*;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
 import us.ilite.robot.network.EForwardableConnections;
+
+import edu.wpi.first.wpilibj.Timer;
+
 
 import java.util.Arrays;
 
@@ -44,6 +47,8 @@ public class Robot extends TimedRobot {
     private final Settings mSettings = new Settings();
     private CSVLogger mCSVLogger;
     private Timer initTimer = new Timer();
+
+    private Timer mAutonTimer;
 
 
 
@@ -147,14 +152,17 @@ public class Robot extends TimedRobot {
         if (mAutonSelection.getSelectedAutonController() != null) {
             mAutonSelection.getSelectedAutonController().schedule();
         }
+
+        mAutonTimer = new Timer();
+        mAutonTimer.start();
     }
 
     @Override
     public void autonomousPeriodic() {
+        PathPlannerTrajectory path = mAutonSelection.getAutonTraj();
         CommandScheduler.getInstance().run();
-        if (mAutonSelection.getSelectedAutonController().isFinished()) {
-            mNeoDrive.setVolts(0,0);
-        }
+        Robot.FIELD.setRobotPose(path.sample(mAutonTimer.get()).poseMeters);
+
         commonPeriodic();
     }
 

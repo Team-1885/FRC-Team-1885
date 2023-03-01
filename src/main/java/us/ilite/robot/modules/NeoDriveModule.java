@@ -235,7 +235,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         db.drivetrain.set(Y_ACTuAL_ODOMETRY_METERS, mOdometry.getPoseMeters().getY());
 
 
-        Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
+//        Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
     }
 
     @Override
