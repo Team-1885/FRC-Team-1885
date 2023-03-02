@@ -96,8 +96,8 @@ public class NeoDriveModule extends Module {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
 
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
 
         
         mLeftFollower.follow(mLeftMaster);
@@ -245,40 +245,6 @@ public class NeoDriveModule extends Module {
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
-//            case TURN_TO:
-//                mTurnToDegreePID.setSetpoint(db.drivetrain.get(DESIRED_TURN_ANGLE_deg));
-//                double turnOutput = mTurnToDegreePID.calculate(db.drivetrain.get(ACTUAL_HEADING_DEGREES), clock.getCurrentTimeInMillis());
-//                db.drivetrain.set(DESIRED_TURN_PCT, turnOutput);
-//                mLeftMaster.set(turnOutput);
-//                mRightMaster.set(-turnOutput);
-//                break;
-//            case SMART_MOTION:
-//                mLeftCtrl.setReference(db.drivetrain.get(L_DESIRED_POS_FT) / kDriveNEOPositionFactor,
-//                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
-//                mRightCtrl.setReference(db.drivetrain.get(R_DESIRED_POS_FT) / kDriveNEOPositionFactor,
-//                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
-//                break;
-//            case PATH_FOLLOWING_BASIC:
-//                mLeftPositionPID.setSetpoint(db.drivetrain.get(L_DESIRED_POS_FT));
-//                mRightPositionPID.setSetpoint(db.drivetrain.get(R_DESIRED_POS_FT));
-//                double lMeasurement = db.drivetrain.get(L_ACTUAL_POS_FT);
-//                double rMeasurement = db.drivetrain.get(R_ACTUAL_POS_FT);
-//                double leftPathOutput = mLeftPositionPID.calculate(lMeasurement, clock.getCurrentTimeInMillis());
-//                double rightPathOutput = mRightPositionPID.calculate(rMeasurement, clock.getCurrentTimeInMillis());
-//                mLeftMaster.set(leftPathOutput);
-//                mRightMaster.set(rightPathOutput);
-//                break;
-//            case PATH_FOLLOWING_RAMSETE:
-//                //Divide by 6.56 since that is the max velocity in ft/s
-//                double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
-//                double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
-////                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
-////                mDrive.feed();
-//                mLeftCtrl.setReference((vleft / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
-//                mRightCtrl.setReference((vright / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
-//                break;
         }
     }
 
