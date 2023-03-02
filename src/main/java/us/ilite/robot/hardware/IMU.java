@@ -8,7 +8,7 @@ import us.ilite.common.lib.util.FilteredAverage;
 import org.apache.commons.lang3.ArrayUtils;
 
 
-public abstract  class IMU {
+public abstract class IMU {
 
   protected static final Rotation2d ZERO = new Rotation2d(0d);
   public enum Axis {
