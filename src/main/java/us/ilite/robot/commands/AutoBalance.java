@@ -9,9 +9,9 @@ public class AutoBalance extends PIDCommand {
         NeoDriveModule driveSubsystem;
 
         public AutoBalance(NeoDriveModule pDriveSubsystem, double setpoint) {
-            super(new PIDController(0.1, 0, 0), pDriveSubsystem::getGyroRollDeg, 0,
+            super(new PIDController(0.1, 0, 0), pDriveSubsystem::getGyroRollDeg, 1.5, //1.5 is about the base roll in deg
                 output -> {
-                    pDriveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
+                    pDriveSubsystem.setThrottlePct(-output); //-output * Settings.kMaxSpeedMetersPerSecond
                 },
                     pDriveSubsystem);
             driveSubsystem = pDriveSubsystem;
@@ -19,7 +19,8 @@ public class AutoBalance extends PIDCommand {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(m_controller.getPositionError()) < 1;
+            System.out.println("position error " + m_controller.getPositionError());
+        return Math.abs(m_controller.getPositionError()) < 2.5;
     }
     @Override
     public void end(boolean interrupted) {

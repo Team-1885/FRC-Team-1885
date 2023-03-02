@@ -329,7 +329,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public void setThrottlePct(double throttle) {
-        throttle = throttle / 15;
+        throttle = throttle / 15; //divided by 15 to limit accel
         mRightMaster.set(throttle);
         mLeftMaster.set(throttle);
         mTable.getEntry("THROTTLE PCT").setNumber(throttle);
