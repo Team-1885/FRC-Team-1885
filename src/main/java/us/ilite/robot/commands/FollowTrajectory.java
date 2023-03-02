@@ -1,128 +1,78 @@
-package us.ilite.robot.commands;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import us.ilite.common.config.Settings;
-import us.ilite.common.lib.util.Units;
-import us.ilite.common.types.drive.EDriveData;
-import us.ilite.robot.Enums;
-import us.ilite.robot.Robot;
-import us.ilite.robot.modules.NeoDriveModule;
-
-public class FollowTrajectory implements ICommand {
-
-    private Trajectory mTrajectory;
-    private boolean mUsePid;
-    private Timer mTrajectoryTimer;
-    private RamseteController mController;
-    private PIDController mLeftDrivePID;
-    private PIDController mRightDrivePID;
-    private SimpleMotorFeedforward mFeedForward;
-    private Trajectory.State initialState;
-    private DifferentialDriveKinematics mDriveKinematics;
-    private DifferentialDriveWheelSpeeds mPreviousSpeeds;
-    private double mPreviousTime = -1;
-
-    public FollowTrajectory(Trajectory pTrajectory, boolean pUsePid) {
-        mTrajectory = pTrajectory;
-        mUsePid = pUsePid;
-        mController = new RamseteController(Settings.kRamseteB, Settings.kRamseteZeta);
-        mFeedForward = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
-        //kp = 0.00051968
-        mLeftDrivePID = new PIDController(0.1,0,0);
-        mRightDrivePID = new PIDController(0.1,0,0);
-        mTrajectoryTimer = new Timer();
-        mDriveKinematics = new DifferentialDriveKinematics(Units.feet_to_meters(NeoDriveModule.kTrackWidthFeet));
-    }
-    @Override
-    public void init(double pNow) {
-//        Robot.DATA.drivetrain.set(EDriveData.STATE, Enums.EDriveState.RESET_ODOMETRY);
-//        Robot.DATA.drivetrain.set(EDriveData.X_DESIRED_ODOMETRY_METERS, mTrajectory.getInitialPose().getX());
-//        Robot.DATA.drivetrain.set(EDriveData.Y_DESIRED_ODOMETRY_METERS, mTrajectory.getInitialPose().getY());
-        Robot.FIELD.getObject("Current Trajectory").setTrajectory(mTrajectory);
-        mTrajectoryTimer.reset();
-        mTrajectoryTimer.start();
-        initialState = mTrajectory.sample(0);
-        mPreviousSpeeds =
-                mDriveKinematics.toWheelSpeeds(
-                        new ChassisSpeeds(
-                                initialState.velocityMetersPerSecond,
-                                0,
-                                initialState.curvatureRadPerMeter * initialState.velocityMetersPerSecond));
-        SmartDashboard.putNumber("Initial state X", initialState.poseMeters.getX());
-        SmartDashboard.putNumber("Initial state Y", initialState.poseMeters.getY());
-        SmartDashboard.putNumber("Trajectory Total Time in Seconds", mTrajectory.getTotalTimeSeconds());
-    }
-
-    @Override
-    public boolean update(double pNow) {
-        Robot.DATA.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PATH_FOLLOWING_RAMSETE);
-        double curTime = mTrajectoryTimer.get();
-        double dt = curTime - mPreviousTime;
-        Trajectory.State setpoint = mTrajectory.sample(mTrajectoryTimer.get());
-        ChassisSpeeds chassisSpeeds = mController.calculate(getRobotPose(), setpoint);
-        DifferentialDriveWheelSpeeds wheelSpeeds = mDriveKinematics.toWheelSpeeds(chassisSpeeds);
-        SmartDashboard.putNumber("Left Wheel speed output", wheelSpeeds.leftMetersPerSecond);
-        SmartDashboard.putNumber("Right Wheel speed output", wheelSpeeds.rightMetersPerSecond);
-        if (mUsePid) {
-            double actualRightSpeed = Units.feet_to_meters(Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s));
-            double actualLeftSpeed = Units.feet_to_meters(Robot.DATA.drivetrain.get(EDriveData.L_ACTUAL_VEL_FT_s));
-            double leftFeedforward =
-                    mFeedForward.calculate(
-                            wheelSpeeds.leftMetersPerSecond, (wheelSpeeds.leftMetersPerSecond - mPreviousSpeeds.leftMetersPerSecond) / dt);
-
-            double rightFeedforward =
-                    mFeedForward.calculate(
-                            wheelSpeeds.rightMetersPerSecond, (wheelSpeeds.rightMetersPerSecond - mPreviousSpeeds.rightMetersPerSecond) / dt);
-
-            double leftOutput =
-                    leftFeedforward
-                            + mLeftDrivePID.calculate(actualLeftSpeed, wheelSpeeds.leftMetersPerSecond);
-
-            double rightOutput =
-                    rightFeedforward
-                            + mRightDrivePID.calculate(actualRightSpeed, wheelSpeeds.rightMetersPerSecond);
-            Robot.DATA.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, leftOutput);
-            Robot.DATA.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, rightOutput);
-        }
-        else {
-            Robot.DATA.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PATH_FOLLOWING_RAMSETE);
-            Robot.DATA.drivetrain.set(EDriveData.L_DESIRED_VEL_FT_s, Units.meters_to_feet(wheelSpeeds.leftMetersPerSecond));
-            Robot.DATA.drivetrain.set(EDriveData.R_DESIRED_VEL_FT_s, Units.meters_to_feet(wheelSpeeds.rightMetersPerSecond));
-        }
-        mPreviousSpeeds = wheelSpeeds;
-        mPreviousTime = curTime;
-//        if (mTrajectoryTimer.get() > mTrajectory.getTotalTimeSeconds()) {
-//            return true;
-//        }
-        return false;
-    }
-
-    @Override
-    public void shutdown(double pNow) {
-        Robot.DATA.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-        Robot.DATA.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0.0);
-        Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, 0.0);
-    }
-    //Helper method to get robot pose
-    public Pose2d getRobotPose() {
-        double x = Robot.DATA.drivetrain.get(EDriveData.X_ACTUAL_ODOMETRY_METERS);
-        double y = Robot.DATA.drivetrain.get(EDriveData.Y_ACTuAL_ODOMETRY_METERS);
-        double heading = Robot.DATA.drivetrain.get(EDriveData.ACTUAL_HEADING_RADIANS);
-        return new Pose2d(new Translation2d(x, y), new Rotation2d(heading));
-    }
-
-    public Trajectory getCurrentTrajectory() {
-        return mTrajectory;
-    }
-}
+//package us.ilite.robot.commands;
+//
+////import com.pathplanner.lib.PathConstraints;
+////import com.pathplanner.lib.PathPlanner;
+////import com.pathplanner.lib.PathPlannerTrajectory;
+//import com.team319.trajectory.Path;
+//import edu.wpi.first.math.trajectory.Trajectory;
+//import edu.wpi.first.networktables.NetworkTable;
+//import edu.wpi.first.networktables.NetworkTableInstance;
+//import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj2.command.CommandBase;
+//
+//import edu.wpi.first.wpilibj.Timer;
+//import us.ilite.common.types.drive.EDriveData;
+//import us.ilite.common.types.sensor.EGyro;
+//import us.ilite.robot.Robot;
+//import us.ilite.robot.TrajectoryCommandUtils;
+//import us.ilite.robot.modules.NeoDriveModule;
+//
+//public class FollowTrajectory extends CommandBase {
+//    Timer mTimer;
+//    GenerateRamseteCommand commandGenerator;
+//    private NetworkTable mTable;
+//    private String mTrajectoryName;
+//    private Command mCommand;
+//    private NeoDriveModule mNeoDrive;
+//
+//    private Trajectory mTrajectory;
+//
+//    public FollowTrajectory(String pTrajectoryName) {
+//        mTimer = new Timer();
+//        mTable = NetworkTableInstance.getDefault().getTable("follow traj");
+//
+//        commandGenerator = new GenerateRamseteCommand();
+//        mNeoDrive = NeoDriveModule.getInstance();
+//        mTrajectoryName = pTrajectoryName;
+////        mTrajectory = PathPlanner.loadPath(pTrajectoryName, 2, 1);
+//        mTrajectory = TrajectoryCommandUtils.getJSONTrajectory(pTrajectoryName);
+//        addRequirements(mNeoDrive);
+//    }
+//
+//    @Override
+//    public void initialize() {
+//        mTimer.start();
+//        mCommand = commandGenerator.generateCommand(mTrajectoryName);
+//        mCommand = mCommand.withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+//        mTable.getEntry("initial pose").setString(commandGenerator.getTrajInitPose().toString());
+//
+//        mCommand.schedule(); //this interrupts the follow traj command
+//    }
+//
+//    @Override
+//    public void execute() {
+//
+//    }
+//
+//    @Override
+//    public void end(boolean interrupted) {
+//        System.out.println("end " + interrupted);
+////        double desiredHeading = mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
+////        if(Robot.DATA.imu.get(EGyro.HEADING_DEGREES) < desiredHeading)  {
+////            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) + 0.1));
+////        } else {
+////            Robot.DATA.drivetrain.set(EDriveData.DESIRED_TURN_PCT, (Robot.DATA.drivetrain.get(EDriveData.DESIRED_TURN_PCT) - 0.1));
+////        }
+//    }
+//
+//    @Override
+//    public boolean isFinished() {
+//        return mCommand.isFinished();
+////        mTable.getEntry("trajectory timer").setNumber(mTimer.get());
+////        if(mTimer.get()>commandGenerator.getTotalTimeSeconds()){
+////            mTable.getEntry("follow trajectory").setString("finished");
+////            return true;
+////        }
+////        return false;
+//    }
+//}
