@@ -112,8 +112,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML2);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL4);
 
-        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
-        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR4);
+        mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR1);
+        mRightFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTR3);
 
         
         mLeftFollower.follow(mLeftMaster);
