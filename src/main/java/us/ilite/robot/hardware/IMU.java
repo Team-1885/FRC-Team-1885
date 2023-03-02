@@ -53,7 +53,7 @@ public abstract class IMU {
     case PITCH:
       return getPitch();
     case ROLL:
-      return getRoll();
+//      return getRoll();
       default:
       return getYaw();
     }
@@ -77,7 +77,7 @@ public abstract class IMU {
   
   public abstract Rotation2d getYaw();
   public abstract Rotation2d getPitch();
-  public abstract Rotation2d getRoll();
+//  public abstract Rotation2d getRoll();
   public abstract void zeroAll();
   protected abstract double getRawAccelX();
   protected abstract double getRawAccelY();
