@@ -33,11 +33,13 @@ public class AutonSelection {
     private PathPlannerTrajectory leftPiece;
     private PathPlannerTrajectory leftOrigin;
     private PathPlannerTrajectory mScoringAutomation;
+    private PathPlannerTrajectory mGoForward;
 
     private PPRamseteCommand leftPieceCommand;
     private PPRamseteCommand leftOriginCommand;
     private PPRamseteCommand driveStraightCommand;
     private PPRamseteCommand mScoringAutomationCommand;
+    private PPRamseteCommand mGoForwardCommand;
 
 
     private PathPlannerTrajectory DriveStraight;
@@ -67,6 +69,7 @@ public class AutonSelection {
         leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("CenterLeft", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 
@@ -74,6 +77,7 @@ public class AutonSelection {
         leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
         driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
         mScoringAutomationCommand = commandGenerator.generateCommand(mScoringAutomation);
+        mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
 //        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
 //                mRobotDrive::getPose,
 //                mRamseteController,
@@ -103,6 +107,7 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("left piece", leftPieceCommand);
         mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
         mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
+        mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
