@@ -202,4 +202,15 @@ public class Enums {
         VELOCITY;
     }
 
+    public enum EArmMode {
+        LEVEL_POSITION,
+        ARM_POSITION,
+        EXTEND_POSITION;
+    }
+    public enum EClawMode {
+        SPIN_MOTOR,
+        SET_MOTOR_ANGLE_PARALLEL;
+
+    }
+
 }
