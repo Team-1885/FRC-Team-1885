@@ -5,35 +5,54 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import us.ilite.robot.modules.NeoDriveModule;
 
-public class AutoBalance extends CommandBase {
+public class AutoBalance extends PIDCommand {
+        NeoDriveModule driveSubsystem;
 
-
-    private class Balance() extends PIDCommand {
-        public Balance(NeoDriveModule driveSubsystem, double setpoint) {
-            super(new PIDController(0.1, 0, 0), driveSubsystem.mGyro::getRoll, setpoint,
-                    driveSubsystem::setThrottlePct,
-                    driveSubsystem);
-//            super(new PIDController(0.1, 0, 0), driveSubsystem.mGyro::getRoll, setpoint,
-////                    output -> driveSubsystem.setThrottlePct(output),
-//                    driveSubsystem::setThrottlePct,
-//////                driveSubsystem.setTurnPct(-output * Settings.kMaxSpeedMetersPerSecond),
-////                        driveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
-////                    },
-//                    driveSubsystem);
-//            this.driveSubsystem = driveSubsystem;
-
+        public AutoBalance(NeoDriveModule pDriveSubsystem, double setpoint) {
+            super(new PIDController(0.1, 0, 0), pDriveSubsystem::getGyroRollDeg, 0,
+                output -> {
+                    pDriveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
+                },
+                    pDriveSubsystem);
+            driveSubsystem = pDriveSubsystem;
         }
-//        public Balance(NeoDriveModule driveSubsystem, double setpoint) {
-//            super(new PIDController(0.1, 0, 0), driveSubsystem.mGyro::getRoll, setpoint,
-//                    driveSubsystem::setThrottlePct,
-////                    output -> {
-//////                driveSubsystem.setTurnPct(-output * Settings.kMaxSpeedMetersPerSecond),
-////                        driveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
-////                    },
-//                    driveSubsystem);
-//            this.driveSubsystem = driveSubsystem;
-//
-//            mTable.getEntry("Balance").setString("Created Balance Class");
-//        }
+
+    @Override
+    public boolean isFinished() {
+        return Math.abs(m_controller.getPositionError()) < 1;
+    }
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        System.out.println("Robot Balanced!");
+        driveSubsystem.setThrottlePct(0);
     }
 }
+
+
+
+//    private class Balance extends PIDCommand{
+//        NeoDriveModule driveSubsystem;
+//        private Balance(NeoDriveModule driveSubsystem, double setpoint) {
+//            super(new PIDController(0.1, 0, 0), driveSubsystem::getGyroRollDeg, setpoint,
+//                    output -> {
+//                        driveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
+//                    },
+//            driveSubsystem);
+//            this.driveSubsystem = driveSubsystem;
+//
+//        }
+//
+//        @Override
+//        public boolean isFinished() {
+//            return Math.abs(m_controller.getPositionError()) < 1;
+//        }
+//        @Override
+//        public void end(boolean interrupted) {
+//            super.end(interrupted);
+//            System.out.println("Robot Balanced!");
+//            driveSubsystem.setThrottlePct(0);
+//        }
+//    }
+
+

@@ -17,6 +17,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathConstraints;
 //import com.pathplanner.lib.PathPlanner;
+import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.controller.*;
 import us.ilite.robot.modules.NeoDriveModule;
@@ -29,7 +30,7 @@ public class AutonSelection {
 
     public static ShuffleboardTab mAutonConfiguration = Shuffleboard.getTab("Pre-Match Configuration");
     public static int mDelaySeconds;
-    private SendableChooser<PPRamseteCommand> mSendableAutonControllers = new SendableChooser<>();
+    private SendableChooser<Command> mSendableAutonControllers = new SendableChooser<>();
     private PathPlannerTrajectory leftPiece;
     private PathPlannerTrajectory leftOrigin;
     private PathPlannerTrajectory mScoringAutomation;
@@ -61,23 +62,27 @@ public class AutonSelection {
     private SimpleMotorFeedforward mFeedForward;
     GenerateRamseteCommand commandGenerator;
 
+    private AutoBalance mAutoBalance;
+
 
     public AutonSelection() {
         commandGenerator = new GenerateRamseteCommand();
         mDrive = NeoDriveModule.getInstance();
-        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("CenterLeft", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 
-        leftPieceCommand = commandGenerator.generateCommand(leftPiece);
-        leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
+//        leftPieceCommand = commandGenerator.generateCommand(leftPiece);
+//        leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
         driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
         mScoringAutomationCommand = commandGenerator.generateCommand(mScoringAutomation);
         mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
+        mRobotDrive = NeoDriveModule.getInstance();
+        mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
 //        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
 //                mRobotDrive::getPose,
 //                mRamseteController,
@@ -103,11 +108,12 @@ public class AutonSelection {
 //        CenterRight = new FollowTrajectory("CenterRight");
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
 
-        mSendableAutonControllers.addOption("left origin", leftOriginCommand);
-        mSendableAutonControllers.addOption("left piece", leftPieceCommand);
+//        mSendableAutonControllers.addOption("left origin", leftOriginCommand);
+//        mSendableAutonControllers.addOption("left piece", leftPieceCommand);
         mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
         mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
         mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
+        mSendableAutonControllers.addOption("balance", mAutoBalance);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
@@ -122,7 +128,7 @@ public class AutonSelection {
                 Settings.kRamseteZeta // kRamseteZeta
         );
     }
-    public PPRamseteCommand getSelectedAutonController() {
+    public Command getSelectedAutonController() {
         return mSendableAutonControllers.getSelected();
     }
 

@@ -40,7 +40,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     private PIDController mRightPositionPID;
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
-    public Pigeon mGyro;
+    private Pigeon mGyro;
     private DifferentialDriveKinematics mKinematics;
     private Pose2d mPose2d;
     private final NetworkTable mTable;
@@ -327,9 +327,15 @@ public class NeoDriveModule extends Module implements Subsystem {
 
     public void setThrottlePct(double throttle) {
         throttle = throttle / 15;
-        mRightMaster.set(throttle);
-        mLeftMaster.set(throttle);
+//        mRightMaster.set(throttle);
+//        mLeftMaster.set(throttle);
         mTable.getEntry("THROTTLE PCT").setNumber(throttle);
+    }
+
+    public double getGyroRollDeg() {
+        mTable.getEntry("ROLL DEG").setNumber(mGyro.getRoll().getDegrees());
+        return 20;
+//        return mGyro.getRoll().getDegrees();
     }
 
     public Pose2d getPose() {

@@ -60,7 +60,6 @@
           "arrowSize": 15,
           "style": "Track"
         },
-        "image": "D:\\FRC Robotics\\2023-field.png",
         "units": "feet",
         "window": {
           "visible": true
