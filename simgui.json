@@ -25,11 +25,10 @@
       "/Shuffleboard/Auton Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Climber Mode": "String Chooser",
-      "/SmartDashboard/Autonomous Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/Autonomous Mode": {
+      "/Shuffleboard/Auton Configuration/Choose Auton Controller": {
         "window": {
           "visible": true
         }
@@ -40,9 +39,6 @@
         },
         "First Leg": {
           "arrowSize": 14
-        },
-        "Robot": {
-          "style": "Box/Image"
         },
         "Second Leg Ball 3": {
           "arrowSize": 12,
@@ -60,8 +56,6 @@
           "arrowSize": 15,
           "style": "Track"
         },
-        "image": "D:\\FRC Robotics\\2023-field.png",
-        "units": "feet",
         "window": {
           "visible": true
         }
@@ -69,15 +63,6 @@
     }
   },
   "NetworkTables": {
-    "DriveStraight": {
-      "open": true
-    },
-    "LeftOrigin": {
-      "open": true
-    },
-    "LeftPiece": {
-      "open": true
-    },
     "Shuffleboard": {
       "Auton Configuration": {
         "open": false
@@ -88,34 +73,8 @@
         "open": false
       }
     },
-    "TurnTest": {
-      "open": true
-    },
-    "drivetrain": {
-      "open": true
-    },
-    "follow traj": {
-      "open": true
-    },
-    "left origin": {
-      "open": true
-    },
-    "left piece": {
-      "open": true
-    },
     "ramsete command": {
       "open": true
-    },
-    "transitory": {
-      "drivetrain": {
-        "open": true
-      },
-      "follow traj": {
-        "open": true
-      },
-      "ramsete command": {
-        "open": true
-      }
     }
   },
   "Plot": {
@@ -127,7 +86,7 @@
               "autoFit": true
             }
           ],
-          "height": -9,
+          "height": 127,
           "series": [
             {
               "color": [
@@ -140,10 +99,7 @@
             }
           ]
         }
-      ],
-      "window": {
-        "visible": false
-      }
+      ]
     }
   }
 }

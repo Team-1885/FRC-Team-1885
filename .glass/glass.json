@@ -13,8 +13,8 @@
     }
   },
   "NetworkTables Settings": {
-    "mode": "Client (NT3)",
-    "port3": 0,
-    "serverTeam": "1885"
+    "dsClient": false,
+    "mode": "Client",
+    "serverTeam": "10.18.85.2"
   }
 }
