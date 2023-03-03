@@ -1,32 +1,13 @@
 package us.ilite.robot.auto;
 
-import com.pathplanner.lib.auto.RamseteAutoBuilder;
-import com.pathplanner.lib.commands.PPRamseteCommand;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import us.ilite.common.config.Settings;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathConstraints;
-//import com.pathplanner.lib.PathPlanner;
-import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.controller.*;
-import us.ilite.robot.modules.NeoDriveModule;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 public class AutonSelection {
-    private RamseteController mRamseteController;
-
     public static ShuffleboardTab mAutonConfiguration = Shuffleboard.getTab("Pre-Match Configuration");
     public static int mDelaySeconds;
     private SendableChooser<PPRamseteCommand> mSendableAutonControllers = new SendableChooser<>();
@@ -122,9 +103,6 @@ public class AutonSelection {
                 Settings.kRamseteB, // kRamseteB
                 Settings.kRamseteZeta // kRamseteZeta
         );
-    }
-    public PPRamseteCommand getSelectedAutonController() {
-        return mSendableAutonControllers.getSelected();
     }
 
 //    public PathPlannerTrajectory getAutonTraj() {
