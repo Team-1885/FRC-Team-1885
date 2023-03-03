@@ -30,24 +30,25 @@ public class AutonSelection {
     public static ShuffleboardTab mAutonConfiguration = Shuffleboard.getTab("Pre-Match Configuration");
     public static int mDelaySeconds;
     private SendableChooser<PPRamseteCommand> mSendableAutonControllers = new SendableChooser<>();
-    private PathPlannerTrajectory leftPiece;
-    private PathPlannerTrajectory leftOrigin;
-    private PathPlannerTrajectory mScoringAutomation;
-    private PathPlannerTrajectory mGoForward;
+    private PathPlannerTrajectory LeftCenterBalanceOnly;
+    private PathPlannerTrajectory RightCenterBalanceOnly;
+    private PathPlannerTrajectory MiddleBalanceOnly;
+    private PathPlannerTrajectory LeftScoreOnly;
+    private PathPlannerTrajectory RightScoreOnly;
 
-    private PPRamseteCommand leftPieceCommand;
-    private PPRamseteCommand leftOriginCommand;
-    private PPRamseteCommand driveStraightCommand;
-    private PPRamseteCommand mScoringAutomationCommand;
-    private PPRamseteCommand mGoForwardCommand;
+    private PPRamseteCommand LeftCenterBalanceOnlyCommand;
+    private PPRamseteCommand RightCenterBalanceOnlyCommand;
+    private PPRamseteCommand MiddleBalanceOnlyCommand;
+    private PPRamseteCommand LeftScoreOnlyCommand;
+    private PPRamseteCommand RightScoreOnlyCommand;
 
 
-    private PathPlannerTrajectory DriveStraight;
-    private PathPlannerTrajectory TurnTest;
-    private PathPlannerTrajectory Left;
-    private PathPlannerTrajectory Right;
-    private PathPlannerTrajectory CenterLeft;
-    private PathPlannerTrajectory CenterRight;
+//    private PathPlannerTrajectory DriveStraight;
+//    private PathPlannerTrajectory TurnTest;
+//    private PathPlannerTrajectory Left;
+//    private PathPlannerTrajectory Right;
+//    private PathPlannerTrajectory CenterLeft;
+//    private PathPlannerTrajectory CenterRight;
     private SequentialCommandGroup mCommandGroup;
 //    private PathPlannerTrajectory
     private int kMAX_ACCELERATON = 1;
@@ -65,19 +66,19 @@ public class AutonSelection {
     public AutonSelection() {
         commandGenerator = new GenerateRamseteCommand();
         mDrive = NeoDriveModule.getInstance();
-        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("CenterLeft", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 
-        leftPieceCommand = commandGenerator.generateCommand(leftPiece);
-        leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
-        driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
-        mScoringAutomationCommand = commandGenerator.generateCommand(mScoringAutomation);
-        mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
+        LeftCenterBalanceOnlyCommand = commandGenerator.generateCommand(LeftCenterBalanceOnly);
+        RightCenterBalanceOnlyCommand = commandGenerator.generateCommand(RightCenterBalanceOnly);
+        MiddleBalanceOnlyCommand = commandGenerator.generateCommand(MiddleBalanceOnly);
+        RightScoreOnlyCommand = commandGenerator.generateCommand(RightScoreOnly);
+        LeftScoreOnlyCommand = commandGenerator.generateCommand(LeftScoreOnly);
 //        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
 //                mRobotDrive::getPose,
 //                mRamseteController,
@@ -103,11 +104,11 @@ public class AutonSelection {
 //        CenterRight = new FollowTrajectory("CenterRight");
 //        mCommandGroup = new SequentialCommandGroup(leftPiece, leftOrigin, DriveStraight);
 
-        mSendableAutonControllers.addOption("left origin", leftOriginCommand);
-        mSendableAutonControllers.addOption("left piece", leftPieceCommand);
-        mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
-        mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
-        mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
+        mSendableAutonControllers.addOption("Left & dock", LeftCenterBalanceOnlyCommand);
+        mSendableAutonControllers.addOption("Right & dock", RightCenterBalanceOnlyCommand);
+        mSendableAutonControllers.addOption("Middle dock", MiddleBalanceOnlyCommand);
+        mSendableAutonControllers.addOption("Right & score", RightScoreOnlyCommand);
+        mSendableAutonControllers.addOption("Left & Score", LeftScoreOnlyCommand);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
@@ -126,9 +127,9 @@ public class AutonSelection {
         return mSendableAutonControllers.getSelected();
     }
 
-    public PathPlannerTrajectory getAutonTraj() {
-        return mScoringAutomation;
-    }
+//    public PathPlannerTrajectory getAutonTraj() {
+//        return mScoringAutomation;
+//    }
 
 //    private PathPlannerRamseteCommand generatePathPlannerRamseteCommand(PathPlannerTrajectory pPathPlannerTrajectory) {
 //        PathPlannerRamseteCommand command = new PathPlannerRamseteCommand (
