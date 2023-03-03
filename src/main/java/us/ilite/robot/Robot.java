@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -81,7 +82,7 @@ public class Robot extends TimedRobot {
         mLogger.warn("===> ROBOT INIT Starting");
         mOI = new OperatorInput();
         mLEDControl = new LEDModule();
-        mNeoDrive = new NeoDriveModule();
+        mNeoDrive = NeoDriveModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
@@ -139,16 +140,20 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
-        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-        mActiveController = mAutoController;
-        mAutoController.initialize();
-        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
+//        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+//        mActiveController = mAutoController;
+//        mAutoController.initialize();
+//        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
-        mActiveController.setEnabled(true);
+//        mActiveController.setEnabled(true);
+        if (mAutonSelection.getSelectedAutonController() != null) {
+            mAutonSelection.getSelectedAutonController().schedule();
+        }
     }
 
     @Override
     public void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
         commonPeriodic();
     }
 
@@ -237,7 +242,9 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-        mActiveController.update();
+        if (mAutonSelection!= null) {
+            mActiveController.update();
+        }
         mRunningModules.safeSetOutputs();
         SmartDashboard.putNumber("common_periodic_dt", Timer.getFPGATimestamp() - start);
         SmartDashboard.putNumber("Clock Time", CLOCK.now());

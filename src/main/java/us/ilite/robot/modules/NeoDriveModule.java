@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
@@ -25,7 +27,7 @@ import us.ilite.robot.hardware.SparkMaxFactory;
 
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module {
+public class NeoDriveModule extends Module implements Subsystem {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -93,8 +95,13 @@ public class NeoDriveModule extends Module {
     // ========================================
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
+    private static final NeoDriveModule instance = new NeoDriveModule();
 
-    public NeoDriveModule() {
+    public static NeoDriveModule getInstance() {
+        return instance;
+    }
+
+    private NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
 
@@ -117,10 +124,10 @@ public class NeoDriveModule extends Module {
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
 
-        mRightMaster.setClosedLoopRampRate(1.5);
-        mRightFollower.setClosedLoopRampRate(1.5);
-        mLeftMaster.setClosedLoopRampRate(1.5);
-        mLeftFollower.setClosedLoopRampRate(1.5);
+        mRightMaster.setClosedLoopRampRate(0.5);
+        mRightFollower.setClosedLoopRampRate(0.5);
+        mLeftMaster.setClosedLoopRampRate(0.5);
+        mLeftFollower.setClosedLoopRampRate(0.5);
 
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
@@ -147,7 +154,9 @@ public class NeoDriveModule extends Module {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-//        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -159,7 +168,7 @@ public class NeoDriveModule extends Module {
         mGyro.zeroAll();
         reset();
         if(pMode == EMatchMode.AUTONOMOUS) {
-            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+//            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
             mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
             mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
             mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -178,7 +187,12 @@ public class NeoDriveModule extends Module {
      */
     public void resetOdometry(Pose2d pose) {
         reset();
-        mGyro.resetAngle(pose.getRotation());
+        mGyro.zeroAll();
+        mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
+                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
+                pose);
+//        mGyro.resetAngle(pose.getRotation());
 //        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
     @Override
@@ -248,6 +262,27 @@ public class NeoDriveModule extends Module {
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
         }
+    }
+
+    public Pose2d getPose() {
+        return mOdometry.getPoseMeters();
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)),
+                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s))
+        );
+    }
+
+    public void setVolts(double leftVolts, double rightVolts) {
+        //safety check, only if the desired .set() value is less than one should it be set to the motors
+//        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
+//            mRightMaster.set(rightVolts / 12);
+//            mLeftMaster.set(leftVolts / 12);
+//        }
+        mRightMaster.set(rightVolts / 12);
+        mLeftMaster.set(leftVolts / 12);
     }
 
     public void reset() {
