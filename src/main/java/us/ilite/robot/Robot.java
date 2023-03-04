@@ -242,7 +242,7 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-        if (mAutonSelection!= null) {
+        if (mActiveController!= null) {
             mActiveController.update();
         }
         mRunningModules.safeSetOutputs();
