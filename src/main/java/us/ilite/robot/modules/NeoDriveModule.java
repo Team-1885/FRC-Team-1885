@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
@@ -41,6 +43,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
+    private NetworkTable mTable;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -104,6 +107,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     public double mCurrentDeg;
 
     private NeoDriveModule() {
+        mTable = NetworkTableInstance.getDefault().getTable("drive");
+
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
 
@@ -295,12 +300,14 @@ public class NeoDriveModule extends Module implements Subsystem {
 
     public void setVolts(double leftVolts, double rightVolts) {
         //safety check, only if the desired .set() value is less than one should it be set to the motors
-//        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
-//            mRightMaster.set(rightVolts / 12);
-//            mLeftMaster.set(leftVolts / 12);
-//        }
-        mRightMaster.set(rightVolts / 12);
-        mLeftMaster.set(leftVolts / 12);
+        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
+            mRightMaster.set(rightVolts/12);
+            mLeftMaster.set(leftVolts/12);
+        }
+//        mRightMaster.set(rightVolts / 12);
+//        mLeftMaster.set(leftVolts / 12);
+        mTable.getEntry("volts").setNumber(leftVolts/12);
+
     }
 
     public void reset() {

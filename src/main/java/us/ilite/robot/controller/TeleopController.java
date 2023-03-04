@@ -106,16 +106,13 @@ public class TeleopController extends BaseManualController {
     private void updateTargetLock() {
         if (Robot.mode() == EMatchMode.TELEOPERATED) {
             if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-                if (db.limelight.isSet(ELimelightData.TV)) {
-                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
-                } else {
-                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
-                }
-                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-                    db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.BLUE_BALL.id());
-                } else {
-                    db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.RED_BALL.id());
-                }
+//                if (db.limelight.isSet(ELimelightData.TV)) {
+//                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
+//                } else {
+//                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
+//                }
+                db.limelight.set(ELimelightData.TARGET_ID, 1);
+
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
             } else {
                 db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
