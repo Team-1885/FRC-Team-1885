@@ -83,6 +83,8 @@ public class AutonSelection {
         mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
         mRobotDrive = NeoDriveModule.getInstance();
         mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
+
+        SequentialCommandGroup totalDrive = new SequentialCommandGroup(mGoForwardCommand, mAutoBalance);
 //        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
 //                mRobotDrive::getPose,
 //                mRamseteController,
@@ -114,6 +116,7 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
         mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
         mSendableAutonControllers.addOption("balance", mAutoBalance);
+        mSendableAutonControllers.addOption("totalDrive", totalDrive);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
