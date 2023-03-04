@@ -101,6 +101,8 @@ public class NeoDriveModule extends Module implements Subsystem {
         return instance;
     }
 
+    public double mCurrentDeg;
+
     private NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
@@ -167,6 +169,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void modeInit(EMatchMode pMode) {
         mGyro.zeroAll();
         reset();
+//        mCurrentDeg = 80;
         if(pMode == EMatchMode.AUTONOMOUS) {
 //            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
             mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -262,6 +265,21 @@ public class NeoDriveModule extends Module implements Subsystem {
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
         }
+    }
+
+    public void setThrottlePct(double throttle) {
+        throttle = throttle / 15; //divided by 15 to limit accel
+        mRightMaster.set(throttle);
+        mLeftMaster.set(throttle);
+        mTable.getEntry("THROTTLE PCT").setNumber(throttle);
+    }
+
+    public double getGyroRollDeg() {
+        mTable.getEntry("ROLL DEG").setNumber(mGyro.getRoll().getDegrees());
+        System.out.println("getting deg");
+//        mCurrentDeg--;
+//        return mCurrentDeg;
+        return mGyro.getRoll().getDegrees();
     }
 
     public Pose2d getPose() {
