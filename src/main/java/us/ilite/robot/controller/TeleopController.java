@@ -1,7 +1,10 @@
 package us.ilite.robot.controller;
 
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import us.ilite.common.Field2022;
 import us.ilite.common.config.InputMap;
@@ -10,6 +13,8 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
+import us.ilite.robot.commands.AutoBalance;
+import us.ilite.robot.modules.NeoDriveModule;
 
 import static us.ilite.common.types.EIntakeData.*;
 import static us.ilite.common.types.EFeederData.*;
@@ -22,6 +27,8 @@ public class TeleopController extends BaseManualController {
 
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
+    private NeoDriveModule mRobotDrive = NeoDriveModule.getInstance();
+    private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
 
 
     public static TeleopController getInstance() {
@@ -58,6 +65,7 @@ public class TeleopController extends BaseManualController {
 //            updateHangerMotors();
 //            updateHangerPneumatics();
         }
+//        updateAutoBalance();
 
 //        updateIntake();
         updateTargetLock();
@@ -100,6 +108,22 @@ public class TeleopController extends BaseManualController {
 //            } if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
 //                db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
 //            }
+//        }
+//    }
+
+
+//    private void updateAutoBalance() {
+//        if (Robot.mode() == EMatchMode.TELEOPERATED) {
+//            if (db.driverinput.isSet(InputMap.DRIVER.MID_RUNG)) { // Left button
+//                // schedule command, if already scheduled dont schedule again
+//                if(!mAutoBalance.isScheduled()) {
+//                    mAutoBalance.withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).schedule();
+//                    System.out.println(mAutoBalance.isScheduled());
+//                }
+//            }
+////            else {
+////                mAutoBalance.end(true);
+////            }
 //        }
 //    }
 

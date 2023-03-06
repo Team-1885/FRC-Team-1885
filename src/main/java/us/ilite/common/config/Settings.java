@@ -91,7 +91,7 @@ public class Settings {
     public static class Input {
         public static double kNormalPercentThrottleReduction = 1.0;
         // These are applied AFTER the normal throttle reduction
-        public static double kSnailModePercentThrottleReduction = 0.5;
+        public static double kSnailModePercentThrottleReduction = 0.3;
         public static double kSnailModePercentRotateReduction = 0.4;
         public static double kMaxAllowedVelocityMultiplier = 1.0;
         // Applied after any scaling

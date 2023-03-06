@@ -50,8 +50,8 @@ public class AutonSelection {
     private PathPlannerTrajectory CenterRight;
     private SequentialCommandGroup mCommandGroup;
 //    private PathPlannerTrajectory
-    private int kMAX_ACCELERATON = 1;
-    private int kMAX_VELOCITY = 2;
+    private int kMAX_ACCELERATON = 2;
+    private int kMAX_VELOCITY = 3;
     private NeoDriveModule mDrive;
     private PPRamseteCommand mRamseteCommand;
     private NeoDriveModule mRobotDrive; // get singleton instance
@@ -60,12 +60,21 @@ public class AutonSelection {
     private PIDController mRightDrivePID;
     private SimpleMotorFeedforward mFeedForward;
     private PPRamseteCommand mGoForwardCommand;
-    private PPRamseteCommand DriveStraightCommand;
     private PPRamseteCommand DriveOntoChargeStationCommand;
-    GenerateRamseteCommand commandGenerator;
+    private GenerateRamseteCommand commandGenerator;
+
+    private PathPlannerTrajectory ScorePreloadNODOCK;
+    private PPRamseteCommand ScorePreloadNODOCKCommand;
+
+    private PathPlannerTrajectory ScorePreloadWITHDOCK;
+    private PPRamseteCommand ScorePreloadWITHDOCKCommand;
+
 
     private PathPlannerTrajectory DriveOutOfCommunity;
     private PPRamseteCommand DriveOutOfCommunityCommand;
+
+    private PathPlannerTrajectory ScorePreloadWithTAXI;
+    private PPRamseteCommand ScorePreloadWithTAXICommand;
 
     private AutoBalance mAutoBalance;
 
@@ -74,27 +83,35 @@ public class AutonSelection {
         commandGenerator = new GenerateRamseteCommand();
         mDrive = NeoDriveModule.getInstance();
 
-//        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         DriveOntoChargeStation = PathPlanner.loadPath("DriveOntoChargeStation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        DriveOutOfCommunity = PathPlanner.loadPath("DriveOutOfCommunity", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        DriveOutOfCommunity = PathPlanner.loadPath("DriveOutOfCommunity", new PathConstraints(2, 1));
+        ScorePreloadNODOCK = PathPlanner.loadPath("ScorePreloadNODOCK", new PathConstraints(2, 1));
+        ScorePreloadWITHDOCK = PathPlanner.loadPath("ScorePreloadWITHDOCK", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+        ScorePreloadWithTAXI = PathPlanner.loadPath("ScorePreloadWithTAXI", new PathConstraints(2, 1));
 
 
 
         mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
         DriveOutOfCommunityCommand = commandGenerator.generateCommand(DriveOutOfCommunity);
-//        DriveStraightCommand = commandGenerator.generateCommand(DriveStraight);
         DriveOntoChargeStationCommand = commandGenerator.generateCommand(DriveOntoChargeStation);
+        ScorePreloadNODOCKCommand = commandGenerator.generateCommand(ScorePreloadNODOCK);
+        ScorePreloadWITHDOCKCommand = commandGenerator.generateCommand(ScorePreloadWITHDOCK);
+        ScorePreloadWithTAXICommand = commandGenerator.generateCommand(ScorePreloadWithTAXI);
 
         mRobotDrive = NeoDriveModule.getInstance();
         mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
 
-        SequentialCommandGroup totalDrive = new SequentialCommandGroup(mGoForwardCommand, mAutoBalance);
+//        SequentialCommandGroup totalDrive = new SequentialCommandGroup(mGoForwardCommand, mAutoBalance);
 //
-        mSendableAutonControllers.addOption("totalAutoBalance", totalDrive);
+        mSendableAutonControllers.addOption("totalAutoBalance", mAutoBalance);
+//        mSendableAutonControllers.addOption("balance", totalDrive);
         mSendableAutonControllers.addOption("DriveOutOfCommunity", DriveOutOfCommunityCommand);
 //        mSendableAutonControllers.addOption("DriveStraight", DriveStraightCommand);
         mSendableAutonControllers.addOption("DriveOntoChargeStation", DriveOntoChargeStationCommand);
+        mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
+        mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
+        mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }
