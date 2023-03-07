@@ -136,10 +136,10 @@ public class Drivetrain extends Module {
         // CONSTRUCTS THE CANSparkMax MOTORS ESTABLISHED IN THE FIELD AS NEW CANSparkMax TYPE kBrushless MOTORS
         // =====================================================================================================
 
-        mFrontLeft = SparkMaxFactory.createDefaultSparkMax(0);
-        mBackLeft = SparkMaxFactory.createDefaultSparkMax(0);
-        mFrontRight = SparkMaxFactory.createDefaultSparkMax(0);
-        mBackRight = SparkMaxFactory.createDefaultSparkMax(0);
+        mFrontLeft = SparkMaxFactory.createDefaultSparkMax(12);
+        mBackLeft = SparkMaxFactory.createDefaultSparkMax(13);
+        mFrontRight = SparkMaxFactory.createDefaultSparkMax(14);
+        mBackRight = SparkMaxFactory.createDefaultSparkMax(15);
 
         // ====================================================================
         // MAKES BACK LEFT AND RIGHT MOTORS FOLLOW FRONT LEFT AND RIGHT MOTORS

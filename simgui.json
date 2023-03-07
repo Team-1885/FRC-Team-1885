@@ -60,8 +60,11 @@
     },
     "SmartDashboard": {
       "Field": {
-        "open": false
+        "open": true
       }
+    },
+    "claw": {
+      "open": true
     }
   }
 }

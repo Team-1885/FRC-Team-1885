@@ -403,7 +403,7 @@ public class TeleopController extends BaseManualController {
             db.arm.set(EArmData.ARM_STATE, Enums.EArmMode.LEVEL_POSITION);
             db.arm.set(EArmData.DESIRED_LEVEL_POS_deg, 1.0);
             db.arm.set(EArmData.DESIRED_PERCENT_OUTPUT,1.0);
-            db.claw.set(EClawData.DESIRED_POS_DEG, 90 - (db.arm.get(EArmData.DESIRED_ARM_POS_deg) + db.claw.get(EClawData.ACTUAL_POS_DEG)));
+
 
         }
 

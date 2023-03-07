@@ -53,8 +53,8 @@ public class TelescopeArm extends Module {
         // SETTING MOTOR ID'S
         // ===================
 
-        mLevel = new TalonFX(0);
-        mMoveArm = new TalonFX(0);
+        mLevel = new TalonFX(15);
+        mMoveArm = new TalonFX(16);
 
         // =========================================================
         // CONSTRUCTING PID CONTROLLER (POSITION)
