@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
     private Timer initTimer = new Timer();
 
     private LEDModule mLEDControl;
+    private AddressableLEDs mAddressableLEDs;
     private SimulationModule mSimulation;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
