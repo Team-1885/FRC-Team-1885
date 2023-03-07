@@ -14,6 +14,7 @@ import us.ilite.robot.Enums;
 import static us.ilite.common.types.EIntakeData.*;
 
 public class IntakeModule extends Module {
+    /*
     private final TalonFX mIntakeRoller;
     private final DoubleSolenoid mArmSolenoid;
     private final Compressor mCompressor;
@@ -30,6 +31,7 @@ public class IntakeModule extends Module {
     public static final double kFeetSpeedConversion = (kScaledUnitsToRPM * kWheelCircumference) / 60.0;
 
     public IntakeModule() {
+
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
 //        mIntakeRoller.setInverted(true);
@@ -90,4 +92,6 @@ public class IntakeModule extends Module {
                 break;
         }
     }
+
+     */
 }

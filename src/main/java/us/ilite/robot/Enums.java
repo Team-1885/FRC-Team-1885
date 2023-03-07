@@ -208,8 +208,11 @@ public class Enums {
         EXTEND_POSITION;
     }
     public enum EClawMode {
-        SPIN_MOTOR,
-        SET_MOTOR_ANGLE_PARALLEL;
+        PERCENT_OUTPUT,
+        DEFAULT,
+        EXTEND,
+        RETRACT;
+
 
     }
 

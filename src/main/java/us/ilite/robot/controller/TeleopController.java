@@ -437,13 +437,13 @@ public class TeleopController extends BaseManualController {
 
 
     }
-    //comment for pus
     public void updateClaw() {
-        if (db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+        if (db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             //================================================
             // IF DPAD DOWN AND UP ARE PRESSED VELOCITY IS .2
             //================================================
             db.claw.set(EClawData.DESIRED_VEL_ft_s, .2);
+            System.out.print("aaaaaaaaaaaaaaaa");
         }
         else {
             //===========================================
@@ -451,6 +451,12 @@ public class TeleopController extends BaseManualController {
             //===========================================
             db.claw.set(EClawData.DESIRED_VEL_ft_s, 0);
         }
-
+        if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
+            if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+                setIntakeArmEnabled(true);
+            } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+                setIntakeArmEnabled(false);
+            }
+        }
     }
 }
