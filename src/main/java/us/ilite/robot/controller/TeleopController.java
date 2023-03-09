@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import us.ilite.common.Field2022;
 import us.ilite.common.config.InputMap;
+import us.ilite.common.config.Settings;
 import us.ilite.common.types.*;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.ELogitech310;
@@ -24,7 +25,6 @@ public class TeleopController extends BaseManualController {
 
     private static TeleopController INSTANCE;
     private boolean mPressed = false, mPrevPressed = false;
-
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
     private NeoDriveModule mRobotDrive = NeoDriveModule.getInstance();
@@ -126,36 +126,133 @@ public class TeleopController extends BaseManualController {
 ////            }
 //        }
 //    }
-
     private void updateTargetLock() {
         if (Robot.mode() == EMatchMode.TELEOPERATED) {
-            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-//                if (db.limelight.isSet(ELimelightData.TV)) {
-//                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
-//                } else {
-//                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
-//                }
-                db.limelight.set(ELimelightData.TARGET_ID, 1);
-
+            /**
+             * Upon Specific Buttons Pressed, adjust the
+             * limelight pipeline to target different objects
+             */
+            // if the reflective tape tracking button is pressed
+            if (db.driverinput.isSet(InputMap.DRIVER.REFLECTIVE_TAPE_TRACKING)) {
+                // adjust limelight pipeline so the robot targets reflective tape
+                db.limelight.set(ELimelightData.TARGET_ID, Settings.kReflectiveTapePipelineID);
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            } else {
-                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
             }
-        } else {
-            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
-                } else {
-                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
-                }
+            // if the cone tracking button is pressed
+            else if (db.driverinput.isSet(InputMap.DRIVER.CONE_TRACKING)) {
+                // adjust limelight pipeline so the robot targets cones
+                db.limelight.set(ELimelightData.TARGET_ID, Settings.kConePipelineID);
+                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+            }
+            // if the cube tracking button is pressed
+            else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
+                // adjust limelight pipeline so the robot targets cubes
+                db.limelight.set(ELimelightData.TARGET_ID, Settings.kCubePipelineID);
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
             } else {
                 db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
             }
         }
+//        else // if the robot is not in teleoperated mode
+//        {
+//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK))
+//            {
+//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
+//                {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
+//                } else {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
+//                }
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//            } else {
+//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+//            }
+//        }
     }
+
+
+
+
+
+
+
+
+
+//                // if the limelight is targeting reflective tape
+//                if(db.limelight.get(ELimelightData.PIPELINE) == Settings.kReflectiveTapePipelineID)
+//                {
+//
+//                }
+//                // if the limelight is targeting cones
+//                else if (db.limelight.get(ELimelightData.PIPELINE) == Settings.kConePipelineID)
+//                {
+//                    // if ___ button is pressed, make adjust limelight pipeline so the robot targets cones
+//                }
+//                // if the limelight is targeting cubes
+//                else if (db.limelight.get(ELimelightData.PIPELINE) == Settings.kCubePipelineID)
+//                {
+//                    // if ___ button is pressed, make adjust limelight pipeline so the robot targets cubes
+//                }
+//                if (db.limelight.isSet(ELimelightData.TV)) {
+//                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
+//                } else {
+//                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
+//                }
+//                db.limelight.set(ELimelightData.TARGET_ID, 1);
+
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//            } else {
+//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+//            }
+//        } else {
+//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
+//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
+//                } else {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
+//                }
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//            } else {
+//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+//            }
+//        }
+
+
+
+
+
+//        if (Robot.mode() == EMatchMode.TELEOPERATED) {
+//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
+////                if (db.limelight.isSet(ELimelightData.TV)) {
+////                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
+////                } else {
+////                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
+////                }
+//                db.limelight.set(ELimelightData.TARGET_ID, 1);
+//
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//            } else {
+//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+//            }
+//        } else {
+//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
+//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
+//                } else {
+//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
+//                }
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//            } else {
+//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+//            }
+//        }
+//    }
 //    private void updateHangerManual() {
 //        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
 //            if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {

@@ -115,6 +115,9 @@ public class Settings {
     public static final double kTargetAngleLockMaxInput = 27;
     public static final double kTargetAngleLockFrictionFeedforward = 0.44 / 12;
 
+    public static final int kReflectiveTapePipelineID = 1;
+    public static final int kConePipelineID = 2;
+    public static final int kCubePipelineID = 3;
     // =============================================================================
     // RamseteCommand constants
     // =============================================================================
