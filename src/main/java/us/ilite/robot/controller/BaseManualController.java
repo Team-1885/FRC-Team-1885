@@ -39,6 +39,8 @@ public abstract class BaseManualController extends AbstractController {
             rotate *= Settings.Input.kSnailModePercentRotateReduction;
         }
 
+        // turn towards targetted object
+        // (InputMap.isTargeting) {
         if (db.driverinput.isSet(TARGET_LOCK)) {
             db.drivetrain.set(DESIRED_THROTTLE_PCT, Math.min(throttle, 0.75));
             db.drivetrain.set(DESIRED_TURN_PCT, rotate);

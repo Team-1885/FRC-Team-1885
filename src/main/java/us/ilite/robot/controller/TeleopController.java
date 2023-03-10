@@ -1,6 +1,8 @@
 package us.ilite.robot.controller;
 
 import com.pathplanner.lib.commands.PPRamseteCommand;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +31,8 @@ public class TeleopController extends BaseManualController {
     private Timer moveToTraversalTimer = new Timer();
     private NeoDriveModule mRobotDrive = NeoDriveModule.getInstance();
     private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
+    private NetworkTable mTable;
+
 
 
     public static TeleopController getInstance() {
@@ -42,6 +46,9 @@ public class TeleopController extends BaseManualController {
         mClimbTimer = new Timer();
         mClimbTimer.reset();
         mClimbTimer.start();
+
+        // create network table
+        mTable = NetworkTableInstance.getDefault().getTable("Target_Lock_Info");
     }
 
     @Override
@@ -133,25 +140,43 @@ public class TeleopController extends BaseManualController {
              * limelight pipeline to target different objects
              */
             // if the reflective tape tracking button is pressed
-            if (db.driverinput.isSet(InputMap.DRIVER.REFLECTIVE_TAPE_TRACKING)) {
+//            if (db.driverinput.isSet(InputMap.DRIVER.REFLECTIVE_TAPE_TRACKING)) {
+            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
+                // set robot mode to targeting
+                InputMap.isTargetting = true;
                 // adjust limelight pipeline so the robot targets reflective tape
                 db.limelight.set(ELimelightData.TARGET_ID, Settings.kReflectiveTapePipelineID);
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+
+                mTable.getEntry("Tracking Object").setString("Tracking Reflective Tape");
             }
             // if the cone tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CONE_TRACKING)) {
+                // set robot mode to targeting
+                InputMap.isTargetting = true;
                 // adjust limelight pipeline so the robot targets cones
                 db.limelight.set(ELimelightData.TARGET_ID, Settings.kConePipelineID);
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+
+                mTable.getEntry("Tracking Object").setString("Tracking Cones");
             }
             // if the cube tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
+                // set robot mode to targeting true
+                InputMap.isTargetting = true;
                 // adjust limelight pipeline so the robot targets cubes
                 db.limelight.set(ELimelightData.TARGET_ID, Settings.kCubePipelineID);
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            } else {
+
+                mTable.getEntry("Tracking Object").setString("Tracking Cubes");
+            }
+            else { // No targetting button is pressed
+                // set robot mode to targeting false
+                InputMap.isTargetting = false;
                 db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
+
+                mTable.getEntry("Tracking Object").setString("Not Tracking");
             }
         }
 //        else // if the robot is not in teleoperated mode
