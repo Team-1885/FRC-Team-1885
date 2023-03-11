@@ -87,14 +87,16 @@ public class TeleopController extends BaseManualController {
         }
     }
     private void updateAddressableLEDS() {
+        //System.out.println("teleop");
         if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.BATTLEFIElD_COLOR);
+            //System.out.println("BattlefieldColor");
         }
 
-        if(db.operatorinput.isSet(ELogitech310.X_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+        else if(db.operatorinput.isSet(ELogitech310.X_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.YELLOW);
         }
-        if(db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
+        else if(db.operatorinput.isSet(ELogitech310.DPAD_UP) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.PURPLE);
         }
         else {

@@ -18,40 +18,54 @@ public class AddressableLEDs extends Module{
         mLED = new AddressableLED(9);
         mLEDBuffer = new AddressableLEDBuffer(60);
         mLED.setLength(mLEDBuffer.getLength());
+        mLED.setData(mLEDBuffer);
+        mLED.start();
         mTable = NetworkTableInstance.getDefault().getTable("newled");
     }
     @Override
     public void modeInit(EMatchMode pMode) {
 
     }
+
+    //private Enums.EAddressableLEDState desiredColor;
     @Override
     protected void readInputs() {
-
+        //desiredColor = db.addressableled.get(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.class); // idk if that will work but by my understanding,
+        // you get the information that you will eventually use in setOutputs in readInputs
+        //db.addressableled.set(EAddressableLEDData.ACTUALCOLOR, );
     }
     @Override
     protected void setOutputs() {
+
         Enums.EAddressableLEDState mode = db.addressableled.get(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.class);
-        mTable.getEntry("DesiredColor").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
+        System.out.println(mode);
+        System.out.println(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
+        //System.out.println("itsglasstime");
+        mTable.getEntry("DesiredColor").setString(mode.toString());
         switch(mode) {
             case GAMER_COLOR:
                 gamerColor();
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
                 mTable.getEntry("GamerColor").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case BATTLEFIElD_COLOR:
                 battlefieldColor();
+                System.out.println("bbbbbbbbbbbbbbbbbbbbb");
                 mTable.getEntry("BattlefieldColor").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case YELLOW:
                 yellowCones();
+                System.out.println("cccccccccccccccccccccccc");
                 mTable.getEntry("Yellow").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case PURPLE:
                 purpleCubes();
+                System.out.println("ddddddddddddddddddddddddddddd");
                 mTable.getEntry("Purple").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
+            default: System.out.println("nerd");
         }
-        mLED.setData(mLEDBuffer);
-        mLED.start();
+
         //mTable.getEntry("RGBColor").setNumber();
     }
     int i = 0;
@@ -60,10 +74,23 @@ public class AddressableLEDs extends Module{
         if (i < mLEDBuffer.getLength()) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var hue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
+            var hue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
             // Set the value
             mLEDBuffer.setHSV(i, hue, 255, 128);
-            i++;
+            hue = (mRainbowFirstPixelHue + ((i+1) * 180 / mLEDBuffer.getLength())) % 180;
+            // Set the value
+            mLEDBuffer.setHSV(i+1, hue, 255, 128);
+            hue = (mRainbowFirstPixelHue + ((i+2) * 180 / mLEDBuffer.getLength())) % 180;
+            // Set the value
+            mLEDBuffer.setHSV(i+2, hue, 255, 128);
+            hue = (mRainbowFirstPixelHue + ((i+3) * 180 / mLEDBuffer.getLength())) % 180;
+            // Set the value
+            mLEDBuffer.setHSV(i+3, hue, 255, 128);
+            hue = (mRainbowFirstPixelHue + ((i+4) * 180 / mLEDBuffer.getLength())) % 180;
+            // Set the value
+            mLEDBuffer.setHSV(i+4, hue, 255, 128);
+
+            i+=5;
         } else {
             mLED.setData(mLEDBuffer);
             // Increase by to make the rainbow "move"
@@ -95,7 +122,8 @@ public class AddressableLEDs extends Module{
 
     public void yellowCones() {
         if (i < mLEDBuffer.getLength()) {
-            mLEDBuffer.setRGB(i,255,255,0);
+
+            mLEDBuffer.setRGB(i,128,0,128);
             i++;
         }
         else {
@@ -107,7 +135,7 @@ public class AddressableLEDs extends Module{
     }
     public void purpleCubes() {
         if (i < mLEDBuffer.getLength()) {
-            mLEDBuffer.setRGB(i,128,0,128);
+            mLEDBuffer.setRGB(i,255,255,0);
             i++;
         }
         else {
