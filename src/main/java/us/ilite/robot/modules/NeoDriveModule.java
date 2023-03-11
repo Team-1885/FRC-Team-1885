@@ -131,10 +131,10 @@ public class NeoDriveModule extends Module implements Subsystem {
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
 
-        mRightMaster.setClosedLoopRampRate(0.5);
-        mRightFollower.setClosedLoopRampRate(0.5);
-        mLeftMaster.setClosedLoopRampRate(0.5);
-        mLeftFollower.setClosedLoopRampRate(0.5);
+        mRightMaster.setClosedLoopRampRate(0.25);
+        mRightFollower.setClosedLoopRampRate(0.25);
+        mLeftMaster.setClosedLoopRampRate(0.25);
+        mLeftFollower.setClosedLoopRampRate(0.25);
 
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
@@ -269,6 +269,11 @@ public class NeoDriveModule extends Module implements Subsystem {
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
+            case BREAK:
+                mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+                mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+                mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+                mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
         }
     }
 

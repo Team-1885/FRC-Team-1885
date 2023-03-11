@@ -6,6 +6,7 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.EInputScale;
 import us.ilite.common.types.input.ELogitech310;
+import us.ilite.robot.Enums;
 import us.ilite.robot.modules.DriveMessage;
 import static us.ilite.robot.Enums.*;
 
@@ -33,6 +34,10 @@ public abstract class BaseManualController extends AbstractController {
 
         rotate = Math.abs(rotate) > 0.02 ? rotate : 0.0; //Handling Deadband
         throttle = Math.abs(throttle) > 0.02 ? throttle : 0.0; //Handling Deadband
+
+        if (db.driverinput.isSet(ELogitech310.L_BTN)) {
+            db.drivetrain.set(STATE, EDriveState.BREAK);
+        }
 
         if (db.driverinput.isSet(SNAIL_MODE) && db.driverinput.get(SNAIL_MODE) > DRIVER_SUB_WARP_AXIS_THRESHOLD) {
             throttle *= Settings.Input.kSnailModePercentThrottleReduction;

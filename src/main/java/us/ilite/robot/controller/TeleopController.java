@@ -69,6 +69,7 @@ public class TeleopController extends BaseManualController {
 
 //        updateIntake();
         updateTargetLock();
+
     }
 //    private void updateHangerMotors() {
 //        db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
