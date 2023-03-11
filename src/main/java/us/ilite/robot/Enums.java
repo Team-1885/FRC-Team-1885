@@ -201,5 +201,7 @@ public class Enums {
         PERCENT_OUTPUT,
         VELOCITY;
     }
+    public enum EAddressableLEDState {
 
+    }
 }
