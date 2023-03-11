@@ -13,6 +13,7 @@ public class AddressableLEDs extends Module{
     private int mRainbowFirstPixelHue = 0;
     private int mColorPalettePixelHueOne = 0;
     private NetworkTable mTable;
+    int i = 0;
     public AddressableLEDs() {
         mLED = new AddressableLED(9);
         mLEDBuffer = new AddressableLEDBuffer(60);
@@ -52,12 +53,17 @@ public class AddressableLEDs extends Module{
 
     private void gamerColor() {
         // For every pixel
-        for ( var i = 0; i < mLEDBuffer.getLength(); i++) {
+        if(i < 60){
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
             final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
             // Set the value
             mLEDBuffer.setHSV(i, colorPaletteHue, 30, 68);
+            i++;
+        }
+        else {
+            i = 0;
+            System.out.println("else statement");
         }
         // Increase by to make the rainbow "move"
         mColorPalettePixelHueOne += 3;
