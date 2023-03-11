@@ -33,7 +33,6 @@ public class AddressableLEDs extends Module{
     }
     @Override
     protected void setOutputs() {
-        System.out.println("Alan is a poop head");
         mTable.getEntry("newLED").setString("setOutputs");
         gamerColor();
         mLED.setData(mLEDBuffer);
@@ -58,22 +57,30 @@ public class AddressableLEDs extends Module{
 
     private void gamerColor() {
         // For every pixel
-        if(i < 60){
+        if(i < 60) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
-          //  final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
+            var colorPaletteHue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
+            //  final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
             // Set the value
-            mLEDBuffer.setHSV(i, colorPaletteHue, 30, 68);
+            if (i % 2 == 0) {
+                System.out.println("MeganPHONE");
+                colorPaletteHue = 45;
+                mLEDBuffer.setHSV(i, colorPaletteHue, 255, 255);
+            } else {
+                System.out.println("BIGBROSAM");
+                colorPaletteHue = 90;
+                mLEDBuffer.setHSV(i, colorPaletteHue, 255, 200);
+            }
             i++;
-        }
-        else {
-            i = 0;
-            System.out.println("else statement");
+
+            //}
+            //else {
+            //  i = 0;
             // Increase by to make the rainbow "move"
-            mColorPalettePixelHueOne += 3;
+            //mColorPalettePixelHueOne += 3;
             // Check bounds
-            mColorPalettePixelHueOne %= 180;
+            //mColorPalettePixelHueOne %= 180;
         }
     }
 }
