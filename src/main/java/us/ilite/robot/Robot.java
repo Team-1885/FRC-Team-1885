@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
         mOI = new OperatorInput();
         mLEDControl = new LEDModule();
         mNeoDrive = NeoDriveModule.getInstance();
+        mAddressableLEDs = new AddressableLEDs();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
