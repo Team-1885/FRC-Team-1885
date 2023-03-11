@@ -50,6 +50,7 @@ public class Data {
     public final RobotCodex<ELimelightData> limelight = new RobotCodex(NULL_CODEX_VALUE , ELimelightData.class);
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
     public final RobotCodex<EPixyData> pixydata = new RobotCodex(NULL_CODEX_VALUE, EPixyData.class);
+    public final RobotCodex<EAddressableLEDData> addressableled = new RobotCodex(NULL_CODEX_VALUE, EAddressableLEDData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
             operatorinput,
@@ -61,6 +62,7 @@ public class Data {
             intake,
             climber,
             pixydata,
+            addressableled,
     };
 
     public final Map<String, RobotCodex> mMappedCodex = new HashMap<>();
@@ -138,6 +140,7 @@ public class Data {
         mConvertedFields.add(EClimberData.IS_SINGLE_CLAMPED.name());
         mConvertedFields.add(ELEDControlData.DESIRED_COLOR.name());
         mConvertedFields.add(ELEDControlData.LED_STATE.name());
+
     }
 
     private List<String> mConvertedFields = new ArrayList<>();

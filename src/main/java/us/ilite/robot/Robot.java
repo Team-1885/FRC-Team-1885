@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AutonSelection mAutonSelection;
     private ClimbModeSelection mClimberSelector;
+
   //  private BallTracking mPixy;
 
 
@@ -87,6 +88,7 @@ public class Robot extends TimedRobot {
         mNeoDrive = NeoDriveModule.getInstance();
         mAddressableLEDs = new AddressableLEDs();
         mLimelight = new Limelight();
+        mAddressableLEDs = new AddressableLEDs();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
             mSimulation = new SimulationModule();

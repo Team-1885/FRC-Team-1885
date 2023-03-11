@@ -201,5 +201,11 @@ public class Enums {
         PERCENT_OUTPUT,
         VELOCITY;
     }
-
+    public enum EAddressableLEDState {
+        NULL,
+        GAMER_COLOR,
+        BATTLEFIElD_COLOR,
+        YELLOW,
+        PURPLE;
+    }
 }
