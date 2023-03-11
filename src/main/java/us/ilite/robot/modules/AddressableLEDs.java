@@ -18,7 +18,7 @@ public class AddressableLEDs extends Module{
         mLED = new AddressableLED(9);
         mLEDBuffer = new AddressableLEDBuffer(60);
         mLED.setLength(mLEDBuffer.getLength());
-        mTable = NetworkTableInstance.getDefault().getTable("newled");
+        mTable = NetworkTableInstance.getDefault().getTable("newLED");
     }
     @Override
     public void modeInit(EMatchMode pMode) {
@@ -30,6 +30,7 @@ public class AddressableLEDs extends Module{
     }
     @Override
     protected void setOutputs() {
+        mTable.getEntry("newLED").setString("else statement");
         gamerColor();
         mLED.setData(mLEDBuffer);
         mLED.start();
@@ -56,7 +57,8 @@ public class AddressableLEDs extends Module{
         if(i < 60){
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
+            final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
+          //  final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
             // Set the value
             mLEDBuffer.setHSV(i, colorPaletteHue, 30, 68);
             i++;
