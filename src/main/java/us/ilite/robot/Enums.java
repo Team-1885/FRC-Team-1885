@@ -202,6 +202,9 @@ public class Enums {
         VELOCITY;
     }
     public enum EAddressableLEDState {
-
+        GAMER_COLOR,
+        BATTLEFIElD_COLOR,
+        YELLOW,
+        PURPLE;
     }
 }
