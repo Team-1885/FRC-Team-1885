@@ -145,6 +145,8 @@ public class TeleopController extends BaseManualController {
              *
              * We get the pipeline we want to track from the field element we want to track
              * Not from a random constant in Settings.java
+             *
+             * Make sure normal vision pipeline doesn't target anything to avoid weird bugs
              */
             // if the reflective tape button is pressed
             if (db.driverinput.isSet(InputMap.DRIVER.REFLECTIVE_TAPE_TRACKING)) {
@@ -152,6 +154,8 @@ public class TeleopController extends BaseManualController {
                 db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.REFLECTIVE_TAPE);
                 // let target lock take over
                 db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+                // set LED
+                //db.ledcontrol.set(ELEDControlData.DESIRED_COLOR, 20);
 
                 // log
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
