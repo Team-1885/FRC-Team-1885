@@ -38,8 +38,11 @@ public class AutonSelection {
     private PathPlannerTrajectory ScorePreloadWithTAXI;
     private PPRamseteCommand ScorePreloadWithTAXICommand;
 
-    private PathPlannerTrajectory Autobalance;
-    private PPRamseteCommand AutobalanceCommand;
+    private PathPlannerTrajectory AutobalanceREVERSE;
+    private PPRamseteCommand AutobalanceREVERSECommand;
+
+    private PathPlannerTrajectory AutobalanceFRONT;
+    private PPRamseteCommand AutobalanceFRONTCommand;
 
 
     public AutonSelection() {
@@ -48,19 +51,22 @@ public class AutonSelection {
         ScorePreloadNODOCK = PathPlanner.loadPath("ScorePreloadNODOCK", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
         ScorePreloadWITHDOCK = PathPlanner.loadPath("ScorePreloadWITHDOCK", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         ScorePreloadWithTAXI = PathPlanner.loadPath("ScorePreloadWithTAXI", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
-        Autobalance = PathPlanner.loadPath("Autobalance", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        AutobalanceREVERSE = PathPlanner.loadPath("AutobalanceREVERSE", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        AutobalanceFRONT = PathPlanner.loadPath("AutobalanceFRONT", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
 
         ScorePreloadNODOCKCommand = commandGenerator.generateCommand(ScorePreloadNODOCK);
         ScorePreloadWITHDOCKCommand = commandGenerator.generateCommand(ScorePreloadWITHDOCK);
         ScorePreloadWithTAXICommand = commandGenerator.generateCommand(ScorePreloadWithTAXI);
-        AutobalanceCommand = commandGenerator.generateCommand(Autobalance);
+        AutobalanceREVERSECommand = commandGenerator.generateCommand(AutobalanceREVERSE);
+        AutobalanceFRONTCommand = commandGenerator.generateCommand(AutobalanceFRONT);
 
         mRobotDrive = NeoDriveModule.getInstance();
 
         mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
-        mSendableAutonControllers.addOption("ScorePreload WITH TAXI", AutobalanceCommand);
+        mSendableAutonControllers.addOption("Autobalance REVERSE", AutobalanceREVERSECommand);
+        mSendableAutonControllers.addOption("Autobalance FRONT", AutobalanceFRONTCommand);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }
