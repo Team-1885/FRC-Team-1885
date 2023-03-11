@@ -24,14 +24,12 @@ public class InputMap {
         SNAIL_MODE = ELogitech310.RIGHT_TRIGGER_AXIS, // TODO Experiment with increased or decreased acceleration rates for snail
         ACTIVATE_CLIMB = ELogitech310.START,
         //MID_RUNG = ELogitech310.L_BTN,
-        //REFLECTIVE_TAPE_TRACKING = ELogitech310.LEFT_TRIGGER_AXIS,
+        REFLECTIVE_TAPE_TRACKING = ELogitech310.LEFT_TRIGGER_AXIS,
         CONE_TRACKING = ELogitech310.L_BTN,
-        CUBE_TRACKING = ELogitech310.R_BTN,
-        TARGET_LOCK = ELogitech310.LEFT_TRIGGER_AXIS
+        CUBE_TRACKING = ELogitech310.R_BTN
+        //TARGET_LOCK = ELogitech310.LEFT_TRIGGER_AXIS
         ;
     }
-    // keep track of if targetting is enabled
-    public static boolean isTargetting;
 
     /**
      *

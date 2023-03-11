@@ -4,16 +4,9 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.modules.NeoDriveModule;
 
@@ -38,10 +31,10 @@ public class AutonSelection {
     private PathPlannerTrajectory ScorePreloadWithTAXI;
     private PPRamseteCommand ScorePreloadWithTAXICommand;
 
-    private PathPlannerTrajectory AutobalanceREVERSE;
+    private PathPlannerTrajectory AutobalanceREVERSEFIRST;
     private PPRamseteCommand AutobalanceREVERSECommand;
 
-    private PathPlannerTrajectory AutobalanceFRONT;
+    private PathPlannerTrajectory AutobalanceFRONTFIRST;
     private PPRamseteCommand AutobalanceFRONTCommand;
 
 
@@ -51,14 +44,14 @@ public class AutonSelection {
         ScorePreloadNODOCK = PathPlanner.loadPath("ScorePreloadNODOCK", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
         ScorePreloadWITHDOCK = PathPlanner.loadPath("ScorePreloadWITHDOCK", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         ScorePreloadWithTAXI = PathPlanner.loadPath("ScorePreloadWithTAXI", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
-        AutobalanceREVERSE = PathPlanner.loadPath("AutobalanceREVERSE", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
-        AutobalanceFRONT = PathPlanner.loadPath("AutobalanceFRONT", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        AutobalanceREVERSEFIRST = PathPlanner.loadPath("AutobalanceREVERSEFIRST", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        AutobalanceFRONTFIRST = PathPlanner.loadPath("AutobalanceFRONTFIRST", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
 
         ScorePreloadNODOCKCommand = commandGenerator.generateCommand(ScorePreloadNODOCK);
         ScorePreloadWITHDOCKCommand = commandGenerator.generateCommand(ScorePreloadWITHDOCK);
         ScorePreloadWithTAXICommand = commandGenerator.generateCommand(ScorePreloadWithTAXI);
-        AutobalanceREVERSECommand = commandGenerator.generateCommand(AutobalanceREVERSE);
-        AutobalanceFRONTCommand = commandGenerator.generateCommand(AutobalanceFRONT);
+        AutobalanceREVERSECommand = commandGenerator.generateCommand(AutobalanceREVERSEFIRST);
+        AutobalanceFRONTCommand = commandGenerator.generateCommand(AutobalanceFRONTFIRST);
 
         mRobotDrive = NeoDriveModule.getInstance();
 
