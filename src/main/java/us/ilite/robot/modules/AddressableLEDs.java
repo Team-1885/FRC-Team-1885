@@ -18,7 +18,9 @@ public class AddressableLEDs extends Module{
         mLED = new AddressableLED(9);
         mLEDBuffer = new AddressableLEDBuffer(60);
         mLED.setLength(mLEDBuffer.getLength());
+        System.out.println("Your mother is muy bonita");
         mTable = NetworkTableInstance.getDefault().getTable("newLED");
+        mTable.getEntry("newLED").setString("DEBUG: NOT SET");
     }
     @Override
     public void modeInit(EMatchMode pMode) {
@@ -27,10 +29,12 @@ public class AddressableLEDs extends Module{
     @Override
     protected void readInputs() {
 
+        mTable.getEntry("newLED").setString("getInputs");
     }
     @Override
     protected void setOutputs() {
-        mTable.getEntry("newLED").setString("else statement");
+        System.out.println("Alan is a poop head");
+        mTable.getEntry("newLED").setString("setOutputs");
         gamerColor();
         mLED.setData(mLEDBuffer);
         mLED.start();
@@ -66,11 +70,11 @@ public class AddressableLEDs extends Module{
         else {
             i = 0;
             System.out.println("else statement");
+            // Increase by to make the rainbow "move"
+            mColorPalettePixelHueOne += 3;
+            // Check bounds
+            mColorPalettePixelHueOne %= 180;
         }
-        // Increase by to make the rainbow "move"
-        mColorPalettePixelHueOne += 3;
-        // Check bounds
-        mColorPalettePixelHueOne %= 180;
     }
 }
 
