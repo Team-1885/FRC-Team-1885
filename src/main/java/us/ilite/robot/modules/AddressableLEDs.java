@@ -33,7 +33,6 @@ public class AddressableLEDs extends Module{
     }
     @Override
     protected void setOutputs() {
-
         Enums.EAddressableLEDState mode = db.addressableled.get(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.class);
         System.out.println(mode);
         System.out.println(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
