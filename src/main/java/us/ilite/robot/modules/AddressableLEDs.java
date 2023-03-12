@@ -54,6 +54,11 @@ public class AddressableLEDs extends Module{
                 purpleCubes();
                 mTable.getEntry("Purple").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
+            case RED:
+                trackingButtonPressed();
+                mTable.getEntry("Red").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
+                break;
+
         }
     }
 
@@ -125,6 +130,16 @@ public class AddressableLEDs extends Module{
     public void purpleCubes() {
         if (i < mLEDBuffer.getLength()) {
             mLEDBuffer.setRGB(i,255,255,0);
+            i++;
+        }
+        else {
+            mLED.setData(mLEDBuffer);
+            i = 0;
+        }
+    }
+    public void trackingButtonPressed() {
+        if (i < mLEDBuffer.getLength()) {
+            mLEDBuffer.setRGB(i,255,0,0);
             i++;
         }
         else {

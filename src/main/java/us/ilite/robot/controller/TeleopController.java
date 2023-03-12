@@ -30,7 +30,7 @@ public class TeleopController extends BaseManualController {
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
     private NeoDriveModule mRobotDrive = NeoDriveModule.getInstance();
-    private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
+    //private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
     private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("Target_Lock_Info");
 
 
@@ -111,7 +111,7 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Reflective Tape");
 
-                // change led color
+                db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.RED);
             }
             // if the cone tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CONE_TRACKING)) {
@@ -124,7 +124,7 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Cones");
 
-                // change led color to yellow
+                db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.YELLOW);
             }
             // if the cube tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
@@ -137,7 +137,7 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Cubes");
 
-                // change led color to purple
+                db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.PURPLE);
             }
             else { // No targetting button is pressed
                 // set limelight pipeline back to base camera without crazy filters
@@ -149,16 +149,14 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Not Tracking");
 
-                // change led to default color
+                db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.GAMER_COLOR);
             }
         }
     }
 
     private void updateAddressableLEDS() {
-        //System.out.println("teleop");
         if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.BATTLEFIElD_COLOR);
-            //System.out.println("BattlefieldColor");
         }
 
         else if(db.operatorinput.isSet(ELogitech310.X_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
