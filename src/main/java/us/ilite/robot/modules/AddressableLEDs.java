@@ -56,6 +56,7 @@ public class AddressableLEDs extends Module{
                 break;
         }
     }
+
     int i = 0;
     private void gamerColor() {
         // For every pixel

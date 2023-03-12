@@ -115,6 +115,7 @@ public class Settings {
     public static final double kTargetAngleLockMaxInput = 27;
     public static final double kTargetAngleLockFrictionFeedforward = 0.44 / 12;
 
+
     // =============================================================================
     // RamseteCommand constants
     // =============================================================================
