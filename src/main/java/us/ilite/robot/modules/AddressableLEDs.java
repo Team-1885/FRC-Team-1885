@@ -69,6 +69,7 @@ public class AddressableLEDs extends Module{
 
         //mTable.getEntry("RGBColor").setNumber();
     }
+
     int i = 0;
     private void gamerColor() {
         // For every pixel
@@ -101,9 +102,7 @@ public class AddressableLEDs extends Module{
             i = 0;
         }
     }
-     */
-
-    private void gamerColor() {
+    private void battlefieldColor() {
         // For every pixel
         if (i < mLEDBuffer.getLength()) {
             // Calculate the hue - hue is easier for rainbows because the color
