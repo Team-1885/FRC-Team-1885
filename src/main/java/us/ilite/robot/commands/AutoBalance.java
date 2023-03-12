@@ -11,7 +11,6 @@ import us.ilite.robot.Robot;
 import us.ilite.robot.modules.NeoDriveModule;
 
 import static us.ilite.common.types.drive.EDriveData.*;
-
 // this command will need to start before the robot drives up onto the charge station
 // trajectory should end at the foot of the charge station
 // gyro should zero
@@ -50,17 +49,13 @@ public class AutoBalance extends CommandBase {
     public void execute() { // continuously executes until the command is finished
         // update current roll
         mCurrentRoll = db.imu.get(EGyro.ROLL_DEGREES);
-        //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-        //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
-        //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
+
     }
 
     @Override
     public void end(boolean interrupted) { // executes once after the command ends
         // robot is balanced, stop robot
-        mDrive.setVolts(0, 0);
-        //db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
-        //db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, 0.0);
+        mDrive.setThrottlePct(0);
     }
 
     @Override
@@ -75,16 +70,8 @@ public class AutoBalance extends CommandBase {
             double errorAngle = mCurrentRoll - mBalancedHighBound; // always positive
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
-            newVelocity *= 12; // never greater than 12
-            // drive forward
-            mDrive.setVolts(newVelocity, newVelocity);
+            mDrive.setThrottlePct(newVelocity);
 
-//            db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
-//            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
-//            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, .2);
-            //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, .2);
-            //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
             mTable.getEntry("throttle").setNumber(db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT));
             mTable.getEntry("finshed").setString("not finished");
 
@@ -97,16 +84,8 @@ public class AutoBalance extends CommandBase {
             double errorAngle = mCurrentRoll - mBalancedLowBound; // always negative
             // the greater the errorAngle, the faster the robot should correct its balance
             double newVelocity = errorAngle/360; // make angle magnitude between 0 and 1
-            newVelocity *= 12; // never greater than 12
-            // drive backward
-            mDrive.setVolts(newVelocity, newVelocity);
+            mDrive.setThrottlePct(newVelocity);
 
-            //Robot.DATA.drivetrain.set(STATE, Enums.EDriveState.PERCENT_OUTPUT);
-            //Robot.DATA.drivetrain.set(DESIRED_THROTTLE_PCT, -.2);
-            //Robot.DATA.drivetrain.set(DESIRED_TURN_PCT, 0);
-//            db.drivetrain.set(STATE, Enums.EDriveState.VELOCITY);
-//            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, newVelocity);
-//            db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, .2);
             mTable.getEntry("finshed").setString("not finished");
             return false;
         }
@@ -114,15 +93,8 @@ public class AutoBalance extends CommandBase {
             mTable.getEntry("finshed").setString("finished");
             return true;
         }
-
-
     }
-
 }
-
-
-
-
 
 
 
