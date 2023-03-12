@@ -152,145 +152,14 @@ public class TeleopController extends BaseManualController {
                 // change led to default color
             }
         }
-//        else // if the robot is not in teleoperated mode
-//        {
-//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK))
-//            {
-//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
-//                {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
-//                } else {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
-//                }
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//            } else {
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
-//            }
-//        }
     }
+
     private void updateAddressableLEDS() {
         //System.out.println("teleop");
         if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.BATTLEFIElD_COLOR);
             //System.out.println("BattlefieldColor");
         }
-
-
-
-
-
-
-
-
-
-//                // if the limelight is targeting reflective tape
-//                if(db.limelight.get(ELimelightData.PIPELINE) == Settings.kReflectiveTapePipelineID)
-//                {
-//
-//                }
-//                // if the limelight is targeting cones
-//                else if (db.limelight.get(ELimelightData.PIPELINE) == Settings.kConePipelineID)
-//                {
-//                    // if ___ button is pressed, make adjust limelight pipeline so the robot targets cones
-//                }
-//                // if the limelight is targeting cubes
-//                else if (db.limelight.get(ELimelightData.PIPELINE) == Settings.kCubePipelineID)
-//                {
-//                    // if ___ button is pressed, make adjust limelight pipeline so the robot targets cubes
-//                }
-//                if (db.limelight.isSet(ELimelightData.TV)) {
-//                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
-//                } else {
-//                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
-//                }
-//                db.limelight.set(ELimelightData.TARGET_ID, 1);
-
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//            } else {
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
-//            }
-//        } else {
-//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
-//                } else {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
-//                }
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//            } else {
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
-//            }
-//        }
-
-
-
-
-
-//        if (Robot.mode() == EMatchMode.TELEOPERATED) {
-//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-////                if (db.limelight.isSet(ELimelightData.TV)) {
-////                    setLED(Enums.LEDColorMode.GREEN, Enums.LEDState.SOLID);
-////                } else {
-////                    setLED(Enums.LEDColorMode.RED, Enums.LEDState.SOLID);
-////                }
-//                db.limelight.set(ELimelightData.TARGET_ID, 1);
-//
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//            } else {
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
-//            }
-//        } else {
-//            if (db.driverinput.isSet(InputMap.DRIVER.TARGET_LOCK)) {
-//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG1);
-//                } else {
-//                    db.pixydata.set(EPixyData.SIGNATURE, Pixy2CCC.CCC_SIG2);
-//                }
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//            } else {
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.VELOCITY);
-//            }
-//        }
-//    }
-//    private void updateHangerManual() {
-//        if (db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
-//            if (db.operatorinput.isSet(InputMap.HANGER.SPIN_SINGLE)) {
-//                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-//                db.climber.set(EClimberData.DESIRED_VEL_pct, 0.45);
-//            } else if (db.operatorinput.isSet(InputMap.HANGER.SPIN_DOUBLE)) {
-//                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-//                db.climber.set(EClimberData.DESIRED_VEL_pct, -0.45);
-//            } else {
-//                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-//                db.climber.set(EClimberData.DESIRED_VEL_pct, 0.0);
-//            }
-//            if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_DOUBLE)) {
-//                db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.CLAMPED);
-//            }
-//            else if (db.operatorinput.isSet(InputMap.HANGER.TRAVERSAL_RUNG)) {
-//                db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.POSITION);
-//                setIntakeArmEnabled(true);
-//                db.climber.set(EClimberData.DESIRED_POS_deg, 287.5);
-//            }
-//            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_DOUBLE)) {
-//                db.climber.set(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.RELEASED);
-//            }
-//            if (db.operatorinput.isSet(InputMap.HANGER.CLAMP_SINGLE)) {
-//                db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.CLAMPED);
-//            }
-//            if (db.operatorinput.isSet(InputMap.HANGER.RELEASE_SINGLE)) {
-//                db.climber.set(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.RELEASED);
-//            }
-//        } else {
-//            db.climber.set(EClimberData.HANGER_STATE, Enums.EClimberMode.PERCENT_OUTPUT);
-//            db.climber.set(EClimberData.DESIRED_VEL_pct, 0.0);
-//        }
-//    }
 
         else if(db.operatorinput.isSet(ELogitech310.X_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.YELLOW);
