@@ -7,6 +7,7 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.modules.NeoDriveModule;
 
@@ -37,6 +38,8 @@ public class AutonSelection {
     private PathPlannerTrajectory AutobalanceFRONTFIRST;
     private PPRamseteCommand AutobalanceFRONTCommand;
 
+    private AutoBalance autoBalanceCommand;
+
 
     public AutonSelection() {
         commandGenerator = new GenerateRamseteCommand();
@@ -60,6 +63,7 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
         mSendableAutonControllers.addOption("Autobalance REVERSE", AutobalanceREVERSECommand);
         mSendableAutonControllers.addOption("Autobalance FRONT", AutobalanceFRONTCommand);
+        mSendableAutonControllers.addOption("autoBalanceTest", autoBalanceCommand);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

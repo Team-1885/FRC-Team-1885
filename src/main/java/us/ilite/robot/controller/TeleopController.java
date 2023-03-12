@@ -30,7 +30,7 @@ public class TeleopController extends BaseManualController {
     private Timer mClimbTimer;
     private Timer moveToTraversalTimer = new Timer();
     private NeoDriveModule mRobotDrive = NeoDriveModule.getInstance();
-    private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
+    //private AutoBalance mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
     private NetworkTable mTable = NetworkTableInstance.getDefault().getTable("Target_Lock_Info");
 
 
