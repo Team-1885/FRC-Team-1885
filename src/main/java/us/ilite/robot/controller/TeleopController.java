@@ -149,13 +149,16 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Not Tracking");
 
+
+
                 db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.GAMER_COLOR);
+                System.out.println("else statment works");
             }
         }
     }
 
     private void updateAddressableLEDS() {
-        /*
+/*
         if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.BATTLEFIElD_COLOR);
         }
@@ -169,7 +172,7 @@ public class TeleopController extends BaseManualController {
         else {
             db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.GAMER_COLOR);
         }
-         */
+ */
     }
 
 
