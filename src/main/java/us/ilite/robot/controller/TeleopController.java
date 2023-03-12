@@ -160,6 +160,8 @@ public class TeleopController extends BaseManualController {
                 // log
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Reflective Tape");
+
+                // change led color
             }
             // if the cone tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CONE_TRACKING)) {
@@ -171,6 +173,8 @@ public class TeleopController extends BaseManualController {
                 // log
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Cones");
+
+                // change led color to yellow
             }
             // if the cube tracking button is pressed
             else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
@@ -182,6 +186,8 @@ public class TeleopController extends BaseManualController {
                 // log
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Cubes");
+
+                // change led color to purple
             }
             else { // No targetting button is pressed
                 // set limelight pipeline back to base camera without crazy filters
@@ -192,6 +198,8 @@ public class TeleopController extends BaseManualController {
                 // log
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Not Tracking");
+
+                // change led to default color
             }
         }
 //        else // if the robot is not in teleoperated mode
