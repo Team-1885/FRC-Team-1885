@@ -27,13 +27,9 @@ public class AddressableLEDs extends Module{
     public void modeInit(EMatchMode pMode) {
 
     }
-
-    //private Enums.EAddressableLEDState desiredColor;
     @Override
     protected void readInputs() {
-        //desiredColor = db.addressableled.get(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.class); // idk if that will work but by my understanding,
-        // you get the information that you will eventually use in setOutputs in readInputs
-        //db.addressableled.set(EAddressableLEDData.ACTUALCOLOR, );
+
     }
     @Override
     protected void setOutputs() {
@@ -41,33 +37,25 @@ public class AddressableLEDs extends Module{
         Enums.EAddressableLEDState mode = db.addressableled.get(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.class);
         System.out.println(mode);
         System.out.println(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
-        //System.out.println("itsglasstime");
         mTable.getEntry("DesiredColor").setString(mode.toString());
         switch(mode) {
             case GAMER_COLOR:
                 gamerColor();
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
                 mTable.getEntry("GamerColor").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case BATTLEFIElD_COLOR:
                 battlefieldColor();
-                System.out.println("bbbbbbbbbbbbbbbbbbbbb");
                 mTable.getEntry("BattlefieldColor").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case YELLOW:
                 yellowCones();
-                System.out.println("cccccccccccccccccccccccc");
                 mTable.getEntry("Yellow").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
             case PURPLE:
                 purpleCubes();
-                System.out.println("ddddddddddddddddddddddddddddd");
                 mTable.getEntry("Purple").setNumber(db.addressableled.get(EAddressableLEDData.DESIREDCOLOR));
                 break;
-            default: System.out.println("nerd");
         }
-
-        //mTable.getEntry("RGBColor").setNumber();
     }
     int i = 0;
     private void gamerColor() {
@@ -101,25 +89,23 @@ public class AddressableLEDs extends Module{
             i = 0;
         }
     }
-     */
 
-    private void gamerColor() {
+    private void battlefieldColor() {
         // For every pixel
         if (i < mLEDBuffer.getLength()) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var colorPaletteHue = (mRainbowFirstPixelHue + (i * 135 / mLEDBuffer.getLength())) % 256;
+            var colorPaletteHue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
             // Set the value
-            mLEDBuffer.setHSV(i, hue, 255, 128);
+            if(i % 2 == 0) {
+                colorPaletteHue = 45;
+                mLEDBuffer.setHSV(i, colorPaletteHue, 255, 255);
+            }
+            else {
+                colorPaletteHue = 90;
+                mLEDBuffer.setHSV(i, colorPaletteHue, 255, 200);
+            }
             i++;
-        }
-        else {
-            mLED.setData(mLEDBuffer);
-            // Increase by to make the rainbow "move"
-            mRainbowFirstPixelHue += 3;
-            // Check bounds
-            mRainbowFirstPixelHue %= 180;
-            i = 0;
         }
     }
 
