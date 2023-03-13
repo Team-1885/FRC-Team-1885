@@ -5,30 +5,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import us.ilite.common.types.EAddressableLEDData;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.robot.Enums;
 
 public class AddressableLEDs extends Module{
-    private AddressableLED mLED;
-    private AddressableLEDBuffer mLEDBuffer;
-    private int mRainbowFirstPixelHue = 0;
-    private int mColorPalettePixelHueOne = 0;
-    private NetworkTable mTable;
-    int i = 0;
-    public AddressableLEDs() {
-        mLED = new AddressableLED(9);
-        mLEDBuffer = new AddressableLEDBuffer(60);
-        mLED.setLength(mLEDBuffer.getLength());
-        System.out.println("Your mother is muy bonita");
-        mTable = NetworkTableInstance.getDefault().getTable("newLED");
-        mTable.getEntry("newLED").setString("DEBUG: NOT SET");
-    }
     private AddressableLED mLED;
     private AddressableLEDBuffer mLEDBuffer;
     private int mRainbowFirstPixelHue = 0;
@@ -124,13 +105,15 @@ public class AddressableLEDs extends Module{
             if(i % 2 == 0) {
                 colorPaletteHue = 45;
                 mLEDBuffer.setHSV(i, colorPaletteHue, 255, 255);
+                i++;
             }
             else {
                 colorPaletteHue = 90;
                 mLEDBuffer.setHSV(i, colorPaletteHue, 255, 200);
+                i = 0;
             }
-            i++;
         }
+
 
     }
 
@@ -168,5 +151,4 @@ public class AddressableLEDs extends Module{
         }
     }
 }
-
 
