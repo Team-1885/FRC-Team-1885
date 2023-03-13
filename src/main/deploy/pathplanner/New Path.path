@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.6875068035850362,
-        "y": 4.77
+        "x": 2.3725824594506335,
+        "y": 2.963151783446424
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.242827200429256,
-        "y": 4.77
+        "x": 2.1435465728074314,
+        "y": 2.963151783446424
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -24,41 +24,16 @@
     },
     {
       "anchorPoint": {
-        "x": 2.4727856598570344,
-        "y": 3.034725498022425
+        "x": 1.9431401719946302,
+        "y": 2.96
       },
       "prevControl": {
-        "x": 1.7917444893149916,
-        "y": 3.034725498022425
+        "x": 2.259363178727849,
+        "y": 2.96
       },
       "nextControl": {
-        "x": 3.153826830399077,
-        "y": 3.034725498022425
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.857251714503429,
-        "y": 4.766809390761639
-      },
-      "prevControl": {
-        "x": 2.3019313176592098,
-        "y": 4.766809390761639
-      },
-      "nextControl": {
-        "x": 2.3019313176592098,
-        "y": 4.766809390761639
+        "x": 2.259363178727849,
+        "y": 2.96
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -74,12 +49,12 @@
     },
     {
       "anchorPoint": {
-        "x": 6.466598933197867,
-        "y": 4.77
+        "x": 5.0,
+        "y": 3.0
       },
       "prevControl": {
-        "x": 5.466598933197867,
-        "y": 4.77
+        "x": 4.0,
+        "y": 3.0
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -97,6 +72,6 @@
   ],
   "maxVelocity": 2.0,
   "maxAcceleration": 1.0,
-  "isReversed": null,
+  "isReversed": true,
   "markers": []
 }
