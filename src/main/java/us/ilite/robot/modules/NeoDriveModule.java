@@ -45,6 +45,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     private Pigeon mGyro;
     private NetworkTable mTable;
 
+    NetworkTable mAutoBalanceTable = NetworkTableInstance.getDefault().getTable("AutoBalance");
+
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
     // ========================================
@@ -107,7 +109,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     public double mCurrentDeg;
 
     private NeoDriveModule() {
-        mTable = NetworkTableInstance.getDefault().getTable("drive");
+        mTable = NetworkTableInstance.getDefault().getTable("drive"); // when i run my auton from autonselection none of neodrives tables appear
+        // that was from the last test i did
 
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
@@ -230,29 +233,72 @@ public class NeoDriveModule extends Module implements Subsystem {
                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
                Units.feet_to_meters( db.drivetrain.get(R_ACTUAL_POS_FT)));
         Robot.FIELD.setRobotPose(mOdometry.getPoseMeters());
+
+        mTable.getEntry("throttle setinputs").setString("" + db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
+        mTable.getEntry("throttle setinputs Robot.Data").setString("" + Robot.DATA.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
+
     }
 
     @Override
     public void setOutputs() {
-        Enums.EDriveState state = db.drivetrain.get(STATE, Enums.EDriveState.class);
+
+//        //Enums.EDriveState recordedState = (Enums.EDriveState)mAutoBalanceTable.getEntry("Robotmode").get;
+//        String recordedState = mAutoBalanceTable.getEntry("Robotmode").getString("noString");
+//        double recordedNewVelocity = mAutoBalanceTable.getEntry("newVelocity").getDouble(-0.191);
+//
+//        db.drivetrain.set(DESIRED_THROTTLE_PCT, recordedNewVelocity);
+//
+//        mTable.getEntry("PrintRecordedState").setString("" + recordedState);
+//        mTable.getEntry("PrintRecordedNewVelocity").setString("" + recordedNewVelocity);
+//
+//        if (recordedState == "AUTOBALANCE")
+//        {
+//            mTable.getEntry("jankystate").setString("AUTOBALANCE");
+//            mRightMaster.set(recordedNewVelocity);
+//            mLeftMaster.set(recordedNewVelocity);
+//        }
+
+//        mTable.getEntry("Robotmode").setValue(Enums.EDriveState.AUTOBALANCE);
+//        mTable.getEntry("newVelocity").setDouble(newVelocity);
+
+
+        mTable.getEntry("database drivetrain instance").setString("" + db.drivetrain.hashCode());
+        mTable.getEntry("database instance").setString("" + db.hashCode());
+
+
+        mTable.getEntry("setOutputsEntryForDrive").setString("Setting Outputs");
+        mTable.getEntry("throttle setOutputs").setString("" + db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
+        mTable.getEntry("throttle setOutputs Robot.Data").setString("" + Robot.DATA.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
+
+        //mTable.getEntry("desired throttle").setDouble(db.drivetrain.get(DESIRED_THROTTLE_PCT));
+        mTable.getEntry("current left velocity").setDouble(db.drivetrain.get(L_ACTUAL_VEL_FT_s));
+        mTable.getEntry("current right velocity").setDouble(db.drivetrain.get(R_ACTUAL_VEL_FT_s));
+        //mTable.getEntry("does enum desired throttle exist").setString("" + EDriveData.DESIRED_THROTTLE_PCT == null);
+        //mTable.getEntry("actual throttle").setString(db.drivetrain.get(EDriveData.Th); // how do you get the current throttle?
+        Enums.EDriveState state = db.drivetrain.get(STATE, Enums.EDriveState.class); // why .class?
+        mTable.getEntry("state from db").setString("" + db.drivetrain.get(STATE, Enums.EDriveState.class));
         double throttle = db.drivetrain.safeGet(DESIRED_THROTTLE_PCT, 0.0);
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
         double left = throttle + turn;
         double right = throttle - turn;
         ECommonNeutralMode neutralMode = db.drivetrain.get(NEUTRAL_MODE, ECommonNeutralMode.class);
+        mTable.getEntry("state").setString("" + state);
         if (state == null) return;
         switch (state) {
             case RESET:
+                mTable.getEntry("driveCaseStatement").setString("RESET");
                 mGyro.zeroAll();
                 reset();
                 break;
             case RESET_ODOMETRY:
+                mTable.getEntry("driveCaseStatement").setString("RESET_ODOMETRY");
                 double x = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 double y = db.drivetrain.get(X_DESIRED_ODOMETRY_METERS);
                 mGyro.zeroAll();
                 resetOdometry(new Pose2d(x, y, new Rotation2d(-mGyro.getYaw().getRadians())));
                 break;
             case PERCENT_OUTPUT:
+                mTable.getEntry("driveCaseStatement").setString("PERCENT_OUTPUT");
                 if (db.limelight.isSet(ELimelightData.TARGET_ID)) {
                     //mTable.getEntry("AM I tracking idk").setString("Yippie");
                     double targetLockOutput = 0;
@@ -267,8 +313,15 @@ public class NeoDriveModule extends Module implements Subsystem {
                 mRightMaster.set(throttle-turn);
                 break;
             case VELOCITY:
+                mTable.getEntry("driveCaseStatement").setString("VELOCITY");
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                break;
+            case AUTOBALANCE:
+                mTable.getEntry("driveCaseStatement").setString("AUTOBALANCE");
+                mRightMaster.set(throttle);
+                mLeftMaster.set(throttle);
+                mTable.getEntry("THROTTLE PCT").setNumber(throttle);
                 break;
         }
     }
@@ -277,6 +330,9 @@ public class NeoDriveModule extends Module implements Subsystem {
         throttle = throttle; //divided by 15 to limit accel
         mRightMaster.set(throttle);
         mLeftMaster.set(throttle);
+        //db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.AUTOBALANCE);
+        //db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, throttle);
+
         mTable.getEntry("THROTTLE PCT").setNumber(throttle);
     }
 

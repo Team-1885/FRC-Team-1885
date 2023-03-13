@@ -148,6 +148,7 @@ public class Robot extends TimedRobot {
 //        mAutoController.initialize();
 //        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
+        mNeoDrive.setOutputs(); // added because setoutputs was only being called once during auton
 //        mActiveController.setEnabled(true);
         if (mAutonSelection.getSelectedAutonController() != null) {
             mAutonSelection.getSelectedAutonController().schedule();

@@ -40,6 +40,8 @@ public class AutonSelection {
 
     private AutoBalance autoBalanceCommand;
 
+    //private Command autoBalanceCommand;
+
 
     public AutonSelection() {
         commandGenerator = new GenerateRamseteCommand();
@@ -56,6 +58,10 @@ public class AutonSelection {
         AutobalanceREVERSECommand = commandGenerator.generateCommand(AutobalanceREVERSEFIRST);
         AutobalanceFRONTCommand = commandGenerator.generateCommand(AutobalanceFRONTFIRST);
 
+        autoBalanceCommand = new AutoBalance(mRobotDrive, 0);
+
+
+
         mRobotDrive = NeoDriveModule.getInstance();
 
         mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
@@ -63,7 +69,8 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
         mSendableAutonControllers.addOption("Autobalance REVERSE", AutobalanceREVERSECommand);
         mSendableAutonControllers.addOption("Autobalance FRONT", AutobalanceFRONTCommand);
-        mSendableAutonControllers.addOption("autoBalanceTest", autoBalanceCommand);
+        mSendableAutonControllers.addOption("autoBalanceTest", autoBalanceCommand); // not running command
+        // neodrive always exists, the autobalance is called here ^^^^^
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

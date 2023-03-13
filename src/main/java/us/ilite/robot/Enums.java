@@ -177,6 +177,7 @@ public class Enums {
         POSITION,
         SMART_MOTION,
         TURN_TO,
+        AUTOBALANCE // used to set throttle in autobalance
     }
 
 
