@@ -1,5 +1,6 @@
 package us.ilite.robot.modules;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -14,11 +15,12 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.types.sensor.EClawData;
 import us.ilite.robot.Enums;
 
+import static us.ilite.common.types.EClimberData.DESIRED_POS_deg;
 import static us.ilite.common.types.EIntakeData.*;
 
 public class ClawModule extends Module {
     private TalonFX mIntakeRoller;
-    private DoubleSolenoid mArmSolenoid;
+    private TalonFX mActuateIntake;
     private Compressor mCompressor;
     private boolean mIntakeState = false;
     private NetworkTable mTable;
@@ -33,6 +35,11 @@ public class ClawModule extends Module {
     public static final double kScaledUnitsToRPM = (600.0 / 2048.0) * kIntakeRollerRatio;
     public static final double kFeetSpeedConversion = (kScaledUnitsToRPM * kWheelCircumference) / 60.0;
 
+    // ========================================
+    // PHYSICAL CONTANTS /!\ DO NOT MODIFY /!\
+    // ========================================
+    public static final double kActuateRatio = (12.0 / 72.0) * (20.0 / 80.0) * (20.0 / 80.0) * (16.0 / 42.0);
+
     public ClawModule() {
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
@@ -42,10 +49,12 @@ public class ClawModule extends Module {
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 255);
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 255);
 
-        mArmSolenoid = new DoubleSolenoid(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH, Settings.HW.PCH.kINPNIntakeForward, Settings.HW.PCH.kINPNIntakeReverse);
+        mActuateIntake = new TalonFX(0);
+
 
         mCompressor = new Compressor(Settings.HW.PCH.kPCHCompressorModule, PneumaticsModuleType.REVPH);
         mCompressor.enableAnalog(100, 110);
+
 
         mTable = NetworkTableInstance.getDefault().getTable("rollerintake");
     }
@@ -76,12 +85,14 @@ public class ClawModule extends Module {
         switch (mode) {
             case DEFAULT:
             case EXTEND:
-                mArmSolenoid.set(DoubleSolenoid.Value.kReverse);
-                db.claw.set(EClawData.PNEUMATIC_STATE, 1.0);
+                //  #'s arent final
+                mActuateIntake.set(ControlMode.Position, clawDegreesToTicks(180));
+                db.claw.set(EClawData.ACTUATED_STATE, 1.0);
                 break;
             case RETRACT:
-                mArmSolenoid.set(DoubleSolenoid.Value.kForward);
-                db.claw.set(EClawData.PNEUMATIC_STATE, 2.0);
+                // #'s arent final
+                mActuateIntake.set(ControlMode.Position, clawDegreesToTicks(45));
+                db.claw.set(EClawData.ACTUATED_STATE, 2.0);
                 break;
         }
     }
@@ -96,5 +107,11 @@ public class ClawModule extends Module {
                 mIntakeRoller.set(TalonFXControlMode.PercentOutput, db.claw.get(EClawData.DESIRED_ROLLER_pct));
                 break;
         }
+    }
+    private double ticksToClimberDegrees(double pTicks) {
+        return pTicks / 2048 * kActuateRatio * 360;
+    }
+    private double clawDegreesToTicks(double pDegrees) {
+        return pDegrees * 2048 / kActuateRatio / 360;
     }
 }

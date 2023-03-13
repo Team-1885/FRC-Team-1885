@@ -1,6 +1,7 @@
 package us.ilite.common.types.sensor;
 
 public enum EClawData {
+    NULL,
     ACTUAL_VEL_ft_s,
     DESIRED_VEL_ft_s,
     PNEUMATIC_STATE,
@@ -12,4 +13,6 @@ public enum EClawData {
     INTAKE_SUPPLY_CURRENT,
     INTAKE_STATOR_CURRENT,
     COMPRESSOR_PSI,
+    ACTUATED_STATE,
+
 }

@@ -438,25 +438,24 @@ public class TeleopController extends BaseManualController {
 
     }
     public void updateClaw() {
-        if (db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.B_BTN)) {
-            //================================================
-            // IF DPAD DOWN AND UP ARE PRESSED VELOCITY IS .2
-            //================================================
-            db.claw.set(EClawData.DESIRED_VEL_ft_s, .2);
-            System.out.print("aaaaaaaaaaaaaaaa");
+        if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.X_BTN)) {
+            db.claw.set(EClawData.ARM_STATE, Enums.EClawMode.EXTEND);
         }
-        else {
-            //===========================================
-            //IF NOTHING IS PRESSED VELOCITY IS SET TO 0
-            //===========================================
-            db.claw.set(EClawData.DESIRED_VEL_ft_s, 0);
+        else if(db.operatorinput.isSet(ELogitech310.B_BTN) && db.operatorinput.isSet(ELogitech310.X_BTN)) {
+            db.claw.set(EClawData.ARM_STATE, Enums.EClawMode.RETRACT);
         }
-        if (!db.driverinput.isSet(InputMap.DRIVER.ACTIVATE_CLIMB)) {
-            if (db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
-                setIntakeArmEnabled(true);
-            } else if (db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE) && db.operatorinput.isSet(ELogitech310.DPAD_DOWN)) {
-                setIntakeArmEnabled(false);
-            }
+        else if (db.operatorinput.isSet(ELogitech310.B_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+            db.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
+            db.claw.set(EClawData.DESIRED_ROLLER_pct, .5);
+        }
+        else if (db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+            db.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
+            db.claw.set(EClawData.DESIRED_ROLLER_pct, -0.5);
+        }
+        else  {
+            db.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
+            db.claw.set(EClawData.DESIRED_ROLLER_pct, 0.0);
+            db.claw.set(EClawData.ARM_STATE, Enums.EClawMode.DEFAULT);
         }
     }
 }
