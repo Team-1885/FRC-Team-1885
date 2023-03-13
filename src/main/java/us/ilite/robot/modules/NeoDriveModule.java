@@ -254,6 +254,7 @@ public class NeoDriveModule extends Module implements Subsystem {
                 break;
             case PERCENT_OUTPUT:
                 if (db.limelight.isSet(ELimelightData.TARGET_ID)) {
+                    //mTable.getEntry("AM I tracking idk").setString("Yippie");
                     double targetLockOutput = 0;
                     if (db.limelight.isSet(ELimelightData.TV)) {
                         targetLockOutput = mTargetLockPID.calculate(-db.limelight.get(ELimelightData.TX), clock.dt());

@@ -206,6 +206,8 @@ public class Enums {
         GAMER_COLOR,
         BATTLEFIElD_COLOR,
         YELLOW,
-        PURPLE;
+        PURPLE,
+        RED,
+        DEFAULT;
     }
 }

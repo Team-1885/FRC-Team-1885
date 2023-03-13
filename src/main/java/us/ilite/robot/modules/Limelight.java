@@ -67,6 +67,8 @@ public class Limelight extends Module implements ITargetDataProvider {
 
     @Override
     public void setOutputs() {
+        // use the TARGET_ID (given pipeline) to set the goal (the element being targeted)
+        // checks if there are any available FieldElements with the pipeline that matches TARGET_ID
         mGoal = Field2022.FieldElement.values()[(int) db.limelight.get(ELimelightData.TARGET_ID)];
         db.limelight.set(PIPELINE, mGoal.pipeline());
 
