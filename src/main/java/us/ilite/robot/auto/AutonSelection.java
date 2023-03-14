@@ -4,16 +4,9 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.modules.NeoDriveModule;
 
@@ -38,10 +31,10 @@ public class AutonSelection {
     private PathPlannerTrajectory ScorePreloadWithTAXI;
     private PPRamseteCommand ScorePreloadWithTAXICommand;
 
-    private PathPlannerTrajectory AutobalanceREVERSE;
+    private PathPlannerTrajectory AutobalanceREVERSEFIRST;
     private PPRamseteCommand AutobalanceREVERSECommand;
 
-    private PathPlannerTrajectory AutobalanceFRONT;
+    private PathPlannerTrajectory AutobalanceFRONTFIRST;
     private PPRamseteCommand AutobalanceFRONTCommand;
 
     private PathPlannerTrajectory BalanceTest;
