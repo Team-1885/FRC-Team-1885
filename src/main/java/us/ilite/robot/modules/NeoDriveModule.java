@@ -18,10 +18,12 @@ import us.ilite.common.types.ELimelightData;
 import us.ilite.common.types.EMatchMode;
 import us.ilite.common.types.EPixyData;
 import us.ilite.common.types.drive.EDriveData;
+import us.ilite.common.types.input.EDriverInputMode;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
 import us.ilite.robot.Robot;
 import us.ilite.robot.TrajectoryCommandUtils;
+import us.ilite.robot.commands.DriveStraight;
 import us.ilite.robot.hardware.ECommonNeutralMode;
 import us.ilite.robot.hardware.HardwareUtils;
 import us.ilite.robot.hardware.Pigeon;
@@ -262,13 +264,12 @@ public class NeoDriveModule extends Module implements Subsystem {
 //        mTable.getEntry("newVelocity").setDouble(newVelocity);
 
 
-        mTable.getEntry("database drivetrain instance").setString("" + db.drivetrain.hashCode());
-        mTable.getEntry("database instance").setString("" + db.hashCode());
-
+        //mTable.getEntry("database drivetrain instance").setString("" + db.drivetrain.hashCode());
+        //mTable.getEntry("database instance").setString("" + db.hashCode());
 
         mTable.getEntry("setOutputsEntryForDrive").setString("Setting Outputs");
         mTable.getEntry("throttle setOutputs").setString("" + db.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
-        mTable.getEntry("throttle setOutputs Robot.Data").setString("" + Robot.DATA.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
+        //mTable.getEntry("throttle setOutputs Robot.Data").setString("" + Robot.DATA.drivetrain.get(EDriveData.DESIRED_THROTTLE_PCT) + " at " + System.currentTimeMillis());
 
         //mTable.getEntry("desired throttle").setDouble(db.drivetrain.get(DESIRED_THROTTLE_PCT));
         mTable.getEntry("current left velocity").setDouble(db.drivetrain.get(L_ACTUAL_VEL_FT_s));
@@ -276,7 +277,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         //mTable.getEntry("does enum desired throttle exist").setString("" + EDriveData.DESIRED_THROTTLE_PCT == null);
         //mTable.getEntry("actual throttle").setString(db.drivetrain.get(EDriveData.Th); // how do you get the current throttle?
         Enums.EDriveState state = db.drivetrain.get(STATE, Enums.EDriveState.class); // why .class?
-        mTable.getEntry("state from db").setString("" + db.drivetrain.get(STATE, Enums.EDriveState.class));
+        //mTable.getEntry("state from db").setString("" + db.drivetrain.get(STATE, Enums.EDriveState.class));
         double throttle = db.drivetrain.safeGet(DESIRED_THROTTLE_PCT, 0.0);
         double turn = db.drivetrain.safeGet(DESIRED_TURN_PCT, 0.0);
         double left = throttle + turn;
@@ -330,11 +331,32 @@ public class NeoDriveModule extends Module implements Subsystem {
         throttle = throttle; //divided by 15 to limit accel
         mRightMaster.set(throttle);
         mLeftMaster.set(throttle);
+
         //db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.AUTOBALANCE);
         //db.drivetrain.set(EDriveData.DESIRED_THROTTLE_PCT, throttle);
 
         mTable.getEntry("THROTTLE PCT").setNumber(throttle);
     }
+
+    // set doubles in the drivetrain database was trying something
+    public void setValueInDrivetrainDatabase(EDriveData toSet, double value)
+    {
+        print(toSet + " Before Change", "" + db.drivetrain.get(toSet));
+        db.drivetrain.set(toSet, value);
+        print(toSet + " Before Change", "" + db.drivetrain.get(toSet));
+    }
+    // set enums in the drivetrain database either EDriveState or EDriveData
+    public void setValueInDrivetrainDatabase(Enums.EDriveState value)
+    {
+        print("State Before Change", "" + db.drivetrain.get(STATE));
+        db.drivetrain.set(STATE, value);
+        print("State After Change", "" + db.drivetrain.get(STATE));
+    }
+    public void print(String title, String msg)
+    {
+        mTable.getEntry(title).setString(msg);
+    }
+
 
     public double getGyroRollDeg() {
         mTable.getEntry("ROLL DEG").setNumber(mGyro.getRoll().getDegrees());
