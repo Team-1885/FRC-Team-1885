@@ -100,18 +100,22 @@ public class AddressableLEDs extends Module{
         if (i < mLEDBuffer.getLength()) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
+//            mLEDBuffer.setHSV(i, 30, 255, 200);
+
             var colorPaletteHue = (mRainbowFirstPixelHue + (i * 180 / mLEDBuffer.getLength())) % 180;
             // Set the value
             if(i % 2 == 0) {
                 colorPaletteHue = 45;
                 mLEDBuffer.setHSV(i, colorPaletteHue, 255, 255);
-                i++;
             }
             else {
                 colorPaletteHue = 90;
                 mLEDBuffer.setHSV(i, colorPaletteHue, 255, 200);
-                i = 0;
             }
+            i ++;
+        } else {
+            mLED.setData(mLEDBuffer);
+            i = 0;
         }
 
 
