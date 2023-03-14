@@ -184,6 +184,42 @@ public class TeleopController extends BaseManualController {
                 mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
                 mTable.getEntry("Tracking Object").setString("Tracking Cubes");
             }
+//            // track enemy robots' left corner
+//            else if (db.driverinput.isSet(InputMap.DRIVER.ENEMY_ROBOT_LEFT_TRACKING)) {
+//                // if our team is blue, target red robots
+//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
+//                {
+//                    db.limelight.set(ELimelightData.TARGET_ID, /*red left corner field element*/);
+//                }
+//                else // if our team is red, target blue robots
+//                {
+//                    db.limelight.set(ELimelightData.TARGET_ID, /*blue left corner field element*/);
+//                }
+//                // let target lock take over
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//
+//                // log
+//                mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
+//                mTable.getEntry("Tracking Object").setString("Tracking Cubes");
+//            }
+//            // track enemy robots' right
+//            else if (db.driverinput.isSet(InputMap.DRIVER.ENEMY_ROBOT_RIGHT_TRACKING)) {
+//                // if our team is blue, target red robots
+//                if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
+//                {
+//                    db.limelight.set(ELimelightData.TARGET_ID, /*red right corner field element*/);
+//                }
+//                else // if our team is red, target blue robots
+//                {
+//                    db.limelight.set(ELimelightData.TARGET_ID, /*blue right corner field element*/);
+//                }
+//                // let target lock take over
+//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+//
+//                // log
+//                mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
+//                mTable.getEntry("Tracking Object").setString("Tracking Cubes");
+//            }
             else { // No targetting button is pressed
                 // set limelight pipeline back to base camera without crazy filters
                 db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CAMERA.id());

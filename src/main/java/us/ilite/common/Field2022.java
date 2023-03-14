@@ -31,6 +31,8 @@ public class Field2022 {
         REFLECTIVE_TAPE(0,0, 1),
         CONE(12 + ((double)13/16), 8 + ((double) 1/2), 2), // cones have a width of 12 13/16 inches and a height of 8 1/2 inches
         CUBE(9 + ((double)3/4),9 + ((double)3/4), 3), // cues have a width of 9 3/4 inches and a height of 9 3/4 inches
+        BLUE_ROBOT(5,32,4), // track blue robots' bumper with dimensions of 5 inches tall and 32 inches long
+        RED_ROBOT(5,32,5) // track red robots' bumper with dimensions of 5 inches tall and 32 inches long
         ;
 
 
