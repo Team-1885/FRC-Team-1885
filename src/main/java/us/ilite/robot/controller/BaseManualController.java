@@ -35,17 +35,19 @@ public abstract class BaseManualController extends AbstractController {
         rotate = Math.abs(rotate) > 0.02 ? rotate : 0.0; //Handling Deadband
         throttle = Math.abs(throttle) > 0.02 ? throttle : 0.0; //Handling Deadband
 
-        if (db.driverinput.isSet(ELogitech310.L_BTN)) {
-            db.drivetrain.set(STATE, EDriveState.BREAK);
-        }
+//        if (db.driverinput.isSet(ELogitech310.L_BTN)) {
+//            db.drivetrain.set(STATE, EDriveState.BREAK);
+//        }
 
         if (db.driverinput.isSet(SNAIL_MODE) && db.driverinput.get(SNAIL_MODE) > DRIVER_SUB_WARP_AXIS_THRESHOLD) {
+            System.out.println("snail mode");
             throttle *= Settings.Input.kSnailModePercentThrottleReduction;
             rotate *= Settings.Input.kSnailModePercentRotateReduction;
         }
 
         // if one of our target locking buttons is pressed
         if (db.driverinput.isSet(REFLECTIVE_TAPE_TRACKING) || db.driverinput.isSet(CONE_TRACKING) || db.driverinput.isSet(CUBE_TRACKING)) {
+            System.out.println("tracking");
             db.drivetrain.set(DESIRED_THROTTLE_PCT, Math.min(throttle, 0.75));
             db.drivetrain.set(DESIRED_TURN_PCT, rotate);
         } else {

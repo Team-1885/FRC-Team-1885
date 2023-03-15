@@ -270,11 +270,11 @@ public class NeoDriveModule extends Module implements Subsystem {
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
-            case BREAK:
-                mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-                mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-                mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
-                mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//            case BREAK:
+//                mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//                mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//                mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+//                mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
         }
     }
 

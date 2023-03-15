@@ -89,7 +89,25 @@
       "open": true
     },
     "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      },
+      "Target_Lock_Info": {
+        "open": true
+      },
       "drive": {
+        "open": true
+      },
+      "limelight": {
+        "open": true
+      },
+      "ramsete command": {
         "open": true
       }
     }

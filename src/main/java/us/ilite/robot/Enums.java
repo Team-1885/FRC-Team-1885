@@ -177,7 +177,7 @@ public class Enums {
         POSITION,
         SMART_MOTION,
         TURN_TO,
-        BREAK,
+//        BREAK,
     }
 
 

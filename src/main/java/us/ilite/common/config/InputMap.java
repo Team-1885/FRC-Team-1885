@@ -27,9 +27,9 @@ public class InputMap {
         REFLECTIVE_TAPE_TRACKING = ELogitech310.LEFT_TRIGGER_AXIS,
         CONE_TRACKING = ELogitech310.L_BTN,
         CUBE_TRACKING = ELogitech310.R_BTN,
-        ENEMY_ROBOT_CENTER_TRACKING = ELogitech310.X_BTN, // TODO mark prefers the X button for robot tracking
-        ENEMY_ROBOT_LEFT_TRACKING = ELogitech310.X_BTN, // TODO if we have left and right tracking to target swerve bot corners
-        ENEMY_ROBOT_RIGHT_TRACKING = ELogitech310.B_BTN // TODO we probably wont have a center tracking
+        OPPONENT_ROBOT_CENTER_TRACKING = ELogitech310.X_BTN, // TODO mark prefers the X button for robot tracking
+        OPPONENT_ROBOT_LEFT_TRACKING = ELogitech310.DPAD_LEFT, // TODO if we have left and right tracking to target swerve bot corners
+        OPPONENT_ROBOT_RIGHT_TRACKING = ELogitech310.DPAD_RIGHT // TODO we probably wont have a center tracking
                 // TODO see if we can have a closest corner button
         //TARGET_LOCK = ELogitech310.LEFT_TRIGGER_AXIS
         ;

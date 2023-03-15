@@ -129,7 +129,7 @@ public class Settings {
     public static final double kV = 2.0535;
     public static final double kA = 0.34977;
 
-    public static final double kP = 2.7382;
+    public static final double kP = 2.5;
 
     public static final double kTrackWidthMeters = 0.6858;
     public static final double kMaxSpeedMetersPerSecond = 2;
