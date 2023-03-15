@@ -179,28 +179,14 @@ public class Enums {
         TURN_TO,
 //        BREAK,
     }
-
-
-
-    // =============================================================================
-    // Intake Module States
-    // =============================================================================
-    public enum ERollerState {
+    public enum EAddressableLEDState {
         NULL,
-        PERCENT_OUTPUT,
-        VELOCITY;
-    }
-
-    public enum EArmState {
-        NULL,
-        EXTEND,
-        RETRACT,
+        GAMER_COLOR,
+        BATTLEFIElD_COLOR,
+        YELLOW,
+        PURPLE,
+        RED,
         DEFAULT;
-    }
-    public enum EFeederState {
-        NULL,
-        PERCENT_OUTPUT,
-        VELOCITY;
     }
 
 }

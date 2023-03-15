@@ -50,6 +50,7 @@ public class Data {
     public final RobotCodex<ELimelightData> limelight = new RobotCodex(NULL_CODEX_VALUE , ELimelightData.class);
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
     public final RobotCodex<EPixyData> pixydata = new RobotCodex(NULL_CODEX_VALUE, EPixyData.class);
+    public final RobotCodex<EAddressableLEDData> addressableled = new RobotCodex(NULL_CODEX_VALUE, EAddressableLEDData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
             operatorinput,
@@ -108,11 +109,8 @@ public class Data {
         drivetrain.createSimpleEnumConverter(EDriveData.STATE, Enums.EDriveState.class);
         drivetrain.createSimpleEnumConverter(EDriveData.NEUTRAL_MODE, ECommonNeutralMode.class);
 
-        intake.createSimpleEnumConverter(EIntakeData.ARM_STATE, Enums.EArmState.class);
-        intake.createSimpleEnumConverter(EIntakeData.ROLLER_STATE, Enums.ERollerState.class);
 
         feeder.createSimpleBooleanConverter(EFeederData.ENTRY_BEAM);
-        feeder.createSimpleEnumConverter(EFeederData.STATE, Enums.EFeederState.class);
 
         climber.createSimpleEnumConverter(EClimberData.HANGER_STATE, Enums.EClimberMode.class);
         climber.createSimpleEnumConverter(EClimberData.RUNG_STATE, Enums.ERungState.class);
