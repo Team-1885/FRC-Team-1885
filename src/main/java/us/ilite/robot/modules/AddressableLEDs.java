@@ -16,6 +16,8 @@ public class AddressableLEDs extends Module{
     private int mColorPalettePixelHueOne = 0;
     private NetworkTable mTable;
     private int colorIndex;
+    int i = 0;
+
     public AddressableLEDs() {
         mLED = new AddressableLED(9);
         mLEDBuffer = new AddressableLEDBuffer(60);
@@ -111,12 +113,13 @@ public class AddressableLEDs extends Module{
     }
 
     public void yellowCones() {
-        if (colorIndex < mLEDBuffer.getLength()) {
-            mLEDBuffer.setRGB(colorIndex,128,0,128);
-            colorIndex++;
+        if (i < mLEDBuffer.getLength()) {
+            System.out.println(i + "*************************************");
+            mLEDBuffer.setRGB(i,128,0,128);
+            i ++;
         } else {
             mLED.setData(mLEDBuffer);
-            colorIndex = 0;
+            i = 0;
         }
     }
     public void purpleCubes() {
