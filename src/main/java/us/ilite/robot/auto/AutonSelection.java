@@ -56,7 +56,7 @@ public class AutonSelection {
 
         mRobotDrive = NeoDriveModule.getInstance();
 
-        mSendableAutonControllers.setDefaultOption("Score Preload WITH TAXI", ScorePreloadWithTAXICommand);
+//        mSendableAutonControllers.setDefaultOption("Score Preload WITH TAXI", ScorePreloadWithTAXICommand);
 
         mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
