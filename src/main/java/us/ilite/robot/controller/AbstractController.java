@@ -101,7 +101,7 @@ public abstract class AbstractController {
     }
 
     protected void setIntakeArmEnabled(boolean enabled) {
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
+//        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
         if (enabled) {
             db.intake.set(EIntakeData.ARM_STATE, EArmState.EXTEND);
         } else {
@@ -160,7 +160,7 @@ public abstract class AbstractController {
 
     protected void intakeCargo() {
         setIntakeArmEnabled(true);
-        db.intake.set(EIntakeData.ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
+//        db.intake.set(EIntakeData.ROLLER_STATE, Enums.ERollerState.PERCENT_OUTPUT);
         db.intake.set(EIntakeData.DESIRED_ROLLER_pct, 1.0);
         indexCargo();
 //        activateFeeder();
@@ -254,7 +254,7 @@ public abstract class AbstractController {
     }
     public void placeFeeder() {
         db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
+//        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
         db.feeder.set(SET_FEEDER_pct, -0.2);
         db.intake.set(EIntakeData.DESIRED_ROLLER_pct, -0.1);
         if (mEntryGate.get() == XorLatch.State.BOTH) {
@@ -264,7 +264,7 @@ public abstract class AbstractController {
     }
     public void reverseFeeder() {
         db.feeder.set(EFeederData.STATE, EFeederState.PERCENT_OUTPUT);
-        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
+//        db.intake.set(EIntakeData.ROLLER_STATE, ERollerState.PERCENT_OUTPUT);
         db.feeder.set(SET_FEEDER_pct, -1.0);
         db.intake.set(DESIRED_ROLLER_pct, -1.0);
         if (mEntryGate.get() == XorLatch.State.BOTH) {

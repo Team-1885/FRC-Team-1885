@@ -109,8 +109,11 @@ public class Data {
         drivetrain.createSimpleEnumConverter(EDriveData.STATE, Enums.EDriveState.class);
         drivetrain.createSimpleEnumConverter(EDriveData.NEUTRAL_MODE, ECommonNeutralMode.class);
 
+        intake.createSimpleEnumConverter(EIntakeData.ARM_STATE, Enums.EArmState.class);
+        intake.createSimpleEnumConverter(EIntakeData.ROLLER_STATE, Enums.EArmState.class);
 
         feeder.createSimpleBooleanConverter(EFeederData.ENTRY_BEAM);
+        feeder.createSimpleEnumConverter(EFeederData.STATE, Enums.EFeederState.class);
 
         climber.createSimpleEnumConverter(EClimberData.HANGER_STATE, Enums.EClimberMode.class);
         climber.createSimpleEnumConverter(EClimberData.RUNG_STATE, Enums.ERungState.class);

@@ -189,4 +189,16 @@ public class Enums {
         DEFAULT;
     }
 
+    public enum EFeederState {
+        NULL,
+        PERCENT_OUTPUT,
+        VELOCITY
+    }
+
+    public enum EArmState {
+        NULL,
+        EXTEND,
+        RETRACT
+    }
+
 }

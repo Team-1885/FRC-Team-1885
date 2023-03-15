@@ -34,8 +34,8 @@ public class AutonSelection {
     private PathPlannerTrajectory BalanceTest;
     private PPRamseteCommand BalanceTestCommand;
 
-    private PathPlannerTrajectory BalanceTestWithTaxi;
-    private PPRamseteCommand BalanceTestWithTaxiCommand;
+    private PathPlannerTrajectory BalanceTestWithScoring;
+    private PPRamseteCommand BalanceTestWithScoringCommand;
 
 
 
@@ -46,13 +46,13 @@ public class AutonSelection {
         ScorePreloadWITHDOCK = PathPlanner.loadPath("ScorePreloadWITHDOCK", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         ScorePreloadWithTAXI = PathPlanner.loadPath("ScorePreloadWithTAXI", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
         BalanceTest = PathPlanner.loadPath("BalanceTest", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
-        BalanceTestWithTaxi = PathPlanner.loadPath("BalanceTestWithTaxi", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        BalanceTestWithScoring = PathPlanner.loadPath("BalanceTestWithScoring", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
 
         ScorePreloadNODOCKCommand = commandGenerator.generateCommand(ScorePreloadNODOCK);
         ScorePreloadWITHDOCKCommand = commandGenerator.generateCommand(ScorePreloadWITHDOCK);
         ScorePreloadWithTAXICommand = commandGenerator.generateCommand(ScorePreloadWithTAXI);
         BalanceTestCommand = commandGenerator.generateCommand(BalanceTest);
-        BalanceTestWithTaxiCommand = commandGenerator.generateCommand(BalanceTestWithTaxi);
+        BalanceTestWithScoringCommand = commandGenerator.generateCommand(BalanceTestWithScoring);
 
         mRobotDrive = NeoDriveModule.getInstance();
 
@@ -61,6 +61,20 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
+
+        /*
+        The balance test command will have the robot starting against the scoring station and will drive
+        forwards until it is *hopefully* balanced/engaged. This command should be tuned first at practice
+        fields to find the end position that will balance. This end position should then be modified in the
+        balance command with scoring.
+         */
+        mSendableAutonControllers.addOption("BalanceTest", BalanceTestCommand);
+        /*
+        The balance test with scoring command will have the bot start against the charge station and facing the
+        Scoring station. make sure the bot is not in contact with the station (this is against the rules).
+        The bot will drive forward to score the cone, and then back up onto the charge station to hopefully engage
+         */
+        mSendableAutonControllers.addOption("BalanceTestWithScoring", BalanceTestWithScoringCommand);
 
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);

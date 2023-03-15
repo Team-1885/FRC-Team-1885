@@ -129,9 +129,10 @@ public class TeleopController extends BaseManualController {
 //            }
 //            // track enemy robots' left corner
             else if (db.driverinput.isSet(InputMap.DRIVER.OPPONENT_ROBOT_LEFT_TRACKING)) {
-                // if our team is blue, target red robots
+                System.out.println("left tracking");
                 if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
                 {
+                    System.out.println("blue alliance");
                     db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.RED_ROBOT_LEFT/*red left corner field element*/);
                 }
                 else // if our team is red, target blue robots
