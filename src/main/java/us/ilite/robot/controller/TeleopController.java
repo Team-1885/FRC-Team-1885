@@ -117,17 +117,17 @@ public class TeleopController extends BaseManualController {
                 db.addressableled.set(EAddressableLEDData.DESIREDCOLOR, Enums.EAddressableLEDState.YELLOW);
             }
             // if the cube tracking button is pressed
-//            else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
-//                // adjust limelight pipeline so the robot targets cubes
-//                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CUBE);
-//                // let target lock take over
-//                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
-//
-//                // log
-//                mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
-//                mTable.getEntry("Tracking Object").setString("Tracking Cubes");
-//            }
-//            // track enemy robots' left corner
+            else if (db.driverinput.isSet(InputMap.DRIVER.CUBE_TRACKING)) {
+                // adjust limelight pipeline so the robot targets cubes
+                db.limelight.set(ELimelightData.TARGET_ID, Field2022.FieldElement.CUBE);
+                // let target lock take over
+                db.drivetrain.set(EDriveData.STATE, Enums.EDriveState.PERCENT_OUTPUT);
+
+                // log
+                mTable.getEntry("Current Pipeline").setString("" + db.limelight.get(ELimelightData.PIPELINE));
+                mTable.getEntry("Tracking Object").setString("Tracking Cubes");
+            }
+            // track enemy robots' left corner
             else if (db.driverinput.isSet(InputMap.DRIVER.OPPONENT_ROBOT_LEFT_TRACKING)) {
                 System.out.println("left tracking");
                 if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
