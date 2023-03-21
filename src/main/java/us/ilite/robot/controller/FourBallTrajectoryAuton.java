@@ -29,7 +29,7 @@ public class FourBallTrajectoryAuton extends BaseAutonController{
 
         mTimer.reset();
         mTimer.start();
-
+        
 
 
         Robot.FIELD.getObject("First Leg").setTrajectory(mFirstLeg);
@@ -45,7 +45,7 @@ public class FourBallTrajectoryAuton extends BaseAutonController{
     public void updateImpl() {
 
         double time = mTimer.get();
-        intakeCargo();
+
         mFollower.update(time);
 
         mFirstLeg.getTotalTimeSeconds();

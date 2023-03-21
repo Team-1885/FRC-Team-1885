@@ -8,7 +8,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import us.ilite.common.lib.util.Units;
-import us.ilite.common.types.EFeederData;
+
 import us.ilite.robot.Robot;
 import us.ilite.robot.commands.FollowTrajectory;
 
@@ -56,28 +56,7 @@ public class ThreeBallTrajectoryController extends BaseAutonController {
         mFollower = new FollowTrajectory(mThreeBallPath, false);
         mFollower.init(mTimer.get());
     }
-    public void updateImpl() {
-        SmartDashboard.putString("Current Trajectory", mFollower.getCurrentTrajectory().toString());
-        double time = mTimer.get();
-        if (time < 0.5) {
-            fireCargo();
-        }
-        else if (time < m2ndBallLegTime) { // Move to Ball #1 (in the direction of human player station)
-            intakeCargo();
-            mFollower.update(time);
-        } else if (time < m2ndBallLegTime + 0.1) {
-            intakeCargo();
-            mFollower = new FollowTrajectory(mThreeBallReturnPath, false);
-            mFollower.init(time);
-        } else if (time < mReturnShootLeg) {
-            intakeCargo();
-            mFollower.update(time);
-        } else {
-            fireCargo();
-        }
 
-
-    }
 
     public Pose2d getStartPose() {
         return ROBOT_START;

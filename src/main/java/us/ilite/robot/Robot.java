@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     private Limelight mLimelight;
     private AddressableLEDs mAddressableLEDs;
     private AutonSelection mAutonSelection;
-    private ClimbModeSelection mClimberSelector;
+
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        mClimberSelector = new ClimbModeSelection();
+
         UsbCamera camera = CameraServer.startAutomaticCapture();
         camera.setFPS(30);
         CLOCK.update();
@@ -161,8 +161,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        CLIMB_MODE = mClimberSelector.getSelectedMode();
-        SmartDashboard.putString("Climb Mode", CLIMB_MODE);
+
         if ( Settings.kIsLogging ){
             mCSVLogger.start();
         }
@@ -245,9 +244,7 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-        if (mActiveController!= null) {
-            mActiveController.update();
-        }
+
         mRunningModules.safeSetOutputs();
         SmartDashboard.putNumber("common_periodic_dt", Timer.getFPGATimestamp() - start);
         SmartDashboard.putNumber("Clock Time", CLOCK.now());

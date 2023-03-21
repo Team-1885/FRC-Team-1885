@@ -43,13 +43,13 @@ public class Data {
     public final RobotCodex<ELogitech310> operatorinput = new RobotCodex(NULL_CODEX_VALUE, ELogitech310.class);
     public final RobotCodex<EPowerDistPanel> pdp = new RobotCodex(NULL_CODEX_VALUE, EPowerDistPanel.class);
     public final RobotCodex<ERawLimelightData> rawLimelight = new RobotCodex(NULL_CODEX_VALUE, ERawLimelightData.class);
-    public final RobotCodex<EClimberData> climber = new RobotCodex(NULL_CODEX_VALUE, EClimberData.class);
+
     public final RobotCodex<EDriveData> drivetrain = new RobotCodex(NULL_CODEX_VALUE, EDriveData.class);
-    public final RobotCodex<EIntakeData> intake = new RobotCodex(NULL_CODEX_VALUE, EIntakeData.class);
-    public final RobotCodex<EFeederData> feeder = new RobotCodex(NULL_CODEX_VALUE, EFeederData.class);
+
+
     public final RobotCodex<ELimelightData> limelight = new RobotCodex(NULL_CODEX_VALUE , ELimelightData.class);
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
-    public final RobotCodex<EPixyData> pixydata = new RobotCodex(NULL_CODEX_VALUE, EPixyData.class);
+
     public final RobotCodex<EAddressableLEDData> addressableled = new RobotCodex(NULL_CODEX_VALUE, EAddressableLEDData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
@@ -58,10 +58,8 @@ public class Data {
             drivetrain,
             pdp,
             rawLimelight,
-            feeder,
-            intake,
-            climber,
-            pixydata,
+
+
     };
 
     public final Map<String, RobotCodex> mMappedCodex = new HashMap<>();
@@ -73,11 +71,10 @@ public class Data {
             // Order does not matter for the rest
             imu,
             drivetrain,
-            feeder,
             pdp,
-            intake,
-            climber,
-            pixydata,
+
+
+
     };
 
     //Stores writers per codex needed for CSV logging
@@ -109,17 +106,11 @@ public class Data {
         drivetrain.createSimpleEnumConverter(EDriveData.STATE, Enums.EDriveState.class);
         drivetrain.createSimpleEnumConverter(EDriveData.NEUTRAL_MODE, ECommonNeutralMode.class);
 
-        intake.createSimpleEnumConverter(EIntakeData.ARM_STATE, Enums.EArmState.class);
-        intake.createSimpleEnumConverter(EIntakeData.ROLLER_STATE, Enums.EArmState.class);
 
-        feeder.createSimpleBooleanConverter(EFeederData.ENTRY_BEAM);
-        feeder.createSimpleEnumConverter(EFeederData.STATE, Enums.EFeederState.class);
 
-        climber.createSimpleEnumConverter(EClimberData.HANGER_STATE, Enums.EClimberMode.class);
-        climber.createSimpleEnumConverter(EClimberData.RUNG_STATE, Enums.ERungState.class);
-        climber.createSimpleBooleanConverter(EClimberData.SET_COAST);
-        climber.createSimpleEnumConverter(EClimberData.IS_DOUBLE_CLAMPED, Enums.EClampMode.class);
-        climber.createSimpleEnumConverter(EClimberData.IS_SINGLE_CLAMPED, Enums.EClampMode.class);
+
+
+
 
         ledcontrol.createSimpleEnumConverter(ELEDControlData.DESIRED_COLOR, Enums.LEDColorMode.class);
         ledcontrol.createSimpleBooleanConverter(ELEDControlData.LED_STATE);
@@ -128,15 +119,8 @@ public class Data {
         mConvertedFields.add(EDriveData.IS_CURRENT_LIMITING.name());
         mConvertedFields.add(EDriveData.STATE.name());
         mConvertedFields.add(EDriveData.NEUTRAL_MODE.name());
-        mConvertedFields.add(EIntakeData.ARM_STATE.name());
-        mConvertedFields.add(EIntakeData.ROLLER_STATE.name());
-        mConvertedFields.add(EFeederData.ENTRY_BEAM.name());
-        mConvertedFields.add(EFeederData.STATE.name());
-        mConvertedFields.add(EClimberData.HANGER_STATE.name());
-        mConvertedFields.add(EClimberData.SET_COAST.name());
-        mConvertedFields.add(EClimberData.IS_DOUBLE_CLAMPED.name());
-        mConvertedFields.add(EClimberData.RUNG_STATE.name());
-        mConvertedFields.add(EClimberData.IS_SINGLE_CLAMPED.name());
+
+
         mConvertedFields.add(ELEDControlData.DESIRED_COLOR.name());
         mConvertedFields.add(ELEDControlData.LED_STATE.name());
     }
