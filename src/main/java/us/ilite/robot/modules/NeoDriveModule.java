@@ -25,6 +25,7 @@ import us.ilite.robot.Robot;
 import us.ilite.robot.TrajectoryCommandUtils;
 import us.ilite.robot.hardware.*;
 
+import static us.ilite.common.config.Settings.kAutoBalanceScalar;
 import static us.ilite.common.types.drive.EDriveData.*;
 
 public class NeoDriveModule extends Module implements Subsystem {
@@ -329,7 +330,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     }
 
     public void setThrottlePct(double throttle) {
-        throttle = throttle/3; //divided by 15 to limit accel
+        throttle = throttle/kAutoBalanceScalar; //divided by AutoBalanceScalar to limit the max speed when autobalancing in order to make the balance more accurate
         mRightMaster.set(throttle);
         mLeftMaster.set(throttle);
         mTable.getEntry("THROTTLE PCT").setNumber(throttle);

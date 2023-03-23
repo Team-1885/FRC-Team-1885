@@ -124,6 +124,11 @@ public class Settings {
     public static final double kTargetAngleLockFrictionFeedforward = 0.44 / 12;
 
     // =============================================================================
+    // DriveTrain constants
+    // =============================================================================
+    public static final double kAutoBalanceScalar = 3;
+
+    // =============================================================================
     // RamseteCommand constants
     // =============================================================================
 
