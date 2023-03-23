@@ -7,6 +7,8 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
 import us.ilite.robot.modules.NeoDriveModule;
 
@@ -37,7 +39,8 @@ public class AutonSelection {
     private PathPlannerTrajectory BalanceTestWithScoring;
     private PPRamseteCommand BalanceTestWithScoringCommand;
 
-
+    private SequentialCommandGroup mTotalBalance;
+    private AutoBalance mAutoBalanceWithGyro;
 
     public AutonSelection() {
         commandGenerator = new GenerateRamseteCommand();
@@ -74,8 +77,12 @@ public class AutonSelection {
         Scoring station. make sure the bot is not in contact with the station (this is against the rules).
         The bot will drive forward to score the cone, and then back up onto the charge station to hopefully engage
          */
-        mSendableAutonControllers.addOption("BalanceTestWithScoring", BalanceTestWithScoringCommand);
+//        mSendableAutonControllers.addOption("BalanceTestWithScoring", BalanceTestWithScoringCommand);
 
+        mAutoBalanceWithGyro = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
+        mTotalBalance = new SequentialCommandGroup(BalanceTestWithScoringCommand, mAutoBalanceWithGyro);
+
+        mSendableAutonControllers.addOption("total balance", mTotalBalance);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

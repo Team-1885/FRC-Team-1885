@@ -30,30 +30,3 @@ public class AutoBalance extends PIDCommand {
     }
 }
 
-
-
-//    private class Balance extends PIDCommand{
-//        NeoDriveModule driveSubsystem;
-//        private Balance(NeoDriveModule driveSubsystem, double setpoint) {
-//            super(new PIDController(0.1, 0, 0), driveSubsystem::getGyroRollDeg, setpoint,
-//                    output -> {
-//                        driveSubsystem.setThrottlePct(output); //-output * Settings.kMaxSpeedMetersPerSecond
-//                    },
-//            driveSubsystem);
-//            this.driveSubsystem = driveSubsystem;
-//
-//        }
-//
-//        @Override
-//        public boolean isFinished() {
-//            return Math.abs(m_controller.getPositionError()) < 1;
-//        }
-//        @Override
-//        public void end(boolean interrupted) {
-//            super.end(interrupted);
-//            System.out.println("Robot Balanced!");
-//            driveSubsystem.setThrottlePct(0);
-//        }
-//    }
-
-
