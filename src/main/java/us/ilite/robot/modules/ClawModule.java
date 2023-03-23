@@ -73,8 +73,10 @@ public class ClawModule extends Module {
     protected void setOutputs() {
         setPneumaticState();
         setRollerState();
-        mTable.getEntry("PNEUMATIC_STATE").setNumber(db.claw.get(EClawData.PNEUMATIC_STATE));
+        mTable.getEntry("PNEUMATIC_STATE").setNumber(db.claw.get(EClawData.ACTUATED_STATE));
         mTable.getEntry("DESIRED_VEL_ft_s").setNumber(db.claw.get(EClawData.DESIRED_VEL_ft_s));
+
+
     }
 
     public void setPneumaticState() {
@@ -88,11 +90,13 @@ public class ClawModule extends Module {
                 //  #'s arent final
                 mActuateIntake.set(ControlMode.Position, clawDegreesToTicks(180));
                 db.claw.set(EClawData.ACTUATED_STATE, 1.0);
+                mTable.getEntry("ACTUATED_STATE").setNumber(db.claw.get(EClawData.ACTUATED_STATE));
                 break;
             case RETRACT:
                 // #'s arent final
                 mActuateIntake.set(ControlMode.Position, clawDegreesToTicks(45));
                 db.claw.set(EClawData.ACTUATED_STATE, 2.0);
+                mTable.getEntry("ACTUATED_STATE").setNumber(db.claw.get(EClawData.ACTUATED_STATE));
                 break;
         }
     }
@@ -105,6 +109,7 @@ public class ClawModule extends Module {
         switch (mode) {
             case PERCENT_OUTPUT:
                 mIntakeRoller.set(TalonFXControlMode.PercentOutput, db.claw.get(EClawData.DESIRED_ROLLER_pct));
+                mTable.getEntry("DESIRED_ROLLER_pct").setNumber(db.claw.get(EClawData.DESIRED_ROLLER_pct));
                 break;
         }
     }

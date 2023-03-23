@@ -1,5 +1,12 @@
 {
   "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [14]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
       "6V Rail": {
         "open": false
