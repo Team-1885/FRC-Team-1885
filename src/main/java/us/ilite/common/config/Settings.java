@@ -45,7 +45,7 @@ public class Settings {
             public static final int kDTR3 = 3;
             public static final int kDTML2 = 2;
             public static final int kDTL4 = 4;
-            public static final int kDTGyro = 21;
+            public static final int kDTGyro = 30;
 
             // ======================
             // FEEDER AND INTAKE ID's

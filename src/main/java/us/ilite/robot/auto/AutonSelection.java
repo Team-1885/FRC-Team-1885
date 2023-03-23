@@ -70,21 +70,21 @@ public class AutonSelection {
         mDrive = NeoDriveModule.getInstance();
 //        leftPiece = PathPlanner.loadPath("LeftPiece", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
-        mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        DriveStraight = PathPlanner.loadPath("DriveStraight", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
+//        mScoringAutomation = PathPlanner.loadPath("ScoringAutomation", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
         mGoForward = PathPlanner.loadPath("GoForward", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        leftOrigin = PathPlanner.loadPath("LeftOrigin", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 //        List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("CenterLeft", new PathConstraints(kMAX_VELOCITY, kMAX_ACCELERATON));
 
 //        leftPieceCommand = commandGenerator.generateCommand(leftPiece);
 //        leftOriginCommand = commandGenerator.generateCommand(leftOrigin);
-        driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
-        mScoringAutomationCommand = commandGenerator.generateCommand(mScoringAutomation);
+//        driveStraightCommand = commandGenerator.generateCommand(DriveStraight);
+//        mScoringAutomationCommand = commandGenerator.generateCommand(mScoringAutomation);
         mGoForwardCommand = commandGenerator.generateCommand(mGoForward);
         mRobotDrive = NeoDriveModule.getInstance();
         mAutoBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg());
 
-        SequentialCommandGroup totalDrive = new SequentialCommandGroup(mGoForwardCommand, mAutoBalance);
+//        SequentialCommandGroup totalDrive = new SequentialCommandGroup(mGoForwardCommand, mAutoBalance);
 //        RamseteAutoBuilder RAutoBuilder = new RamseteAutoBuilder(
 //                mRobotDrive::getPose,
 //                mRamseteController,
@@ -112,11 +112,11 @@ public class AutonSelection {
 
 //        mSendableAutonControllers.addOption("left origin", leftOriginCommand);
 //        mSendableAutonControllers.addOption("left piece", leftPieceCommand);
-        mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
-        mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
-        mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
+//        mSendableAutonControllers.addOption("drive straight", driveStraightCommand);
+//        mSendableAutonControllers.addOption("auton selection", mScoringAutomationCommand);
+//        mSendableAutonControllers.addOption("go fowradr", mGoForwardCommand);
         mSendableAutonControllers.addOption("balance", mAutoBalance);
-        mSendableAutonControllers.addOption("totalDrive", totalDrive);
+//        mSendableAutonControllers.addOption("totalDrive", totalDrive);
 //        mSendableAutonControllers.addOption("path group", pathGroup1);
 //        mSendableAutonControllers.addOption("group", mCommandGroup);
 //        mSendableAutonControllers.addOption("TurnTest", TurnTest);
@@ -135,9 +135,9 @@ public class AutonSelection {
         return mSendableAutonControllers.getSelected();
     }
 
-    public PathPlannerTrajectory getAutonTraj() {
-        return mScoringAutomation;
-    }
+//    public PathPlannerTrajectory getAutonTraj() {
+//        return mScoringAutomation;
+//    }
 
 //    private PathPlannerRamseteCommand generatePathPlannerRamseteCommand(PathPlannerTrajectory pPathPlannerTrajectory) {
 //        PathPlannerRamseteCommand command = new PathPlannerRamseteCommand (

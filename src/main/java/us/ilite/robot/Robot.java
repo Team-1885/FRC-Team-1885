@@ -159,9 +159,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        PathPlannerTrajectory path = mAutonSelection.getAutonTraj();
         CommandScheduler.getInstance().run();
-        Robot.FIELD.setRobotPose(path.sample(mAutonTimer.get()).poseMeters);
+        //        PathPlannerTrajectory path = mAutonSelection.getSelectedAutonController();
+//        Robot.FIELD.setRobotPose(path.sample(mAutonTimer.get()).poseMeters);
 
         commonPeriodic();
     }
