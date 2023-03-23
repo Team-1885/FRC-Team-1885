@@ -388,7 +388,7 @@ public class TeleopController extends BaseManualController {
         */
     }
 
-    private void updateTelescopeArm() {
+     private void updateTelescopeArm() {
         //
 
         // ===========================================================================================================
@@ -438,17 +438,17 @@ public class TeleopController extends BaseManualController {
 
     }
     public void updateClaw() {
-        if(db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.X_BTN)) {
+        if(db.operatorinput.isSet(InputMap.OPERATOR.EXTEND_INTAKE)) {
             db.claw.set(EClawData.ARM_STATE, Enums.EClawMode.EXTEND);
         }
-        else if(db.operatorinput.isSet(ELogitech310.B_BTN) && db.operatorinput.isSet(ELogitech310.X_BTN)) {
+        else if(db.operatorinput.isSet(InputMap.OPERATOR.RETRACT_INTAKE)) {
             db.claw.set(EClawData.ARM_STATE, Enums.EClawMode.RETRACT);
         }
-        else if (db.operatorinput.isSet(ELogitech310.B_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.SPIN_ROLLERS)) {
             db.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
             db.claw.set(EClawData.DESIRED_ROLLER_pct, .5);
         }
-        else if (db.operatorinput.isSet(ELogitech310.A_BTN) && db.operatorinput.isSet(ELogitech310.Y_BTN)) {
+        else if (db.operatorinput.isSet(InputMap.OPERATOR.REVERSE_ROLLERS)) {
             db.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
             db.claw.set(EClawData.DESIRED_ROLLER_pct, -0.5);
         }
