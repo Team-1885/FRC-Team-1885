@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -162,6 +163,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mDriveTrain);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
+        mRunningModules.addModule(mClawModule);
         mRunningModules.modeInit(AUTONOMOUS);
         BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
         mActiveController = mAutoController;
@@ -173,10 +175,12 @@ public class Robot extends TimedRobot {
         mActiveController.setEnabled(true);
     }
 
-    @Override
+    /*@Override
     public void autonomousPeriodic() {
         commonPeriodic();
-    }
+     }
+
+     */
 
     @Override
     public void teleopInit() {
@@ -221,6 +225,11 @@ public class Robot extends TimedRobot {
             mActiveController.setEnabled(false);
         }
     }
+    public void autonomousPeriodic() {
+        CommandScheduler.getInstance().run();
+        commonPeriodic();
+    }
+
 
     @Override
     public void disabledPeriodic() {
