@@ -20,14 +20,23 @@ public class Field2022 {
     /**
      * Any trackable field component for 2020's game.
      */
-    public enum FieldElement implements IFieldComponent {
+    public enum FieldElement implements IFieldComponent { // add field elements with their measurements and the pipeline that tracks them
         //Do not switch order
         NULL(0, 0, 0),
         HUB_UPPER (104,48, 1),
 //        TARGET_ZOOM             (0d,0d),
-        RED_BALL(0 , 0, 3),
-        BLUE_BALL(0, 0, 4),
-        CAMERA(0,0, 0);
+        //RED_BALL(0 , 0, 3),
+        //BLUE_BALL(0, 0, 4),
+        CAMERA(0,0, 0),
+        REFLECTIVE_TAPE(0,0, 1),
+        CONE(12 + ((double)13/16), 8 + ((double) 1/2), 2), // cones have a width of 12 13/16 inches and a height of 8 1/2 inches
+        CUBE(9 + ((double)3/4),9 + ((double)3/4), 7), // cues have a width of 9 3/4 inches and a height of 9 3/4 inches
+        BLUE_ROBOT_LEFT(5,32,3), // track blue robots' bumper with dimensions of 5 inches tall and 32 inches long
+        BLUE_ROBOT_RIGHT(5,32,4), // track blue robots' bumper with dimensions of 5 inches tall and 32 inches long
+        RED_ROBOT_LEFT(5,32,5), // track red robots' bumper with dimensions of 5 inches tall and 32 inches long
+        RED_ROBOT_RIGHT(5,32,6), // track red robots' bumper with dimensions of 5 inches tall and 32 inches long
+        ;
+
 
         // This is done in inches -- straight from game manual
         private final double height;
