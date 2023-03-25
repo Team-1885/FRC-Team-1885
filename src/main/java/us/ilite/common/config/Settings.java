@@ -33,11 +33,11 @@ public class Settings {
             // ===============
             // DRIVETRAIN ID's
             // ===============
-            public static final int kDTMR2 = 1;
-            public static final int kDTR4 = 3;
-            public static final int kDTML1 = 2;
-            public static final int kDTL3 = 4;
-            public static final int kDTGyro = 30; //id of 30 for pop, id of 21 for 2023 leas comet
+            public static final int kDTMR2 = 2;
+            public static final int kDTR4 = 4;
+            public static final int kDTML1 = 1;
+            public static final int kDTL3 = 3;
+            public static final int kDTGyro = 30;
 
             // ======================
             // FEEDER AND INTAKE ID's
@@ -91,7 +91,7 @@ public class Settings {
     public static class Input {
         public static double kNormalPercentThrottleReduction = 1.0;
         // These are applied AFTER the normal throttle reduction
-        public static double kSnailModePercentThrottleReduction = 0.3;
+        public static double kSnailModePercentThrottleReduction = 0.5;
         public static double kSnailModePercentRotateReduction = 0.4;
         public static double kMaxAllowedVelocityMultiplier = 1.0;
         // Applied after any scaling
@@ -115,30 +115,18 @@ public class Settings {
     public static final double kTargetAngleLockMaxInput = 27;
     public static final double kTargetAngleLockFrictionFeedforward = 0.44 / 12;
 
-
-    // =============================================================================
-    // DriveTrain constants
-    // =============================================================================
-    public static final double kAutoBalanceScalar = 3;
-
     // =============================================================================
     // RamseteCommand constants
     // =============================================================================
-//    public static final double kS = 0.64353;
-//    public static final double kV = 0.00046589;
-//    public static final double kA = 3.2696 * Math.pow(10.0, -5.0);
-//
-//    public static final double kP = 0.1139;
+    public static final double kS = 0.64353;
+    public static final double kV = 0.00046589;
+    public static final double kA = 3.2696 * Math.pow(10.0, -5.0);
 
-    public static final double kS = 0.093053;
-    public static final double kV = 2.0535;
-    public static final double kA = 0.34977;
+    public static final double kP = 0.1139;
 
-    public static final double kP = 2.5;
-
-    public static final double kTrackWidthMeters = 0.81;
-    public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    public static final double kTrackWidthMeters = 0.6858;
+    public static final double kMaxSpeedMetersPerSecond = 15;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 15;
 
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;

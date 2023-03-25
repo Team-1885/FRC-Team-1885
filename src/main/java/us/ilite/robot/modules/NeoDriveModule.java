@@ -5,18 +5,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.control.PIDController;
 import us.ilite.common.lib.control.ProfileGains;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.ELimelightData;
 import us.ilite.common.types.EMatchMode;
-
+import us.ilite.common.types.EPixyData;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;
@@ -27,10 +23,9 @@ import us.ilite.robot.hardware.HardwareUtils;
 import us.ilite.robot.hardware.Pigeon;
 import us.ilite.robot.hardware.SparkMaxFactory;
 
-import static us.ilite.common.config.Settings.kAutoBalanceScalar;
 import static us.ilite.common.types.drive.EDriveData.*;
 
-public class NeoDriveModule extends Module implements Subsystem {
+public class NeoDriveModule extends Module {
     private CANSparkMax mRightMaster;
     private CANSparkMax mRightFollower;
     private CANSparkMax mLeftMaster;
@@ -44,7 +39,6 @@ public class NeoDriveModule extends Module implements Subsystem {
     private PIDController mLeftPositionPID;
     private PIDController mTargetLockPID;
     private Pigeon mGyro;
-    private NetworkTable mTable;
 
     // ========================================
     // DO NOT MODIFY THESE PHYSICAL CONSTANTS
@@ -95,16 +89,7 @@ public class NeoDriveModule extends Module implements Subsystem {
     public static double kTurnSensitivity = 0.85;
     private DifferentialDriveOdometry mOdometry;
 
-    private static final NeoDriveModule instance = new NeoDriveModule();
-    public static NeoDriveModule getInstance() {
-        return instance;
-    }
-
-    public double mCurrentDeg;
-
-    private NeoDriveModule() {
-        mTable = NetworkTableInstance.getDefault().getTable("drive");
-
+    public NeoDriveModule() {
         mLeftMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTML1);
         mLeftFollower = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTL3);
         mRightMaster = SparkMaxFactory.createDefaultSparkMax(Settings.HW.CAN.kDTMR2);
@@ -124,12 +109,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         mRightFollower.setSmartCurrentLimit(65);
         mLeftMaster.setSmartCurrentLimit(65);
         mLeftFollower.setSmartCurrentLimit(65);
-
-        mRightMaster.setClosedLoopRampRate(0.5);
-        mRightFollower.setClosedLoopRampRate(0.5);
-        mLeftMaster.setClosedLoopRampRate(0.5);
-        mLeftFollower.setClosedLoopRampRate(0.5);
-
+        
         mRightEncoder = mRightMaster.getEncoder();
         mLeftEncoder = mLeftMaster.getEncoder();
 
@@ -155,9 +135,7 @@ public class NeoDriveModule extends Module implements Subsystem {
         HardwareUtils.setGains(mLeftCtrl, kSmartMotionGains);
         HardwareUtils.setGains(mRightCtrl, kSmartMotionGains);
 
-        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
-                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
-                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)));
+        mOdometry = new DifferentialDriveOdometry(mGyro.getHeading());
 
         mLeftMaster.burnFlash();
         mLeftFollower.burnFlash();
@@ -168,9 +146,8 @@ public class NeoDriveModule extends Module implements Subsystem {
     public void modeInit(EMatchMode pMode) {
         mGyro.zeroAll();
         reset();
-//        mCurrentDeg = 80;
         if(pMode == EMatchMode.AUTONOMOUS) {
-//            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+            resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
             mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
             mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
             mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -189,13 +166,8 @@ public class NeoDriveModule extends Module implements Subsystem {
      */
     public void resetOdometry(Pose2d pose) {
         reset();
-        mGyro.zeroAll();
-        mOdometry.resetPosition(mGyro.getHeading(), //new Rotation2d(db.drivetrain.get(ACTUAL_HEADING_RADIANS))
-                Units.feet_to_meters(db.drivetrain.get(L_ACTUAL_POS_FT)),
-                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_POS_FT)),
-                pose);
-//        mGyro.resetAngle(pose.getRotation());
-//        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
+        mGyro.resetAngle(pose.getRotation());
+        mOdometry.resetPosition(pose, Rotation2d.fromDegrees(-mGyro.getHeading().getDegrees()));
     }
     @Override
     public void readInputs() {
@@ -248,7 +220,6 @@ public class NeoDriveModule extends Module implements Subsystem {
                 break;
             case PERCENT_OUTPUT:
                 if (db.limelight.isSet(ELimelightData.TARGET_ID)) {
-                    //mTable.getEntry("AM I tracking idk").setString("Yippie");
                     double targetLockOutput = 0;
                     if (db.limelight.isSet(ELimelightData.TV)) {
                         targetLockOutput = mTargetLockPID.calculate(-db.limelight.get(ELimelightData.TX), clock.dt());
@@ -273,50 +244,41 @@ public class NeoDriveModule extends Module implements Subsystem {
                 mLeftCtrl.setReference(left * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 mRightCtrl.setReference(right * kMaxVelocityRPM, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
                 break;
-//            case BREAK:
-//                mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//                mRightMaster.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//                mLeftFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
-//                mRightFollower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            case TURN_TO:
+                mTurnToDegreePID.setSetpoint(db.drivetrain.get(DESIRED_TURN_ANGLE_deg));
+                double turnOutput = mTurnToDegreePID.calculate(db.drivetrain.get(ACTUAL_HEADING_DEGREES), clock.getCurrentTimeInMillis());
+                db.drivetrain.set(DESIRED_TURN_PCT, turnOutput);
+                mLeftMaster.set(turnOutput);
+                mRightMaster.set(-turnOutput);
+                break;
+            case SMART_MOTION:
+                mLeftCtrl.setReference(db.drivetrain.get(L_DESIRED_POS_FT) / kDriveNEOPositionFactor,
+                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
+                mRightCtrl.setReference(db.drivetrain.get(R_DESIRED_POS_FT) / kDriveNEOPositionFactor,
+                        CANSparkMax.ControlType.kSmartMotion, SMART_MOTION_PID_SLOT, 0 );
+                break;
+            case PATH_FOLLOWING_BASIC:
+                mLeftPositionPID.setSetpoint(db.drivetrain.get(L_DESIRED_POS_FT));
+                mRightPositionPID.setSetpoint(db.drivetrain.get(R_DESIRED_POS_FT));
+                double lMeasurement = db.drivetrain.get(L_ACTUAL_POS_FT);
+                double rMeasurement = db.drivetrain.get(R_ACTUAL_POS_FT);
+                double leftPathOutput = mLeftPositionPID.calculate(lMeasurement, clock.getCurrentTimeInMillis());
+                double rightPathOutput = mRightPositionPID.calculate(rMeasurement, clock.getCurrentTimeInMillis());
+                mLeftMaster.set(leftPathOutput);
+                mRightMaster.set(rightPathOutput);
+                break;
+            case PATH_FOLLOWING_RAMSETE:
+                //Divide by 6.56 since that is the max velocity in ft/s
+                double vleft = db.drivetrain.get(L_DESIRED_VEL_FT_s);
+                double vright = db.drivetrain.get(R_DESIRED_VEL_FT_s);
+//                mLeftMaster.set(db.drivetrain.get(L_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mRightMaster.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mRightFollower.set(db.drivetrain.get(R_DESIRED_VEL_FT_s) / Units.meters_to_feet(0.5));
+//                mDrive.feed();
+                mLeftCtrl.setReference((vleft / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                mRightCtrl.setReference((vright / kWheelCircumferenceFeet) * 60, CANSparkMax.ControlType.kVelocity, VELOCITY_PID_SLOT, 0);
+                break;
         }
-    }
-
-    public void setThrottlePct(double throttle) {
-        throttle = throttle/kAutoBalanceScalar; //divided by AutoBalanceScalar to limit the max speed when autobalancing in order to make the balance more accurate
-        mRightMaster.set(throttle);
-        mLeftMaster.set(throttle);
-        mTable.getEntry("THROTTLE PCT").setNumber(throttle);
-    }
-
-    public double getGyroRollDeg() {
-        mTable.getEntry("ROLL DEG").setNumber(mGyro.getRoll().getDegrees());
-        System.out.println("getting deg");
-//        mCurrentDeg--;
-//        return mCurrentDeg;
-        return mGyro.getRoll().getDegrees();
-    }
-
-    public Pose2d getPose() {
-        return mOdometry.getPoseMeters();
-    }
-
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(
-                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s)),
-                Units.feet_to_meters(db.drivetrain.get(R_ACTUAL_VEL_FT_s))
-        );
-    }
-
-    public void setVolts(double leftVolts, double rightVolts) {
-        //safety check, only if the desired .set() value is less than one should it be set to the motors
-        if (Math.abs(leftVolts/12) < 1 && Math.abs(rightVolts/12) < 1) {
-            mRightMaster.set(rightVolts/12);
-            mLeftMaster.set(leftVolts/12);
-        }
-//        mRightMaster.set(rightVolts / 12);
-//        mLeftMaster.set(leftVolts / 12);
-        mTable.getEntry("volts").setNumber(leftVolts/12);
-
     }
 
     public void reset() {

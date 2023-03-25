@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
 import us.ilite.common.config.AbstractSystemSettingsUtils;
 import us.ilite.common.config.Settings;
@@ -53,9 +52,8 @@ public class Robot extends TimedRobot {
     private ClimberModule mClimber;
     private NeoDriveModule mNeoDrive;
     private Limelight mLimelight;
-    private AddressableLEDs mAddressableLEDs;
     private AutonSelection mAutonSelection;
-
+    private ClimbModeSelection mClimberSelector;
   //  private BallTracking mPixy;
 
     private OperatorInput mOI;
@@ -72,10 +70,14 @@ public class Robot extends TimedRobot {
     private ThreeBallTrajectoryController mThreeBallAuton;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+    private ReferenceModule mReferenceModule;
+    private TelescopeArm mTelescopeArm;
+    private ClawModule mClawModule;
+    private Drivetrain mDriveTrain;
 
     @Override
     public void robotInit() {
-
+        mClimberSelector = new ClimbModeSelection();
         UsbCamera camera = CameraServer.startAutomaticCapture();
         camera.setFPS(30);
         CLOCK.update();
@@ -157,29 +159,29 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mFeeder);
         mRunningModules.addModule(mIntake);
         mRunningModules.addModule(mNeoDrive);
+        mRunningModules.addModule(mDriveTrain);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
-//        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
-//        mActiveController = mAutoController;
-//        mAutoController.initialize();
-//        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
+        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+        mActiveController = mAutoController;
+        mAutoController.initialize();
+        mNeoDrive.resetOdometry((mAutoController.getStartPose()));
         mNeoDrive.readInputs();
-//        mActiveController.setEnabled(true);
-        if (mAutonSelection.getSelectedAutonController() != null) {
-            mAutonSelection.getSelectedAutonController().schedule();
-        }
+        mDriveTrain.resetOdometry((mAutoController.getStartPose()));
+        mDriveTrain.readInputs();
+        mActiveController.setEnabled(true);
     }
 
     @Override
     public void autonomousPeriodic() {
-        CommandScheduler.getInstance().run();
         commonPeriodic();
     }
 
     @Override
     public void teleopInit() {
-
+        CLIMB_MODE = mClimberSelector.getSelectedMode();
+        SmartDashboard.putString("Climb Mode", CLIMB_MODE);
         if ( Settings.kIsLogging ){
             mCSVLogger.start();
         }
@@ -191,12 +193,15 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mClimber);
         mRunningModules.addModule(mLEDControl);
-        mRunningModules.addModule(mAddressableLEDs);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
+        mRunningModules.addModule(mReferenceModule);
+        mRunningModules.addModule(mTelescopeArm);
+        mRunningModules.addModule(mClawModule);
+        mRunningModules.addModule(mDriveTrain);
     }
 
     @Override
@@ -265,7 +270,7 @@ public class Robot extends TimedRobot {
         }
 
         mRunningModules.safeReadInputs();
-
+        mActiveController.update();
         mRunningModules.safeSetOutputs();
         SmartDashboard.putNumber("common_periodic_dt", Timer.getFPGATimestamp() - start);
         SmartDashboard.putNumber("Clock Time", CLOCK.now());
