@@ -16,7 +16,7 @@ import us.ilite.common.lib.control.ProfileGains;
 import us.ilite.common.lib.util.Units;
 import us.ilite.common.types.ELimelightData;
 import us.ilite.common.types.EMatchMode;
-import us.ilite.common.types.EPixyData;
+
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.sensor.EGyro;
 import us.ilite.robot.Enums;

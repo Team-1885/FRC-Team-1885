@@ -7,7 +7,7 @@ import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.EInputScale;
 import us.ilite.common.types.input.ELogitech310;
 import us.ilite.robot.Enums;
-import us.ilite.robot.modules.DriveMessage;
+
 import static us.ilite.robot.Enums.*;
 
 import static us.ilite.common.config.InputMap.DRIVER.*;
@@ -54,9 +54,7 @@ public abstract class BaseManualController extends AbstractController {
             if (throttle == 0.0 && rotate != 0.0) {
                 throttle += 0.01;
             }
-            DriveMessage d = new DriveMessage().throttle(throttle).turn(rotate).normalize();
-            throttle = d.getThrottle();
-            rotate = d.getTurn();
+
             db.drivetrain.set(DESIRED_THROTTLE_PCT, throttle);
             db.drivetrain.set(DESIRED_TURN_PCT, rotate);
         }

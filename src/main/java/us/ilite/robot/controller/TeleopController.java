@@ -48,7 +48,7 @@ public class TeleopController extends BaseManualController {
         // ========================================
         super.updateDrivetrain();
 //        updateCargo();
-        super.updateBallCount();
+
         //Makes sure that we call the right methods for the climber mode
         if (Robot.CLIMB_MODE.equals("WCMP")) {
             if (db.operatorinput.isSet(ELogitech310.START)) {

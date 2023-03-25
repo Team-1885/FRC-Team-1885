@@ -39,62 +39,11 @@ public class InputMap {
      *
      * Operator
      * ----------
-     * Intake retract - R trigger
-     * Intake extend - L trigger
-     * Roller outwards -  B button
-     * Feeder fwd - X button
-     * Feeder rev - Y button
-     * Release Balls - dpad left
-     * Shoot cargo - r button
-     * Place cargo - l button
+     * Spin intake - X btn
      **/
     public static class OPERATOR {
         public static final ELogitech310
-        RETRACT_INTAKE = ELogitech310.RIGHT_TRIGGER_AXIS,
-        EXTEND_INTAKE = ELogitech310.LEFT_TRIGGER_AXIS,
-        REVERSE_ROLLERS = ELogitech310.B_BTN,
-        SPIN_FEEDER = ELogitech310.X_BTN,
-        REVERSE_FEEDER = ELogitech310.Y_BTN,
-        RELEASE_BALLS = ELogitech310.DPAD_LEFT,
-        //SHOOT_CARGO = ELogitech310.R_BTN,
-        STAGE_BALLS = ELogitech310.A_BTN,
-        PLACE_CARGO = ELogitech310.L_BTN,
-
-        INCREASE_FEEDER_SPEED = ELogitech310.DPAD_UP,
-        DECREASE_FEEDER_SPEED = ELogitech310.DPAD_DOWN;
-    }
-
-    /**
-     * Hanger buttons
-     * Spin double - right trigger axis
-     * Spin single - left trigger axis
-     * High rung - l button
-     * Traversal run - r button
-     * Clamp double - dpad up
-     * Release double - dpad down
-     * Clamp single - y button
-     * Release single - a button
-     * Climb to next rung - r button
-     */
-    public static class HANGER {
-        public static final ELogitech310
-        SPIN_DOUBLE = ELogitech310.RIGHT_TRIGGER_AXIS,
-        SPIN_SINGLE = ELogitech310.LEFT_TRIGGER_AXIS,
-        HIGH_RUNG = ELogitech310.L_BTN,
-        TRAVERSAL_RUNG = ELogitech310.R_BTN,
-//        BALANCE_CLIMBER = ELogitech310.START,
-////        SET_COAST = ELogitech310.BACK,
-        CLAMP_DOUBLE = ELogitech310.DPAD_UP,
-        RELEASE_DOUBLE = ELogitech310.DPAD_DOWN,
-        CLAMP_SINGLE = ELogitech310.Y_BTN,
-        RELEASE_SINGLE = ELogitech310.A_BTN,
-
-
-
-        GRAB_MID = ELogitech310.L_BTN,
-        CONFIRM_CLAMPED_ON_HIGH_BAR = ELogitech310.R_BTN,
-        CONFIRM_CLAMPED_ON_TRAVERSAL_RELEASE_HIGH = ELogitech310.X_BTN;
-        // Experimental Inputs for automation
+        SPIN_INTAKE = ELogitech310.X_BTN;
     }
 
 }
