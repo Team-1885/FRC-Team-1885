@@ -34,6 +34,7 @@ import static us.ilite.robot.vision.Ilite3DSolver.ySort;
  * A module for interfacing with the Goal Limelight
  */
 public class Limelight extends Module implements ITargetDataProvider {
+
     // These are for V2
     public static double llFOVVertical = 49.7; // TODO Confirm if this is true
     public static double llFOVHorizontal = 59.6;
@@ -54,17 +55,6 @@ public class Limelight extends Module implements ITargetDataProvider {
         mTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
-    /*
-    2023 PIPELINES:
-    0: default camera
-    1: node tracking
-    2: cone tracking
-    3: blue bumper left corner
-    4: blue bumper right corner
-    5: red bumper left corner
-    6: red bumper right corner
-     */
-
     @Override
     public void readInputs() {
         boolean targetValid = mTable.getEntry("tv").getDouble(0d) > 0d;
@@ -78,18 +68,14 @@ public class Limelight extends Module implements ITargetDataProvider {
 
     @Override
     public void setOutputs() {
-        // use the TARGET_ID (given pipeline) to set the goal (the element being targeted)
-        // checks if there are any available FieldElements with the pipeline that matches TARGET_ID
         mGoal = Field2022.FieldElement.values()[(int) db.limelight.get(ELimelightData.TARGET_ID)];
         db.limelight.set(PIPELINE, mGoal.pipeline());
-        db.limelight.set(TARGETING_REGION, 1);
 
         setNetworkTableValue("ledMode", LED_MODE);
         setNetworkTableValue("camMode", CAM_MODE);
         setNetworkTableValue("snapshot", SNAPSHOT_MODE);
         setNetworkTableValue("stream", STREAM_MODE);
         setNetworkTableValue("pipeline", PIPELINE);
-        setNetworkTableValue("targetingRegion", TARGETING_REGION);
 
         SmartDashboard.putNumber("Logged TX", db.limelight.get(TX));
         SmartDashboard.putBoolean("Logged TV", db.limelight.isSet(TV));

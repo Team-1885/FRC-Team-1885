@@ -6,7 +6,7 @@ import com.flybotix.hfr.util.log.ILog;
 import com.flybotix.hfr.util.log.Logger;
 
 import edu.wpi.first.networktables.ConnectionInfo;
-//import edu.wpi.first.networktables.ConnectionNotification;
+import edu.wpi.first.networktables.ConnectionNotification;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
@@ -33,12 +33,12 @@ public class Network {
         return mConnectionInfo;
     } 
 
-//    private Network() {
-//        Consumer<ConnectionNotification> listener = conn -> {
-//            mConnectionInfo = conn.conn;
-//            sLOG.info("=== Remote Connection Info ===");
-//            sLOG.info(mConnectionInfo.remote_ip + " : " + mConnectionInfo.remote_port);
-//        };
-//        NetworkTableInstance.getDefault().addConnectionListener(listener, true);
-//    }
+    private Network() {
+        Consumer<ConnectionNotification> listener = conn -> {
+            mConnectionInfo = conn.conn;
+            sLOG.info("=== Remote Connection Info ===");
+            sLOG.info(mConnectionInfo.remote_ip + " : " + mConnectionInfo.remote_port);
+        };
+        NetworkTableInstance.getDefault().addConnectionListener(listener, true);
+    }
 }

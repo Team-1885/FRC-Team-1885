@@ -1,13 +1,10 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "SPARK MAX [1]": {
+      "SPARK MAX [14]": {
         "header": {
           "open": true
         }
-      },
-      "window": {
-        "visible": false
       }
     },
     "RoboRIO": {
@@ -22,25 +19,13 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/Ungrouped/PIDControllerOfIlite[0]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDControllerOfIlite[1]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDControllerOfIlite[2]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDControllerOfIlite[3]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/Shuffleboard/Auton Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Choose Auton Controller": "String Chooser",
       "/Shuffleboard/Pre-Match Configuration/Climber Mode": "String Chooser",
-      "/SmartDashboard/Autonomous Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/Autonomous Mode": {
+      "/Shuffleboard/Auton Configuration/Choose Auton Controller": {
         "window": {
           "visible": true
         }
@@ -82,62 +67,14 @@
     },
     "SmartDashboard": {
       "Field": {
-        "open": false
+        "open": true
       }
     },
-    "ramsete command": {
+    "claw": {
       "open": true
     },
-    "transitory": {
-      "LiveWindow": {
-        "open": true
-      },
-      "Shuffleboard": {
-        "open": true
-      },
-      "SmartDashboard": {
-        "open": true
-      },
-      "Target_Lock_Info": {
-        "open": true
-      },
-      "drive": {
-        "open": true
-      },
-      "limelight": {
-        "open": true
-      },
-      "ramsete command": {
-        "open": true
-      }
-    }
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "axis": [
-            {
-              "autoFit": true
-            }
-          ],
-          "height": 23,
-          "series": [
-            {
-              "color": [
-                0.2980392277240753,
-                0.44705885648727417,
-                0.6901960968971252,
-                1.0
-              ],
-              "id": "NT:/drivetrain/left volts"
-            }
-          ]
-        }
-      ],
-      "window": {
-        "visible": false
-      }
+    "rollerintake": {
+      "open": true
     }
   }
 }

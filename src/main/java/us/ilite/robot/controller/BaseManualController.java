@@ -6,8 +6,7 @@ import us.ilite.common.config.Settings;
 import us.ilite.common.types.drive.EDriveData;
 import us.ilite.common.types.input.EInputScale;
 import us.ilite.common.types.input.ELogitech310;
-import us.ilite.robot.Enums;
-
+import us.ilite.robot.modules.DriveMessage;
 import static us.ilite.robot.Enums.*;
 
 import static us.ilite.common.config.InputMap.DRIVER.*;
@@ -35,26 +34,21 @@ public abstract class BaseManualController extends AbstractController {
         rotate = Math.abs(rotate) > 0.02 ? rotate : 0.0; //Handling Deadband
         throttle = Math.abs(throttle) > 0.02 ? throttle : 0.0; //Handling Deadband
 
-//        if (db.driverinput.isSet(ELogitech310.L_BTN)) {
-//            db.drivetrain.set(STATE, EDriveState.BREAK);
-//        }
-
         if (db.driverinput.isSet(SNAIL_MODE) && db.driverinput.get(SNAIL_MODE) > DRIVER_SUB_WARP_AXIS_THRESHOLD) {
-            System.out.println("snail mode");
             throttle *= Settings.Input.kSnailModePercentThrottleReduction;
             rotate *= Settings.Input.kSnailModePercentRotateReduction;
         }
 
-        // if one of our target locking buttons is pressed
-        if (db.driverinput.isSet(REFLECTIVE_TAPE_TRACKING) || db.driverinput.isSet(CONE_TRACKING) || db.driverinput.isSet(CUBE_TRACKING)) {
-            System.out.println("tracking");
+        if (db.driverinput.isSet(TARGET_LOCK)) {
             db.drivetrain.set(DESIRED_THROTTLE_PCT, Math.min(throttle, 0.75));
             db.drivetrain.set(DESIRED_TURN_PCT, rotate);
         } else {
             if (throttle == 0.0 && rotate != 0.0) {
                 throttle += 0.01;
             }
-
+            DriveMessage d = new DriveMessage().throttle(throttle).turn(rotate).normalize();
+            throttle = d.getThrottle();
+            rotate = d.getTurn();
             db.drivetrain.set(DESIRED_THROTTLE_PCT, throttle);
             db.drivetrain.set(DESIRED_TURN_PCT, rotate);
         }
