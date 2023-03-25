@@ -9,7 +9,7 @@ public class AutoBalance extends PIDCommand {
         NeoDriveModule driveSubsystem;
 
         public AutoBalance(NeoDriveModule pDriveSubsystem, double setpoint) {
-            super(new PIDController(0.1, 0, 0), pDriveSubsystem::getGyroRollDeg, 0, //1.5 is about the base roll in deg
+            super(new PIDController(0.1, 0, 0), pDriveSubsystem::getGyroRollDeg, setpoint, //1.5 is about the base roll in deg
                 output -> {
                     pDriveSubsystem.setThrottlePct(-output); //-output * Settings.kMaxSpeedMetersPerSecond
                 },
