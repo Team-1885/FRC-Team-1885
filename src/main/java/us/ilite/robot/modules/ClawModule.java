@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import us.ilite.common.config.Settings;
 import us.ilite.common.types.sensor.EClawData;
 import us.ilite.robot.Enums;
+import us.ilite.robot.hardware.DigitalBeamSensor;
 
 import static us.ilite.common.types.EClimberData.DESIRED_POS_deg;
 import static us.ilite.common.types.EIntakeData.*;
@@ -23,6 +24,7 @@ public class ClawModule extends Module {
     private TalonFX mActuateIntake;
     private Compressor mCompressor;
     private boolean mIntakeState = false;
+    private DigitalBeamSensor mClawSensor;
     private NetworkTable mTable;
 
     // ========================================
@@ -39,8 +41,17 @@ public class ClawModule extends Module {
     // PHYSICAL CONTANTS /!\ DO NOT MODIFY /!\
     // ========================================
     public static final double kActuateRatio = (12.0 / 72.0) * (20.0 / 80.0) * (20.0 / 80.0) * (16.0 / 42.0);
+    private static final ClawModule instance = new ClawModule();
+    public DigitalBeamSensor getmClawSensor() {
+        return mClawSensor;
+    }
 
-    public ClawModule() {
+    public static ClawModule getInstance() {
+        return instance;
+    }
+
+    private ClawModule() {
+        mClawSensor = new DigitalBeamSensor(1);
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);

@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
         mLimelight = new Limelight();
         mReferenceModule = new ReferenceModule();
         mTelescopeArm = new TelescopeArm();
-        mClawModule = new ClawModule();
+        mClawModule = ClawModule.getInstance();
         mDriveTrain = new Drivetrain();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
