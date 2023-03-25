@@ -15,9 +15,7 @@ public class SpinIntake extends CommandBase {
     }
     @Override
     public void execute() {
-        Robot.DATA.claw.set(EClawData.ROLLER_STATE, Enums.EClawMode.PERCENT_OUTPUT);
-        // CONSTANT
-        Robot.DATA.claw.set(EClawData.DESIRED_ROLLER_pct, 0.5);
+        intake.setMotors(0.5);
     }
     @Override
     public boolean isFinished() {
@@ -29,6 +27,6 @@ public class SpinIntake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        Robot.DATA.claw.set(EClawData.DESIRED_ROLLER_pct, 0.0);
+        intake.setMotors(0.0);
     }
 }

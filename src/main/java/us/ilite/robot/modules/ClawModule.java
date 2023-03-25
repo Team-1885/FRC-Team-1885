@@ -124,6 +124,10 @@ public class ClawModule extends Module {
                 break;
         }
     }
+    public void setMotors( double pSpeed) {
+        mIntakeRoller.set(TalonFXControlMode.PercentOutput, 0.5);
+        mTable.getEntry("PercentOutput").setNumber(mIntakeRoller.getMotorOutputPercent());
+    }
     private double ticksToClimberDegrees(double pTicks) {
         return pTicks / 2048 * kActuateRatio * 360;
     }
