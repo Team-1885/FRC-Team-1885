@@ -53,7 +53,11 @@
         "y": 2.891578068870424
       },
       "prevControl": {
+<<<<<<< HEAD:src/main/deploy/pathplanner/BalanceTestWithScoring.path
         "x": 4.31081072496483,
+=======
+        "x": 3.5991530414845476,
+>>>>>>> master:src/main/deploy/pathplanner/ScorePreload Balance.path
         "y": 2.891578068870424
       },
       "nextControl": null,
