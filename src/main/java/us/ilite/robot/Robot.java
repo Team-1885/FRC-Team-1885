@@ -165,7 +165,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLEDControl);
         mRunningModules.addModule(mClawModule);
         mRunningModules.modeInit(AUTONOMOUS);
-        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
+        BaseAutonController mAutoController = (BaseAutonController) mAutonSelection.getSelectedAutonController();
         mActiveController = mAutoController;
         mAutoController.initialize();
         mNeoDrive.resetOdometry((mAutoController.getStartPose()));
@@ -173,6 +173,10 @@ public class Robot extends TimedRobot {
         mDriveTrain.resetOdometry((mAutoController.getStartPose()));
         mDriveTrain.readInputs();
         mActiveController.setEnabled(true);
+
+        if (mAutonSelection.getSelectedAutonController() != null) {
+            mAutonSelection.getSelectedAutonController().schedule();
+        }
     }
 
     /*@Override

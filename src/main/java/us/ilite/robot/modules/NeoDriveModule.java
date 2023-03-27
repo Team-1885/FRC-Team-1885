@@ -60,6 +60,10 @@ public class NeoDriveModule extends Module {
     // ========================================
     private static final int VELOCITY_PID_SLOT = 1;
     private static final int SMART_MOTION_PID_SLOT = 2;
+    private static final NeoDriveModule Instance = new NeoDriveModule();
+    public static NeoDriveModule getInstance() {
+        return Instance;
+    }
     //TODO change the smart motion gains once we have tuned it
     public static ProfileGains kSmartMotionGains = new ProfileGains()
             .p(0.25)

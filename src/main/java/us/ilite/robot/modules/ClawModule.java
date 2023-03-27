@@ -52,7 +52,7 @@ public class ClawModule extends Module {
 
     private ClawModule() {
         mClawSensor = new DigitalBeamSensor(1);
-        mIntakeRoller = new TalonFX(Settings.HW.CAN.kINRoller);
+        mIntakeRoller = new TalonFX(Settings.HW.CAN.kINFeeder);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);

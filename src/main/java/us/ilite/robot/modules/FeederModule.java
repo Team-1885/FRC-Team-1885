@@ -18,7 +18,7 @@ import static us.ilite.common.types.EFeederData.*;
 
 public class FeederModule extends Module {
 
-    private final TalonFX mIntakeFeeder;
+    // private final TalonFX mIntakeFeeder;
 
     private final DigitalBeamSensor mEntryBeamBreaker;
   //  private final DigitalBeamSensor mExitBeamBreaker;
@@ -38,13 +38,13 @@ public class FeederModule extends Module {
     private ProfileGains kVelocityGains = new ProfileGains().p(0.02).f(0.045).slot(VELOCITY_SLOT);
 
     public FeederModule () {
-        mIntakeFeeder = new TalonFX(Settings.HW.CAN.kINFeeder);
+        // mIntakeFeeder = new TalonFX(Settings.HW.CAN.kINFeeder);
         mEntryBeamBreaker = new DigitalBeamSensor(Settings.HW.DIO.kINEntryBeam, kDebounceTime);
      //   mExitBeamBreaker = new DigitalBeamSensor(Settings.HW.DIO.kINExitBeam, kDebounceTime);
-        mIntakeFeeder.configPeakOutputForward(1.0, 20);
-        mIntakeFeeder.configPeakOutputReverse(-1.0, 20);
+       //  mIntakeFeeder.configPeakOutputForward(1.0, 20);
+        // mIntakeFeeder.configPeakOutputReverse(-1.0, 20);
         setStatusFrames();
-        HardwareUtils.setGains(mIntakeFeeder, kVelocityGains);
+        // HardwareUtils.setGains(mIntakeFeeder, kVelocityGains);
     }
 
     @Override
@@ -54,9 +54,12 @@ public class FeederModule extends Module {
 
     @Override
     public void readInputs() {
+        /*
         db.feeder.set(ACTUAL_FEEDER_pct, (mIntakeFeeder.getSelectedSensorVelocity() * kScaledRPMConversion) / kMaxFalconSpeed);
         db.feeder.set(EXIT_BALL_VELOCITY_ft_s, mIntakeFeeder.getSelectedSensorVelocity() * kVelocityConversion);
         db.feeder.set(EXIT_BALL_VELOCITY_rpm, mIntakeFeeder.getSelectedSensorVelocity() * 600.0 / 2048.0);
+
+         */
         db.feeder.set(ENTRY_BEAM, mEntryBeamBreaker.isBroken());
    //     db.feeder.set(EXIT_BEAM, mExitBeamBreaker.isBroken());
     }
@@ -67,6 +70,7 @@ public class FeederModule extends Module {
         if (mode == null) {
             return;
         }
+        /*
         switch (mode) {
             case PERCENT_OUTPUT:
                 mIntakeFeeder.set(TalonFXControlMode.PercentOutput, db.feeder.get(SET_FEEDER_pct));
@@ -75,12 +79,17 @@ public class FeederModule extends Module {
                 mIntakeFeeder.set(TalonFXControlMode.Velocity, rpmToTicksPer100ms(db.feeder.get(SET_VELOCITY_rpm)));
                 break;
         }
+
+         */
     }
     private void setStatusFrames() {
+        /*
         mIntakeFeeder.setStatusFramePeriod(StatusFrame.Status_1_General, 20);
         mIntakeFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
         mIntakeFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 255);
         mIntakeFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 255);
+
+         */
     }
     private double rpmToTicksPer100ms(double pRPM) {
         return pRPM * 2048.0 / 600.0;
