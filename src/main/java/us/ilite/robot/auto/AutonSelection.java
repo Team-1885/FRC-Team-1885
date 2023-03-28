@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import us.ilite.robot.commands.AutoBalance;
 import us.ilite.robot.commands.GenerateRamseteCommand;
+import us.ilite.robot.commands.SpinIntake;
 import us.ilite.robot.modules.NeoDriveModule;
 
 
@@ -41,6 +42,7 @@ public class AutonSelection {
     private PPRamseteCommand DockWithScoringCommand;
     private AutoBalance mBalance;
     private SequentialCommandGroup mScoreWithBalance;
+    private SpinIntake mSpinIntake;
 
 
     public AutonSelection() {
@@ -70,6 +72,8 @@ public class AutonSelection {
         //mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
         mSendableAutonControllers.addOption("ScorePreload WITH BALANCE", mScoreWithBalance);
+
+        mSendableAutonControllers.addOption("SPIN INTAKE", mSpinIntake);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

@@ -8,10 +8,12 @@ import com.flybotix.hfr.util.log.ILog;
 import com.flybotix.hfr.util.log.Logger;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import us.ilite.common.Data;
@@ -22,7 +24,10 @@ import us.ilite.common.types.MatchMetadata;
 import us.ilite.logging.CSVLogger;
 import us.ilite.logging.Log;
 import us.ilite.robot.auto.AutonSelection;
-import us.ilite.robot.controller.*;
+import us.ilite.robot.controller.AbstractController;
+import us.ilite.robot.controller.BaseAutonController;
+import us.ilite.robot.controller.TeleopController;
+import us.ilite.robot.controller.TestController;
 import us.ilite.robot.hardware.Clock;
 import us.ilite.robot.modules.*;
 import us.ilite.robot.network.EForwardableConnections;
@@ -61,6 +66,7 @@ public class Robot extends TimedRobot {
     private BaseAutonController mBaseAutonController;
     private AbstractController mActiveController = null;
     private TestController mTestController;
+    private ClawModule mClawModule;
 
     @Override
     public void robotInit() {
@@ -80,6 +86,7 @@ public class Robot extends TimedRobot {
         mLEDControl = new LEDModule();
         mAddressableLEDs = new AddressableLEDs();
         mNeoDrive = NeoDriveModule.getInstance();
+        mClawModule = ClawModule.getInstance();
         mLimelight = new Limelight();
      //   mPixy = new BallTracking();
         if(IS_SIMULATED) {
@@ -137,6 +144,7 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.modeInit(AUTONOMOUS);
+        mRunningModules.addModule(mClawModule);
 //        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
 //        mActiveController = mAutoController;
 //        mAutoController.initialize();
@@ -171,6 +179,7 @@ public class Robot extends TimedRobot {
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
+        mRunningModules.addModule(mClawModule);
     }
 
     @Override

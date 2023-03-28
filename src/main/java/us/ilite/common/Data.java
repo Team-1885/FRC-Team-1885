@@ -51,6 +51,7 @@ public class Data {
     public final RobotCodex<ELEDControlData> ledcontrol = new RobotCodex(NULL_CODEX_VALUE, ELEDControlData.class);
 
     public final RobotCodex<EAddressableLEDData> addressableled = new RobotCodex(NULL_CODEX_VALUE, EAddressableLEDData.class);
+    public final RobotCodex<EClawData> claw = new RobotCodex(NULL_CODEX_VALUE, EClawData.class);
     public final RobotCodex[] mAllCodexes = new RobotCodex[]{
             driverinput,
             operatorinput,
@@ -58,6 +59,7 @@ public class Data {
             drivetrain,
             pdp,
             rawLimelight,
+            claw,
 
 
     };
@@ -72,6 +74,7 @@ public class Data {
             imu,
             drivetrain,
             pdp,
+            claw,
 
 
 
