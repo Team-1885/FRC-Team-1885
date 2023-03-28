@@ -1,33 +1,20 @@
 package us.ilite.robot.commands;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import us.ilite.common.config.Settings;
 import us.ilite.common.lib.util.Units;
-import us.ilite.robot.TrajectoryCommandUtils;
 import us.ilite.robot.modules.NeoDriveModule;
-
-import javax.swing.*;
-import java.util.List;
 
 public class GenerateRamseteCommand {
 
@@ -113,8 +100,8 @@ public class GenerateRamseteCommand {
                         mRobotDrive
                 );
         // Reset odometry to the starting pose of the trajectory.
-        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
-        mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
+//        mRobotDrive.resetOdometry(desiredTrajectory.getInitialPose());
+//        mTable.getEntry("initial pose").setString((desiredTrajectory.getInitialPose()).toString());
         return mRamseteCommand;
     }
     public double getTotalTimeSeconds(){
