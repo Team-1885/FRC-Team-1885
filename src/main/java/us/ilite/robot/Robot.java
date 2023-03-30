@@ -143,8 +143,9 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mNeoDrive);
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
-        mRunningModules.modeInit(AUTONOMOUS);
         mRunningModules.addModule(mClawModule);
+        mRunningModules.modeInit(AUTONOMOUS);
+
 //        BaseAutonController mAutoController = mAutonSelection.getSelectedAutonController();
 //        mActiveController = mAutoController;
 //        mAutoController.initialize();
@@ -174,12 +175,13 @@ public class Robot extends TimedRobot {
         mRunningModules.addModule(mLimelight);
         mRunningModules.addModule(mLEDControl);
         mRunningModules.addModule(mAddressableLEDs);
+        mRunningModules.addModule(mClawModule);
       //  mRunningModules.addModule(mPixy);
         MODE=TELEOPERATED;
         mActiveController = mTeleopController;
         mActiveController.setEnabled(true);
         mRunningModules.modeInit(TELEOPERATED);
-        mRunningModules.addModule(mClawModule);
+
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ClawModule extends Module {
     private Compressor mCompressor;
     private boolean mIntakeState = false;
     private DigitalBeamSensor mClawSensor;
-    private NetworkTable mTable;
+    private static NetworkTable mTable;
 
     // ========================================
     // DO NOT MODIFY THESE CONSTANTS
@@ -44,9 +44,11 @@ public class ClawModule extends Module {
     public static ClawModule getInstance() {
         return instance;
     }
-
+    public static NetworkTable getGlass() {
+        return mTable;
+    }
     private ClawModule() {
-        mClawSensor = new DigitalBeamSensor(1);
+        mClawSensor = new DigitalBeamSensor(4);
         mIntakeRoller = new TalonFX(Settings.HW.CAN.kINFeeder);
         mIntakeRoller.configGetSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 14, 15, 0.01));
         mIntakeRoller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
@@ -120,8 +122,8 @@ public class ClawModule extends Module {
         }
     }
     public void setMotors( double pSpeed) {
-        mIntakeRoller.set(TalonFXControlMode.PercentOutput, 0.5);
-        mTable.getEntry("PercentOutput").setNumber(mIntakeRoller.getMotorOutputPercent());
+        mIntakeRoller.set(TalonFXControlMode.PercentOutput, pSpeed);
+
     }
     private double ticksToClimberDegrees(double pTicks) {
         return pTicks / 2048 * kActuateRatio * 360;

@@ -64,6 +64,7 @@ public class AutonSelection {
         DockWithScoringCommand = commandGenerator.generateCommand(DockWithScoringTrajectory); // Dock on the charge station
         mBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg()); // AutoBalance once docked; setpoint is set to the current roll instead of zero in order to account for gyro drift
         mScoreWithBalance = new SequentialCommandGroup(DockWithScoringCommand, mBalance); // group commands
+        mSpinIntake = new SpinIntake();
 
 
 //        mSendableAutonControllers.setDefaultOption("Score Preload WITH TAXI", ScorePreloadWithTAXICommand);
