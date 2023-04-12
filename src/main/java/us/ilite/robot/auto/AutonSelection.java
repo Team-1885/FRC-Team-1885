@@ -67,7 +67,7 @@ public class AutonSelection {
        // mScoreWithBalance = new SequentialCommandGroup(DockWithScoringCommand, mBalance); // group commands
         mSpinIntake = new SpinIntake();
 
-        mTestSequentialCommandGroup = new SequentialCommandGroup(ScorePreloadNODOCKCommand,mSpinIntake);
+        //mTestSequentialCommandGroup = new SequentialCommandGroup(ScorePreloadNODOCKCommand,mSpinIntake);
 
 
 
@@ -78,8 +78,8 @@ public class AutonSelection {
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
         mSendableAutonControllers.addOption("ScorePreload WITH BALANCE", mScoreWithBalance);
 
-        //mSendableAutonControllers.addOption("SPIN INTAKE", mSpinIntake);
-        mSendableAutonControllers.addOption("SEQUENTIAL COMMAND GROUP TEST", mTestSequentialCommandGroup);
+        mSendableAutonControllers.addOption("SPIN INTAKE", mSpinIntake);
+        //mSendableAutonControllers.addOption("SEQUENTIAL COMMAND GROUP TEST", mTestSequentialCommandGroup);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

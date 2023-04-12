@@ -20,11 +20,8 @@ public class SpinIntake extends CommandBase {
     }
     @Override
     public void execute() {
-        intake.setMotors(0.5);
-
+        intake.setMotors(0.2);
         mTable.getEntry("PercentOutput").setNumber(ClawModule.getInstance().getMotors());
-
-
     }
     @Override
     public boolean isFinished() {

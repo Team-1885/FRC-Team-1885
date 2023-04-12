@@ -110,16 +110,20 @@ public class ClawModule extends Module {
     }
 
     public void setRollerState() {
+        mIntakeRoller.set(TalonFXControlMode.PercentOutput, 0.2);
+        /*
         Enums.EClawMode mode = db.claw.get(EClawData.ROLLER_STATE, Enums.EClawMode.class);
         if (mode == null) {
             mode = Enums.EClawMode.PERCENT_OUTPUT;
         }
         switch (mode) {
+            case DEFAULT:
             case PERCENT_OUTPUT:
                 mIntakeRoller.set(TalonFXControlMode.PercentOutput, db.claw.get(EClawData.DESIRED_ROLLER_pct));
                 mTable.getEntry("DESIRED_ROLLER_pct").setNumber(db.claw.get(EClawData.DESIRED_ROLLER_pct));
                 break;
         }
+         */
     }
     public void setMotors(double pSpeed) {
         mIntakeRoller.set(TalonFXControlMode.PercentOutput, pSpeed);

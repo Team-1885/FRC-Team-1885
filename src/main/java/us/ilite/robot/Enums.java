@@ -201,6 +201,7 @@ public class Enums {
         RETRACT
     }
     public enum EClawMode {
+        NULL,
         PERCENT_OUTPUT,
         DEFAULT,
         EXTEND,
