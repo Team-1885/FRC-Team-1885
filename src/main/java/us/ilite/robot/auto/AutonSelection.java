@@ -42,6 +42,7 @@ public class AutonSelection {
     private PPRamseteCommand DockWithScoringCommand;
     private AutoBalance mBalance;
     private SequentialCommandGroup mScoreWithBalance;
+    private SequentialCommandGroup mTestSequentialCommandGroup;
     private SpinIntake mSpinIntake;
 
 
@@ -60,21 +61,25 @@ public class AutonSelection {
         ScorePreloadWithTAXICommand = commandGenerator.generateCommand(ScorePreloadWithTAXI);
 
         // scores preload, docks, then autobalances
-        DockWithScoringTrajectory = PathPlanner.loadPath("ScorePreload Balance", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
+        //DockWithScoringTrajectory = PathPlanner.loadPath("ScorePreload Balance", new PathConstraints(kMAX_VELOCITY, kMAX_VELOCITY));
         DockWithScoringCommand = commandGenerator.generateCommand(DockWithScoringTrajectory); // Dock on the charge station
         mBalance = new AutoBalance(mRobotDrive, mRobotDrive.getGyroRollDeg()); // AutoBalance once docked; setpoint is set to the current roll instead of zero in order to account for gyro drift
-        mScoreWithBalance = new SequentialCommandGroup(DockWithScoringCommand, mBalance); // group commands
+       // mScoreWithBalance = new SequentialCommandGroup(DockWithScoringCommand, mBalance); // group commands
         mSpinIntake = new SpinIntake();
+
+        mTestSequentialCommandGroup = new SequentialCommandGroup(ScorePreloadNODOCKCommand,mSpinIntake);
+
 
 
 //        mSendableAutonControllers.setDefaultOption("Score Preload WITH TAXI", ScorePreloadWithTAXICommand);
 
-        mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
-        //mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
+//        mSendableAutonControllers.addOption("ScorePreload NO DOCK", ScorePreloadNODOCKCommand);
+//        mSendableAutonControllers.addOption("ScorePreload WITH DOCK", ScorePreloadWITHDOCKCommand);
         mSendableAutonControllers.addOption("ScorePreload WITH TAXI", ScorePreloadWithTAXICommand);
         mSendableAutonControllers.addOption("ScorePreload WITH BALANCE", mScoreWithBalance);
 
-        mSendableAutonControllers.addOption("SPIN INTAKE", mSpinIntake);
+        //mSendableAutonControllers.addOption("SPIN INTAKE", mSpinIntake);
+        mSendableAutonControllers.addOption("SEQUENTIAL COMMAND GROUP TEST", mTestSequentialCommandGroup);
 
         SmartDashboard.putData("Autonomous Mode", mSendableAutonControllers);
     }

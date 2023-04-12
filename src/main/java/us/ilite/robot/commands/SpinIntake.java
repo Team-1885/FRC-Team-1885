@@ -3,27 +3,38 @@ package us.ilite.robot.commands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import us.ilite.robot.modules.ClawModule;
+import edu.wpi.first.wpilibj.Timer;
 
 public class SpinIntake extends CommandBase {
     private ClawModule intake;
     private NetworkTable mTable;
+    private Timer mTimer;
 
     @Override
     public void initialize() {
         intake = ClawModule.getInstance();
+        mTimer = new Timer();
+        mTimer.reset();
+        mTimer.start();
         mTable = intake.getGlass();
     }
     @Override
     public void execute() {
         intake.setMotors(0.5);
 
-        mTable.getEntry("PercentOutput").setNumber(0.5);
+        mTable.getEntry("PercentOutput").setNumber(ClawModule.getInstance().getMotors());
 
 
     }
     @Override
     public boolean isFinished() {
 
+        if (mTimer.get() > 2.0) {
+            return true;
+        }
+        return false;
+
+    /*
         if(intake.getmClawSensor().isBroken()) {
             System.out.println("finish true finish start finish start finish start");
             return false;
@@ -31,6 +42,7 @@ public class SpinIntake extends CommandBase {
         }
         System.out.println("finish false finish false finish false");
         return false;
+    */
 
     }
     @Override
